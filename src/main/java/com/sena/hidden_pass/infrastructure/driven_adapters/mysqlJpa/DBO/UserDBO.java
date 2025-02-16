@@ -1,11 +1,9 @@
-package com.sena.hidden_pass.persistence.DBO;
+package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
 
-import com.sena.hidden_pass.domain.models.Password;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

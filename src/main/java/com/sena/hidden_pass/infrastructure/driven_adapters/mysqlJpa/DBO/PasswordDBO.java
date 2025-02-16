@@ -1,6 +1,5 @@
-package com.sena.hidden_pass.persistence.DBO;
+package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
-import com.sena.hidden_pass.domain.models.Folder;
 import jakarta.persistence.*;
 import lombok.*;
 
