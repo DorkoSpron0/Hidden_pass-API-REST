@@ -1,6 +1,5 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,4 +33,13 @@ public class UserDBO {
 
     @OneToMany(mappedBy = "id_user")
     private Set<FolderDBO> folderList;
+
+    public UserDBO(String email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, String username) {
+        this.email = email;
+        this.folderList = folderList;
+        this.master_password = master_password;
+        this.noteList = noteList;
+        this.passwordList = passwordList;
+        this.username = username;
+    }
 }
