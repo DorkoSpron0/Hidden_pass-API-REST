@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface PasswordUseCases {
     Set<PasswordDBO> getAllPassword(UUID user_id);
     PasswordDBO getPasswordById(UUID password_id);
-    PasswordDBO createPassword(PasswordDBO password);
+    PasswordDBO createPassword(PasswordDBO password, UUID user_id);
     PasswordDBO editPassword(PasswordDBO password, UUID password_id);
-    String deletePassword(PasswordDBO password, UUID password_id);
+    String deletePassword(UUID password_id);
 }

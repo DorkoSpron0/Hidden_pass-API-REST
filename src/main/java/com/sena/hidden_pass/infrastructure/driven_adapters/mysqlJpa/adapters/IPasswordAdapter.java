@@ -34,7 +34,8 @@ public class IPasswordAdapter implements PasswordUseCases {
     }
 
     @Override
-    public PasswordDBO createPassword(PasswordDBO password) {
+    public PasswordDBO createPassword(PasswordDBO password, UUID user_id) {
+        password.setId_user(userAdapter.getUserById(user_id));
         return passwordRepository.save(password);
     }
 
@@ -54,7 +55,7 @@ public class IPasswordAdapter implements PasswordUseCases {
     }
 
     @Override
-    public String deletePassword(PasswordDBO password, UUID password_id) {
+    public String deletePassword(UUID password_id) {
         PasswordDBO passwordFounded = getPasswordById(password_id);
 
         passwordRepository.delete(passwordFounded);

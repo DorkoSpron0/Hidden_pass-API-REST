@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,8 @@ public class PasswordDBO {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id_password;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private UserDBO id_user;
@@ -26,6 +29,21 @@ public class PasswordDBO {
     private String password;
     private String description;
     @ManyToOne
-    @JoinColumn(name = "id_folder", nullable = false)
+    @JoinColumn(name = "id_folder", nullable = true)
     private FolderDBO id_folder;
+
+    @Override
+    public String toString() {
+        return "PasswordDBO{" +
+                "url='" + url + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", id_user=" + id_user +
+                ", id_password=" + id_password +
+                ", id_folder=" + id_folder +
+                ", email_user='" + email_user + '\'' +
+                ", description='" + description + '\'' +
+                ", dateTime=" + dateTime +
+                '}';
+    }
 }

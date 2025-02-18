@@ -1,12 +1,12 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.IPasswordAdapter;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.PasswordDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -41,8 +41,34 @@ public class PasswordController {
         }
     }
 
-    // TODO - ADD PASSWORD REGISTRATION
+    @PostMapping("/{id}")
+    public ResponseEntity<?> createPassword(@Valid @RequestBody PasswordDTO passwordDTO, @PathVariable UUID id){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.createPassword(passwordDTO.toDomain(), id));
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
 
+    @PutMapping("/password/{id}")
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody PasswordDTO passwordDTO, @PathVariable UUID id){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.editPassword(passwordDTO.toDomain(), id));
+        }catch (IllegalArgumentException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
 
-
+    @DeleteMapping("/password/{id}")
+    public ResponseEntity<?> deletePassword(@PathVariable UUID id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.deletePassword(id));
+        }catch (IllegalArgumentException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
 }
