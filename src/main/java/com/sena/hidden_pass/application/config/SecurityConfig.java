@@ -31,6 +31,11 @@ public class SecurityConfig {
                             "/api/v1/hidden_pass/users/login",
                             "/api/v1/hidden_pass/users/register"
                     ).permitAll();
+                    auth.requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html"
+                    ).permitAll();
                     auth.requestMatchers("/api/v1/hidden_pass/**").authenticated();
                     auth.anyRequest().denyAll();
                 })

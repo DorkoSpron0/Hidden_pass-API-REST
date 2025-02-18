@@ -3,7 +3,10 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,13 +20,23 @@ public class UserController {
     private UserUseCases userUseCases;
 
     @GetMapping("/{id}")
-    public UserDBO getUserById(@PathVariable UUID id){
-        return userUseCases.getUserById(id);
+    public ResponseEntity<?> getUserById(@PathVariable UUID id){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @PostMapping("/register")
-    public UserDBO registerUser(@RequestBody UserDTO userDTO){
-        return userUseCases.registerUser(userDTO.toDomain());
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO){
+        try{
+            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(userDTO.toDomain()));
+        }catch (Exception exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        }
     }
 
     @PostMapping("/login")

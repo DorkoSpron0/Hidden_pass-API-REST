@@ -1,3 +1,6 @@
 spring:
   profiles:
     active: dev # Selecciona el perfil por defecto
+springdoc:
+  packages-to-scan: com.sena.hidden_pass.infrastructure.entry_points
+  paths-to-match: "/api/v1/hidden_pass/**"  # Ajusta según tu estructura de rutas
