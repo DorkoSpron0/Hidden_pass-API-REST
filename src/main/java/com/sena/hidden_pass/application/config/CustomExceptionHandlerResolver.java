@@ -1,14 +1,17 @@
 package com.sena.hidden_pass.application.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-@ControllerAdvice
+@Hidden
+@RestControllerAdvice
 public class CustomExceptionHandlerResolver{
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
