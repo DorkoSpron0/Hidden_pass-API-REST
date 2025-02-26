@@ -40,6 +40,11 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
+    public UserDBO getUserByUEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
+    }
+
+    @Override
     public String loginUser(UserDBO userModel) {
         UserDBO userFounded = userRepository.findByEmail(userModel.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User with email " + userModel.getEmail() + " not found"));
 

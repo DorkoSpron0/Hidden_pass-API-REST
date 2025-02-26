@@ -1,9 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points.DTO;
 
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.NoteDBO;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -35,9 +32,10 @@ public class UserDTO {
     private Set<NoteDBO> noteList;
     private Set<PasswordDBO> passwordList;
     private Set<FolderDBO> folderList;
+    private Set<SecurityCodesDBO> securityCodes;
 
     public UserDBO toDomain(){
-        return new UserDBO(this.email, this.folderList, this.master_password, this.noteList, this.passwordList, this.username);
+        return new UserDBO(this.email, this.folderList, this.master_password, this.noteList, this.passwordList, this.username, this.securityCodes);
     }
 
     @Override

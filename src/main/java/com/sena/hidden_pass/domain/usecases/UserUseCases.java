@@ -8,6 +8,7 @@ public interface UserUseCases {
     UserDBO registerUser(UserDBO userModel);
     UserDBO getUserById(UUID id);
     UserDBO getUserByUsername(String username);
+    UserDBO getUserByUEmail(String email);
     String loginUser(UserDBO userModel);
     UserDBO updateUser(UUID id,UserDBO userModel);
     UserDBO deleteUser(UUID id);

@@ -34,7 +34,8 @@ public class LoginUserDTO {
                 this.master_password,
                 new HashSet<>(),
                 new HashSet<>(),
-                null
+                null,
+                new HashSet<>()
         );
     }
 
