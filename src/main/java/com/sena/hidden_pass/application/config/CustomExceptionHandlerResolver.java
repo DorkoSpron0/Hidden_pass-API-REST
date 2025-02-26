@@ -2,9 +2,10 @@ package com.sena.hidden_pass.application.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -23,4 +24,15 @@ public class CustomExceptionHandlerResolver{
     public ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException ex){
         return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex){
+        return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+        public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException ex){
+            return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
+        }
+
 }

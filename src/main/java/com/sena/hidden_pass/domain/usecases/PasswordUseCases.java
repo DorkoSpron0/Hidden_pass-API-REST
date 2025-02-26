@@ -1,6 +1,5 @@
 package com.sena.hidden_pass.domain.usecases;
 
-import com.sena.hidden_pass.domain.models.Password;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
 
 import java.util.List;

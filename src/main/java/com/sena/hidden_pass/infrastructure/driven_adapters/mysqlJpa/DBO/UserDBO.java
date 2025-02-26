@@ -1,6 +1,5 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,4 +42,6 @@ public class UserDBO {
         this.passwordList = passwordList;
         this.username = username;
     }
+
+
 }

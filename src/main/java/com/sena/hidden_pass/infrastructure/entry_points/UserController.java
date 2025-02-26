@@ -2,6 +2,7 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.LoginUserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -40,8 +41,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserDTO userDTO){
-        return userUseCases.loginUser(userDTO.toDomain());
+    public String loginUser(@Valid @RequestBody LoginUserDTO loginUserDTO){
+        System.out.println(loginUserDTO.toString());
+        return userUseCases.loginUser(loginUserDTO.toDomain());
     }
 
     @PutMapping("/update/{id}")
