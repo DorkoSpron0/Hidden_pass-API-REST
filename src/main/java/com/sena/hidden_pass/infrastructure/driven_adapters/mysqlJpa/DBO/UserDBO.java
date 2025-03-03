@@ -25,6 +25,8 @@ public class UserDBO {
     @Column(name = "master_password", nullable = false)
     private String master_password;
 
+    private String url_image;
+
     @OneToMany(mappedBy = "id_user")
     private Set<NoteDBO> noteList;
 
@@ -37,7 +39,7 @@ public class UserDBO {
     @OneToMany(mappedBy = "security_code")
     private Set<SecurityCodesDBO> securityCodes;
 
-    public UserDBO(String email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, String username, Set<SecurityCodesDBO> securityCodes) {
+    public UserDBO(String email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, String username, Set<SecurityCodesDBO> securityCodes, String url_image) {
         this.email = email;
         this.folderList = folderList;
         this.master_password = master_password;
@@ -45,7 +47,7 @@ public class UserDBO {
         this.passwordList = passwordList;
         this.username = username;
         this.securityCodes = securityCodes;
+        this.url_image = url_image;
     }
-
 
 }

@@ -35,7 +35,8 @@ public class LoginUserDTO {
                 new HashSet<>(),
                 new HashSet<>(),
                 null,
-                new HashSet<>()
+                new HashSet<>(),
+                null
         );
     }
 

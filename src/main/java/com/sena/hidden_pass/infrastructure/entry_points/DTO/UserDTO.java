@@ -30,12 +30,13 @@ public class UserDTO {
     )
     private String master_password;
     private Set<NoteDBO> noteList;
+    private String url_image;
     private Set<PasswordDBO> passwordList;
     private Set<FolderDBO> folderList;
     private Set<SecurityCodesDBO> securityCodes;
 
     public UserDBO toDomain(){
-        return new UserDBO(this.email, this.folderList, this.master_password, this.noteList, this.passwordList, this.username, this.securityCodes);
+        return new UserDBO(this.email, this.folderList, this.master_password, this.noteList, this.passwordList, this.username, this.securityCodes, this.url_image);
     }
 
     @Override
