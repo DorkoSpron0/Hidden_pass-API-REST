@@ -1,7 +1,9 @@
 package com.sena.hidden_pass.infrastructure.entry_points.DTO;
 
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.Set;
@@ -12,23 +14,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDTO {
 
-    @Pattern(
-            regexp = "^[A-Za-z0-9\\d]{4,}$",
-            message = "Debe tener al menos 4 caracteres y solo puede contener letras y números."
-    )
-    private String username;
-
-    @Pattern(
-            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-            message = "El correo electrónico no es válido. Debe seguir el formato: ejemplo@dominio.com"
-    )
-    private String email;
-
-    @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
-            message = "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, un número y un símbolo especial."
-    )
-    private String master_password;
+    private UsernameValueObject username;
+    private EmailValueObject email;
+    private MasterPasswordValueObject master_password;
     private Set<NoteDBO> noteList;
     private String url_image;
     private Set<PasswordDBO> passwordList;
@@ -36,7 +24,7 @@ public class UserDTO {
     private Set<SecurityCodesDBO> securityCodes;
 
     public UserDBO toDomain(){
-        return new UserDBO(this.email, this.folderList, this.master_password, this.noteList, this.passwordList, this.username, this.securityCodes, this.url_image);
+        return new UserDBO(this.email, this.folderList, this.master_password.getMaster_password() ,this.noteList, this.passwordList, this.username, this.securityCodes, this.url_image);
     }
 
     @Override
