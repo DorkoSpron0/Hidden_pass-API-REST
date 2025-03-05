@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,9 +19,10 @@ public class NoteDBO {
     private UUID id_note;
 
     @ManyToOne
-    @JoinColumn(name="id_priority", nullable=false)
+    @JoinColumn(name="id_priority", nullable=true)
     private PriorityDBO id_priority;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_user")
     private UserDBO id_user;

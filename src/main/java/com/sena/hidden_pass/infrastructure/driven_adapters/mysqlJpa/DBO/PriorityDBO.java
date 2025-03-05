@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class PriorityDBO {
     @Enumerated(value = EnumType.STRING)
     private PriorityNames name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "id_priority")
     private List<NoteDBO> noteList;
 

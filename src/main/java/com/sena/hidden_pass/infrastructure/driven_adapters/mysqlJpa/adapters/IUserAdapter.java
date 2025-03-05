@@ -26,11 +26,11 @@ public class IUserAdapter implements UserUseCases {
     @Override
     public UserDBO registerUser(UserDBO userDBO) {
 
-        System.out.println(userDBO.toString());
+        //System.out.println(userDBO.toString());
         userDBO.setMaster_password(passwordEncoder.encode(userDBO.getMaster_password()));
-        System.out.println("--------------------------------" + userDBO.getMaster_password());
+        //System.out.println("--------------------------------" + userDBO.getMaster_password());
 
-        System.out.println(userDBO.getMaster_password());
+        //System.out.println(userDBO.getMaster_password());
         return userRepository.save(userDBO);
     }
 
@@ -53,8 +53,8 @@ public class IUserAdapter implements UserUseCases {
     public String loginUser(UserDBO userModel) {
         UserDBO userFounded = userRepository.findByEmail_Email(userModel.getEmail().getEmail()).orElseThrow(() -> new UsernameNotFoundException("User with email " + userModel.getEmail() + " not found"));
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA " + userModel.getMaster_password());
-        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBB" + userFounded.getMaster_password());
+        //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA " + userModel.getMaster_password());
+        //System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBB" + userFounded.getMaster_password());
 
         if(!matchPassword(userModel.getMaster_password(), userFounded.getMaster_password())) throw new IllegalArgumentException("Password don't match");
 
