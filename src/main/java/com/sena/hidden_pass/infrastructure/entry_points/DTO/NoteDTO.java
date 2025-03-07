@@ -23,7 +23,6 @@ public class NoteDTO {
     public NoteDBO toDomain(IPriorityRepository priorityRepository){
         PriorityDBO priority =  priorityRepository.getByName(priorityName).orElseThrow(() -> new IllegalArgumentException(""));
 
-
         return NoteDBO.builder()
                 .id_priority(priority)
                 .id_user(id_user)

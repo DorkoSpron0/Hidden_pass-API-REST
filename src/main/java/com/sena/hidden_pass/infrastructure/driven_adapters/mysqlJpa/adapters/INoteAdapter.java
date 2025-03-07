@@ -7,12 +7,10 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.Priority
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.INoteRepository;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,13 +46,22 @@ public class INoteAdapter implements NoteUseCases {
     }
 
     @Override
-    public NoteDBO updateNote(NoteDBO note) {
-        return null;
+    public NoteDBO updateNote(NoteDBO note, UUID note_id) {
+
+        NoteDBO noteDBO = getNoteById(note_id);
+
+        noteDBO.setDescription(note.getDescription());
+        noteDBO.setTitle(note.getTitle());
+        noteDBO.setId_priority(note.getId_priority());
+
+        return noteRepository.save(noteDBO);
     }
 
     @Override
-    public String deleteNote(NoteDBO note) {
-        noteRepository.delete(note);
+    public String deleteNote(UUID note_id) {
+
+        NoteDBO noteDBO = getNoteById(note_id);
+        noteRepository.delete(noteDBO);
 
         return "Note deleted successfully";
     }

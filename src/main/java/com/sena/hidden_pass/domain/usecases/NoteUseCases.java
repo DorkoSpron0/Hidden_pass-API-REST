@@ -10,6 +10,6 @@ public interface NoteUseCases {
     Set<NoteDBO> getAllNotesByUser(UUID user_id);
     NoteDBO getNoteById(UUID id);
     NoteDBO createNote(NoteDBO note, UUID user_id, PriorityNames priority_name);
-    NoteDBO updateNote(NoteDBO note);
-    String deleteNote(NoteDBO note);
+    NoteDBO updateNote(NoteDBO note, UUID note_id);
+    String deleteNote(UUID note_id);
 }

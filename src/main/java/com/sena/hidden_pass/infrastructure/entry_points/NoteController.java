@@ -27,4 +27,14 @@ public class NoteController {
     public NoteDBO createNote(@RequestBody NoteDTO noteDTO, @PathVariable UUID user_id){
         return noteAdapter.createNote(noteDTO.toDomain(priorityRepository), user_id, noteDTO.getPriorityName());
     }
+
+    @PutMapping("/{note_id}")
+    public NoteDBO updateNote(@RequestBody NoteDTO noteDTO, @PathVariable UUID note_id){
+        return noteAdapter.updateNote(noteDTO.toDomain(priorityRepository), note_id);
+    }
+
+    @DeleteMapping("/{note_id}")
+    public String deleteNote(@PathVariable UUID note_id){
+        return noteAdapter.deleteNote(note_id);
+    }
 }
