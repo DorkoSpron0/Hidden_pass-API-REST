@@ -24,4 +24,12 @@ public class SecurityCodesDBO {
     public SecurityCodesDBO(UserDBO userDBO) {
         this.userDBO = userDBO;
     }
+
+    @Override
+    public String toString() {
+        return "SecurityCodesDBO{" +
+                "security_code=" + security_code +
+                ", userDBO=" + userDBO +
+                '}';
+    }
 }

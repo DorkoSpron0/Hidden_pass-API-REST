@@ -11,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Service
 public class ISecurityCodesAdapter implements SecurityCodesCases {
@@ -43,5 +45,19 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
     @Override
     public SecurityCodesDBO getSecurityCode() {
         return null;
+    }
+
+    @Override
+    public boolean validateSecurityCode(UUID security_code, String user_email) {
+        UserDBO userFounded = userAdapter.getUserByUEmail(user_email);
+
+        SecurityCodesDBO codeFounded = securityCodesRepository.findByUserDBO(userFounded).orElseThrow(() -> new IllegalArgumentException("User don't have securityCode"));
+
+        System.out.println(codeFounded.getSecurity_code());
+        System.out.println(security_code);
+
+        if(!codeFounded.getSecurity_code().equals(security_code)) throw new IllegalArgumentException("Security Code invalid");
+
+        return true;
     }
 }

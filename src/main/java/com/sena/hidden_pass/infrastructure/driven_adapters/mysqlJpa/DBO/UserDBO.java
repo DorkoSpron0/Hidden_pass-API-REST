@@ -1,7 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import jakarta.persistence.*;
 import lombok.*;
