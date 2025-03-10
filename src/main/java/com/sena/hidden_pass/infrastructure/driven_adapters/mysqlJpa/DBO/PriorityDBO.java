@@ -21,10 +21,6 @@ public class PriorityDBO {
     @Enumerated(value = EnumType.STRING)
     private PriorityNames name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "id_priority")
-    private List<NoteDBO> noteList;
-
     public PriorityDBO(PriorityNames name) {
         this.name = name;
     }

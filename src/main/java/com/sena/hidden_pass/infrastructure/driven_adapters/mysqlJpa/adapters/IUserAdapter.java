@@ -2,6 +2,8 @@ package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.application.config.JwtFilter;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,7 +45,7 @@ public class IUserAdapter implements UserUseCases {
 
     @Override
     public UserDBO getUserByUEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
+        return userRepository.findByEmail(new EmailValueObject(email)).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
     }
 
     @Override

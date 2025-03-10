@@ -3,6 +3,9 @@ package com.sena.hidden_pass.controller;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.UserController;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,9 +50,9 @@ public class UserControllerTest {
     public void registerUser() throws Exception {
         // Arrange
         UserDTO userDTO = UserDTO.builder()
-                .username("username")
-                .email("test@test.com")
-                .master_password("Password@123")
+                .username(new UsernameValueObject("username"))
+                .email(new EmailValueObject("test@test.com"))
+                .master_password(new MasterPasswordValueObject("Password@123"))
                 .build();
 
         String jsonPayload = objectMapper.writeValueAsString(userDTO);
@@ -72,9 +75,9 @@ public class UserControllerTest {
     @Test
     public void loginUser() throws Exception{
         UserDTO userDTO = UserDTO.builder()
-                .username("username")
-                .email("test@test.com")
-                .master_password("Password@123")
+                .username(new UsernameValueObject("username"))
+                .email(new EmailValueObject("test@test.com"))
+                .master_password(new MasterPasswordValueObject("Password@123"))
                 .build();
 
         String jsonPayload = objectMapper.writeValueAsString(userDTO);
