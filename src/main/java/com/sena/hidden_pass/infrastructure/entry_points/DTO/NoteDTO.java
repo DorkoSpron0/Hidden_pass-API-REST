@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class NoteDTO {
 
     private PriorityNames priorityName;
-    private UserDBO id_user;
+    private String id_user;
     private String title;
     private String description;
 
@@ -25,7 +25,6 @@ public class NoteDTO {
 
         return NoteDBO.builder()
                 .id_priority(priority)
-                .id_user(id_user)
                 .title(title)
                 .description(description)
                 .build();
