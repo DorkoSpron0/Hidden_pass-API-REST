@@ -8,5 +8,4 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ISecurityCodesRepository extends JpaRepository<SecurityCodesDBO, UUID> {
-    Optional<SecurityCodesDBO> findByUserDBO(UserDBO user);
 }

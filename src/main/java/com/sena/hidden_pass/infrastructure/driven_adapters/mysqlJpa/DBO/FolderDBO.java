@@ -22,9 +22,9 @@ public class FolderDBO {
     private String icon;
     private String Description;
 
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    private UserDBO id_user;
+//    @ManyToOne
+//    @JoinColumn(name = "id_user", nullable = false)
+//    private UserDBO id_user;
 
     @OneToMany(mappedBy = "id_folder")
     private Set<PasswordDBO> passwordList;

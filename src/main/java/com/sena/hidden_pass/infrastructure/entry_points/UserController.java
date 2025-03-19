@@ -3,6 +3,7 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.LoginUserDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.RecoverPasswordDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,11 @@ public class UserController {
     @PutMapping("/update/{id}")
     public UserDBO updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO){
         return userUseCases.updateUser(id, userDTO.toDomain());
+    }
+
+    @PutMapping("/update/password/{id}")
+    public UserDBO updatePassword(@PathVariable UUID id, @RequestBody RecoverPasswordDTO password){
+        return userUseCases.updateMasterPassword(password.getNew_password(), id);
     }
 
     @DeleteMapping("/delete/{id}")

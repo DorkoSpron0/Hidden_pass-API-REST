@@ -76,6 +76,17 @@ public class IUserAdapter implements UserUseCases {
         return null;
     }
 
+    @Override
+    public UserDBO updateMasterPassword(String password, UUID user_id) {
+        UserDBO userFounded = getUserById(user_id);
+
+        userFounded.setMaster_password(passwordEncoder.encode(password));
+
+        userRepository.save(userFounded);
+
+        return userFounded;
+    }
+
 
     private boolean matchPassword(String rawPassword, String encodedPassword){
         return passwordEncoder.matches(rawPassword, encodedPassword);

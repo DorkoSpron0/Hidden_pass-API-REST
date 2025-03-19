@@ -41,8 +41,14 @@ public class INoteAdapter implements NoteUseCases {
         PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException(""));
 
         note.setId_priority(priority);
-        note.setId_user(userAdapter.getUserById(user_id));
-        return noteRepository.save(note);
+
+        NoteDBO noteSaved = noteRepository.save(note);
+        UserDBO userFounded = userAdapter.getUserById(user_id);
+        userFounded.getNoteList().add(noteSaved);
+        userAdapter.registerUser(userFounded);
+
+
+        return noteSaved;
     }
 
     @Override

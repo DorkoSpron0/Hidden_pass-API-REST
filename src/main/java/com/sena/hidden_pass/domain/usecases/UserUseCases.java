@@ -12,4 +12,6 @@ public interface UserUseCases {
     String loginUser(UserDBO userModel);
     UserDBO updateUser(UUID id,UserDBO userModel);
     UserDBO deleteUser(UUID id);
+
+    UserDBO updateMasterPassword(String password, UUID user_id);
 }

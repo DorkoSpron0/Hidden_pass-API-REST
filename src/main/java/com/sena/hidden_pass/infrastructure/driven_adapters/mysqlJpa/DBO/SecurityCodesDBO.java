@@ -17,19 +17,11 @@ public class SecurityCodesDBO {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID security_code;
 
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    private UserDBO userDBO;
-
-    public SecurityCodesDBO(UserDBO userDBO) {
-        this.userDBO = userDBO;
-    }
 
     @Override
     public String toString() {
         return "SecurityCodesDBO{" +
                 "security_code=" + security_code +
-                ", userDBO=" + userDBO +
                 '}';
     }
 }

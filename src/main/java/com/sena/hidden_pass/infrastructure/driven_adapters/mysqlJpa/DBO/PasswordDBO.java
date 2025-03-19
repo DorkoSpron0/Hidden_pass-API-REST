@@ -18,10 +18,10 @@ public class PasswordDBO {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id_password;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    private UserDBO id_user;
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "id_user", nullable = false)
+//    private UserDBO id_user;
     private String name;
     private String url;
     private LocalDateTime dateTime;
@@ -38,7 +38,6 @@ public class PasswordDBO {
                 "url='" + url + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
-                ", id_user=" + id_user +
                 ", id_password=" + id_password +
                 ", id_folder=" + id_folder +
                 ", email_user='" + email_user + '\'' +
