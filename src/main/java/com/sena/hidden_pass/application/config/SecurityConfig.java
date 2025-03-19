@@ -34,7 +34,8 @@ public class SecurityConfig {
                             "/swagger-ui.html",
                             "/api/v1/hidden_pass/users/login",
                             "/api/v1/hidden_pass/users/register",
-                            "/api/v1/hidden_pass/codes/**"
+                            "/api/v1/hidden_pass/codes/**",
+                            "/api/v1/hidden_pass/users/update/password/**"
                     ).permitAll();
                     auth.requestMatchers("/api/v1/hidden_pass/**").authenticated();
                     auth.anyRequest().denyAll();

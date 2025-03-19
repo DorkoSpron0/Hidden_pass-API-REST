@@ -21,7 +21,7 @@ public class UserDTO {
     private String url_image;
     private Set<PasswordDBO> passwordList;
     private Set<FolderDBO> folderList;
-    private Set<SecurityCodesDBO> securityCodes;
+    private SecurityCodesDBO securityCodes;
 
     public UserDBO toDomain(){
         return new UserDBO(this.email, this.folderList, this.master_password.getMaster_password() ,this.noteList, this.passwordList, this.username, this.securityCodes, this.url_image);

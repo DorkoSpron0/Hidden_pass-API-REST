@@ -11,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -27,7 +29,11 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
     public String sendSecurityCode(String email) throws MessagingException {
         UserDBO userFounded = userAdapter.getUserByUEmail(email);
 
-        SecurityCodesDBO newSecurityCode = securityCodesRepository.save(new SecurityCodesDBO(userFounded));
+        SecurityCodesDBO newSecurityCode = securityCodesRepository.save(new SecurityCodesDBO());
+
+        userFounded.setSecurityCodes(newSecurityCode);
+
+        userAdapter.registerUser(userFounded);
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -51,10 +57,8 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
     public boolean validateSecurityCode(UUID security_code, String user_email) {
         UserDBO userFounded = userAdapter.getUserByUEmail(user_email);
 
-        SecurityCodesDBO codeFounded = securityCodesRepository.findByUserDBO(userFounded).orElseThrow(() -> new IllegalArgumentException("User don't have securityCode"));
-
-        System.out.println(codeFounded.getSecurity_code());
-        System.out.println(security_code);
+        SecurityCodesDBO codeFounded = Optional.ofNullable(userFounded.getSecurityCodes())
+                .orElseThrow(() -> new IllegalArgumentException("User dont Have security code"));
 
         if(!codeFounded.getSecurity_code().equals(security_code)) throw new IllegalArgumentException("Security Code invalid");
 

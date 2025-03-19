@@ -22,10 +22,10 @@ public class NoteDBO {
     @JoinColumn(name="id_priority", nullable=true)
     private PriorityDBO id_priority;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    private UserDBO id_user;
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "id_user")
+//    private UserDBO id_user;
 
     @Column(name = "title", nullable = false, unique = true)
     private String title;

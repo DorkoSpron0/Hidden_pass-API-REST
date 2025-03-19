@@ -32,19 +32,23 @@ public class UserDBO {
 
     private String url_image;
 
-    @OneToMany(mappedBy = "id_user")
+    @OneToMany
+    @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<NoteDBO> noteList;
 
-    @OneToMany(mappedBy = "id_user")
+    @OneToMany
+    @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<PasswordDBO> passwordList;
 
-    @OneToMany(mappedBy = "id_user")
+    @OneToMany
+    @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<FolderDBO> folderList;
 
-    @OneToMany(mappedBy = "security_code")
-    private Set<SecurityCodesDBO> securityCodes;
+    @OneToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "security_code")
+    private SecurityCodesDBO securityCodes;
 
-    public UserDBO(EmailValueObject email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, UsernameValueObject username, Set<SecurityCodesDBO> securityCodes, String url_image) {
+    public UserDBO(EmailValueObject email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, UsernameValueObject username, SecurityCodesDBO securityCodes, String url_image) {
         this.email = email;
         this.folderList = folderList;
         this.master_password = master_password;

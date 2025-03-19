@@ -5,6 +5,7 @@ import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPasswordRepository;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,12 @@ public class IPasswordAdapter implements PasswordUseCases {
 
     private UserUseCases userAdapter;
     private IPasswordRepository passwordRepository;
+    private IUserRepository userRepository;
 
-    public IPasswordAdapter(UserUseCases iUserAdapter, IPasswordRepository iPasswordRepository){
-        this.userAdapter = iUserAdapter;
-        this.passwordRepository = iPasswordRepository;
+    public IPasswordAdapter(IPasswordRepository passwordRepository, UserUseCases userAdapter, IUserRepository userRepository) {
+        this.passwordRepository = passwordRepository;
+        this.userAdapter = userAdapter;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -35,8 +38,14 @@ public class IPasswordAdapter implements PasswordUseCases {
 
     @Override
     public PasswordDBO createPassword(PasswordDBO password, UUID user_id) {
-        password.setId_user(userAdapter.getUserById(user_id));
-        return passwordRepository.save(password);
+        PasswordDBO passwordSaved = passwordRepository.save(password);
+
+
+        UserDBO userFounded = userAdapter.getUserById(user_id);
+        userFounded.getPasswordList().add(password);
+        userRepository.save(userFounded);
+
+        return passwordSaved;
     }
 
     @Override
