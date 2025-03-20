@@ -3,7 +3,7 @@ package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 import com.sena.hidden_pass.domain.usecases.NoteUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.NoteDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityDBO;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityNames;
+import com.sena.hidden_pass.domain.models.PriorityNames;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.INoteRepository;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;

@@ -1,10 +1,9 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sena.hidden_pass.domain.models.PriorityNames;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Builder

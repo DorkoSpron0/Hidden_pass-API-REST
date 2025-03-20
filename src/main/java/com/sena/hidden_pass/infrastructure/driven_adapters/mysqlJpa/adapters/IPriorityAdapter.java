@@ -1,7 +1,7 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityDBO;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityNames;
+import com.sena.hidden_pass.domain.models.PriorityNames;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
