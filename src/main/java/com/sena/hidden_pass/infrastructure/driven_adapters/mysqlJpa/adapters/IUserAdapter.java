@@ -78,8 +78,8 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public UserModel updateMasterPassword(String password, UUID user_id) {
-        UserDBO userFounded = UserMapper.userModelToDBO(getUserById(user_id));
+    public UserDBO updateMasterPassword(String password, EmailValueObject email) {
+        UserDBO userFounded = getUserByUEmail(email.getEmail());
 
         userFounded.setMaster_password(passwordEncoder.encode(password));
 
