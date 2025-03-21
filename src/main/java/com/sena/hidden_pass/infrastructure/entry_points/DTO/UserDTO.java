@@ -26,10 +26,6 @@ public class UserDTO {
     private Set<FolderDBO> folderList;
     private SecurityCodesDBO securityCodes;
 
-    public UserDBO toDBO(){
-        return new UserDBO(this.email, this.folderList, this.master_password.getMaster_password() ,this.noteList, this.passwordList, this.username, this.securityCodes, this.url_image);
-    }
-
     @Override
     public String toString() {
         return "UserDTO{" +
