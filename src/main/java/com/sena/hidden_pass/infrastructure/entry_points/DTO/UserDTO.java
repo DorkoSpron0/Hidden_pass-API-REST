@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points.DTO;
 
+import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
@@ -7,6 +8,7 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
 import lombok.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -14,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDTO {
 
+    private UUID id;
     private UsernameValueObject username;
     private EmailValueObject email;
     private MasterPasswordValueObject master_password;
@@ -23,7 +26,7 @@ public class UserDTO {
     private Set<FolderDBO> folderList;
     private SecurityCodesDBO securityCodes;
 
-    public UserDBO toDomain(){
+    public UserDBO toDBO(){
         return new UserDBO(this.email, this.folderList, this.master_password.getMaster_password() ,this.noteList, this.passwordList, this.username, this.securityCodes, this.url_image);
     }
 

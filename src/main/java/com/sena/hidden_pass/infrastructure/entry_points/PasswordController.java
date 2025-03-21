@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
+import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.IPasswordAdapter;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.PasswordDTO;
 import jakarta.validation.Valid;
@@ -42,18 +43,18 @@ public class PasswordController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> createPassword(@Valid @RequestBody PasswordDTO passwordDTO, @PathVariable UUID id){
+    public ResponseEntity<?> createPassword(@Valid @RequestBody PasswordModel passwordDTO, @PathVariable UUID id){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.createPassword(passwordDTO.toDomain(), id));
+            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.createPassword(passwordDTO, id));
         }catch (Exception ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 
     @PutMapping("/password/{id}")
-    public ResponseEntity<?> updatePassword(@Valid @RequestBody PasswordDTO passwordDTO, @PathVariable UUID id){
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody PasswordModel passwordDTO, @PathVariable UUID id){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.editPassword(passwordDTO.toDomain(), id));
+            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.editPassword(passwordDTO, id));
         }catch (IllegalArgumentException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }catch (Exception ex){

@@ -7,7 +7,7 @@ public class PriorityMapper {
 
     public static PriorityDBO priorityModelToDBO(PriorityModel model){
         return new PriorityDBO(
-                model.getId_priority(),
+                model.getId_priority() != null ? model.getId_priority() : null,
                 model.getName()
         );
     }

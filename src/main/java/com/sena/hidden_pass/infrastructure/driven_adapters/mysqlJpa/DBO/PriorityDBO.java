@@ -23,4 +23,12 @@ public class PriorityDBO {
     public PriorityDBO(PriorityNames name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "PriorityDBO{" +
+                "id_priority=" + id_priority +
+                ", name=" + name +
+                '}';
+    }
 }

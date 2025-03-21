@@ -1,10 +1,10 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
+import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.LoginUserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.RecoverPasswordDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,32 +33,32 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO user){
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(userDTO.toDomain()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));
         }catch (Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public String loginUser(@Valid @RequestBody LoginUserDTO loginUserDTO){
-        System.out.println(loginUserDTO.toString());
-        return userUseCases.loginUser(loginUserDTO.toDomain());
+    public String loginUser(@Valid @RequestBody UserModel user){
+        System.out.println(user);
+        return userUseCases.loginUser(user);
     }
 
     @PutMapping("/update/{id}")
-    public UserDBO updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO){
-        return userUseCases.updateUser(id, userDTO.toDomain());
+    public UserModel updateUser(@PathVariable UUID id, @RequestBody UserModel user){
+        return userUseCases.updateUser(id, user);
     }
 
     @PutMapping("/update/password/{id}")
-    public UserDBO updatePassword(@PathVariable UUID id, @RequestBody RecoverPasswordDTO password){
+    public UserModel updatePassword(@PathVariable UUID id, @RequestBody RecoverPasswordDTO password){
         return userUseCases.updateMasterPassword(password.getNew_password(), id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public UserDBO deleteUser(@PathVariable UUID id){
+    public UserModel deleteUser(@PathVariable UUID id){
         return userUseCases.deleteUser(id);
     }
 }
