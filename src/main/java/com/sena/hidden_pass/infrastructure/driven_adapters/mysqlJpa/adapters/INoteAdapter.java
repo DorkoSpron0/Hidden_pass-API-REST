@@ -44,7 +44,7 @@ public class INoteAdapter implements NoteUseCases {
     @Override
     public NoteModel createNote(NoteModel note, UUID user_id, PriorityNames priority_name) {
 
-        PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException(""));
+        PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException("PRIORITY NOT FOUND"));
 
         note.setId_priority(PriorityMapper.priorityDBOToModel(priority));
 

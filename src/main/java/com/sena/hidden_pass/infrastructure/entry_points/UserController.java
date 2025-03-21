@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/update/password")
-    public UserDBO updatePassword(@RequestBody ResetMasterPasswordDTO resetMasterPassword){
+    public UserModel updatePassword(@RequestBody ResetMasterPasswordDTO resetMasterPassword){
         return userUseCases.updateMasterPassword(resetMasterPassword.getNew_password(), new EmailValueObject(resetMasterPassword.getEmail()));
     }
 

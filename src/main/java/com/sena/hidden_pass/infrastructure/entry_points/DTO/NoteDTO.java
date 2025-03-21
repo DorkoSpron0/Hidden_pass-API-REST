@@ -14,17 +14,15 @@ import lombok.Setter;
 public class NoteDTO {
 
     private PriorityNames priorityName;
-    private String id_user;
     private String title;
     private String description;
 
-    public NoteDBO toDomain(IPriorityRepository priorityRepository){
-        PriorityDBO priority =  priorityRepository.getByName(priorityName).orElseThrow(() -> new IllegalArgumentException(""));
-
-        return NoteDBO.builder()
-                .id_priority(priority)
-                .title(title)
-                .description(description)
-                .build();
+    @Override
+    public String toString() {
+        return "NoteDTO{" +
+                "description='" + description + '\'' +
+                ", priorityName=" + priorityName +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

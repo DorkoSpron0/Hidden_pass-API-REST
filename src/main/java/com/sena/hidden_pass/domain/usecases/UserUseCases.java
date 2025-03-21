@@ -15,5 +15,5 @@ public interface UserUseCases {
     UserModel updateUser(UUID id,UserModel UserModel);
     UserModel deleteUser(UUID id);
 
-    UserDBO updateMasterPassword(String password, EmailValueObject email);
+    UserModel updateMasterPassword(String password, EmailValueObject email);
 }

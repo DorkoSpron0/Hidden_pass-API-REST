@@ -26,7 +26,8 @@ public class NoteController {
     }
 
     @PostMapping("/{user_id}")
-    public NoteModel createNote(@Valid @RequestBody NoteDTO noteDTO, @PathVariable UUID user_id){
+    public NoteModel createNote(@RequestBody NoteDTO noteDTO, @PathVariable UUID user_id){
+        System.out.println(noteDTO.getPriorityName());
         return noteAdapter.createNote(NoteMapper.noteDTOToModel(noteDTO), user_id, noteDTO.getPriorityName());
     }
 

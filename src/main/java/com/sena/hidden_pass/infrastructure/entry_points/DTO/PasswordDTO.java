@@ -24,16 +24,4 @@ public class PasswordDTO {
     private String password;
     private String description;
     private FolderDBO id_folder;
-
-    public PasswordDBO toDomain(){
-        return PasswordDBO.builder()
-                .dateTime(this.dateTime)
-                .id_folder(this.id_folder)
-                .name(this.name)
-                .url(this.url)
-                .email_user(this.email_user)
-                .password(this.password)
-                .description(this.description)
-                .build();
-    }
 }
