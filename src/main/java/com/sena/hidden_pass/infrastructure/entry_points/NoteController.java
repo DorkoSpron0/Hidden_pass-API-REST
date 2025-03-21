@@ -1,8 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
 import com.sena.hidden_pass.domain.models.NoteModel;
-import com.sena.hidden_pass.domain.models.PriorityNames;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.NoteDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.INoteAdapter;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.NoteDTO;

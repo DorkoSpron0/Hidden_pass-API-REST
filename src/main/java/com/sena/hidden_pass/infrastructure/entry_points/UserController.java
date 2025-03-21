@@ -42,14 +42,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@Valid @RequestBody UserModel user){
-        System.out.println(user);
-        return userUseCases.loginUser(user);
+    public String loginUser(@Valid @RequestBody UserDTO user){
+        return userUseCases.loginUser(UserMapper.userDTOToModel(user));
     }
 
     @PutMapping("/update/{id}")
-    public UserModel updateUser(@PathVariable UUID id, @RequestBody UserModel user){
-        return userUseCases.updateUser(id, user);
+    public UserModel updateUser(@PathVariable UUID id, @RequestBody UserDTO user){
+        return userUseCases.updateUser(id, UserMapper.userDTOToModel(user));
     }
 
     @PutMapping("/update/password/{id}")
