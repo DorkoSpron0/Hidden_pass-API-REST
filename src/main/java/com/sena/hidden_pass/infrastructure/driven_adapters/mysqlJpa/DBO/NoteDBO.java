@@ -30,6 +30,17 @@ public class NoteDBO {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @Column(name = "description", nullable = false, unique = true)
+    @Column(name = "description", nullable = false)
     private String description;
+
+
+    @Override
+    public String toString() {
+        return "NoteDBO{" +
+                "description='" + description + '\'' +
+                ", id_note=" + id_note +
+                ", id_priority=" + id_priority +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

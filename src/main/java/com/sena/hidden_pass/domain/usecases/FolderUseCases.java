@@ -1,13 +1,13 @@
 package com.sena.hidden_pass.domain.usecases;
 
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
+import com.sena.hidden_pass.domain.models.FolderModel;
 
 import java.util.List;
 
 public interface FolderUseCases {
-    List<FolderDBO> getAllFolders();
-    FolderDBO getFolderById(FolderDBO folder);
-    FolderDBO createFolder(FolderDBO folder);
-    FolderDBO updateFolder(FolderDBO folder);
-    FolderDBO deleteFolder(FolderDBO folder);
+    List<FolderModel> getAllFolders();
+    FolderModel getFolderById(FolderModel folder);
+    FolderModel createFolder(FolderModel folder);
+    FolderModel updateFolder(FolderModel folder);
+    FolderModel deleteFolder(FolderModel folder);
 }

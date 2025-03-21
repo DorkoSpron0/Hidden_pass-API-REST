@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
+import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
@@ -7,6 +8,7 @@ import com.sena.hidden_pass.infrastructure.entry_points.DTO.LoginUserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.RecoverPasswordDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,23 +37,22 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO user){
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(userDTO.toDomain()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));
         }catch (Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public String loginUser(@Valid @RequestBody LoginUserDTO loginUserDTO){
-        System.out.println(loginUserDTO.toString());
-        return userUseCases.loginUser(loginUserDTO.toDomain());
+    public String loginUser(@Valid @RequestBody UserDTO user){
+        return userUseCases.loginUser(UserMapper.userDTOToModel(user));
     }
 
     @PutMapping("/update/{id}")
-    public UserDBO updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO){
-        return userUseCases.updateUser(id, userDTO.toDomain());
+    public UserModel updateUser(@PathVariable UUID id, @RequestBody UserDTO user){
+        return userUseCases.updateUser(id, UserMapper.userDTOToModel(user));
     }
 
     @PutMapping("/update/password")
@@ -60,7 +61,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public UserDBO deleteUser(@PathVariable UUID id){
+    public UserModel deleteUser(@PathVariable UUID id){
         return userUseCases.deleteUser(id);
     }
 }

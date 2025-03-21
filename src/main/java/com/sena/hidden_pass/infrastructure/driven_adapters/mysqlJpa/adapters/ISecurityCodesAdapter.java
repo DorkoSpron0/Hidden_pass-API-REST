@@ -1,9 +1,12 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
+import com.sena.hidden_pass.domain.models.SecurityCodesModel;
+import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.SecurityCodesCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.SecurityCodesDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.ISecurityCodesRepository;
+import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -27,13 +30,13 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
 
     @Override
     public String sendSecurityCode(String email) throws MessagingException {
-        UserDBO userFounded = userAdapter.getUserByUEmail(email);
+        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserByUEmail(email));
 
         SecurityCodesDBO newSecurityCode = securityCodesRepository.save(new SecurityCodesDBO());
 
         userFounded.setSecurityCodes(newSecurityCode);
 
-        userAdapter.registerUser(userFounded);
+        userAdapter.registerUser(UserMapper.userDBOToModel(userFounded));
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -49,13 +52,13 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
     }
 
     @Override
-    public SecurityCodesDBO getSecurityCode() {
+    public SecurityCodesModel getSecurityCode() {
         return null;
     }
 
     @Override
     public boolean validateSecurityCode(UUID security_code, String user_email) {
-        UserDBO userFounded = userAdapter.getUserByUEmail(user_email);
+        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserByUEmail(user_email));
 
         SecurityCodesDBO codeFounded = Optional.ofNullable(userFounded.getSecurityCodes())
                 .orElseThrow(() -> new IllegalArgumentException("User dont Have security code"));
