@@ -59,11 +59,11 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public UserModel updateUser(UUID id, UserModel UserDBO) {
+    public UserModel updateUser(UUID id, UserModel userModel) {
         UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
-        userFounded.setEmail(userFounded.getEmail());
-        userFounded.setUsername(UserDBO.getUsername());
-        userFounded.setMaster_password(UserDBO.getMaster_password());
+        userFounded.setEmail(userModel.getEmail());
+        userFounded.setUsername(userModel.getUsername());
+        userFounded.setMaster_password(passwordEncoder.encode(userModel.getMaster_password()));
 
         userFounded.setPasswordList(userFounded.getPasswordList());
         userFounded.setNoteList(userFounded.getNoteList());

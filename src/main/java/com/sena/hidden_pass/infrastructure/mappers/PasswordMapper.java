@@ -11,7 +11,7 @@ public class PasswordMapper {
         return new PasswordDBO(
                 model.getId_password(),
                 model.getName(),
-                model.getDescription(),
+                model.getUrl(),
                 model.getDateTime(),
                 model.getEmail_user(),
                 model.getPassword(),
