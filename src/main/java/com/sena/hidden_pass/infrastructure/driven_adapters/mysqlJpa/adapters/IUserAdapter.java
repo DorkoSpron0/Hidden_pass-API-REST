@@ -81,6 +81,8 @@ public class IUserAdapter implements UserUseCases {
     public UserModel updateMasterPassword(String password, EmailValueObject email) {
         UserDBO userFounded = UserMapper.userModelToDBO(getUserByUEmail(email.getEmail()));
 
+        System.out.println(userFounded.toString());
+
         userFounded.setMaster_password(passwordEncoder.encode(password));
 
         userRepository.save(userFounded);

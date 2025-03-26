@@ -52,6 +52,7 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     public UserModel updateUser(@PathVariable UUID id, @RequestBody UserDTO user){
+        System.out.println(user.toString());
         return userUseCases.updateUser(id, UserMapper.userDTOToModel(user));
     }
 
