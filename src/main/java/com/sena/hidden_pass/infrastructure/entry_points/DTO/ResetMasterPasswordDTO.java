@@ -28,4 +28,12 @@ public class ResetMasterPasswordDTO {
     public void setNew_password(String new_password) {
         this.new_password = new_password;
     }
+
+    @Override
+    public String toString() {
+        return "ResetMasterPasswordDTO{" +
+                "email='" + email + '\'' +
+                ", new_password='" + new_password + '\'' +
+                '}';
+    }
 }
