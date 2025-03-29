@@ -23,10 +23,10 @@ public class IPriorityAdapter implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception { // Insert when server starts
         List<PriorityDBO> priorityDBOS = new ArrayList<>();
-        priorityDBOS.add(new PriorityDBO(PriorityNames.LOW));
-        priorityDBOS.add(new PriorityDBO(PriorityNames.MEDIUM));
-        priorityDBOS.add(new PriorityDBO(PriorityNames.HIGH));
-        priorityDBOS.add(new PriorityDBO(PriorityNames.CRITICAL));
+        priorityDBOS.add(new PriorityDBO(PriorityNames.BAJA));
+        priorityDBOS.add(new PriorityDBO(PriorityNames.MEDIA));
+        priorityDBOS.add(new PriorityDBO(PriorityNames.ALTA));
+        priorityDBOS.add(new PriorityDBO(PriorityNames.CRITICA));
         priorityRepository.saveAll(priorityDBOS);
     }
 }
