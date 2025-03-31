@@ -47,7 +47,8 @@ public class IPasswordAdapter implements PasswordUseCases {
         PasswordDBO passwordSaved = passwordRepository.save(PasswordMapper.passwordModelToDBO(password));
 
         // Obtener el usuario
-        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
+        UserDBO userFounded = userRepository.findById(user_id)
+                .orElseThrow(() -> new IllegalArgumentException("USER NOT FOUND"));
 
         // Añadir la contraseña guardada (persistida) a la lista
         userFounded.getPasswordList().add(passwordSaved);  // Usar 'passwordSaved' en lugar de un nuevo objeto
