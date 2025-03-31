@@ -6,6 +6,7 @@ import com.sena.hidden_pass.domain.usecases.SecurityCodesCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.SecurityCodesDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.ISecurityCodesRepository;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -27,6 +28,8 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
     private ISecurityCodesRepository securityCodesRepository;
 
     private JavaMailSender javaMailSender;
+
+    private IUserRepository userRepository;
 
     @Override
     public String sendSecurityCode(String email) throws MessagingException {
@@ -64,6 +67,9 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
                 .orElseThrow(() -> new IllegalArgumentException("User dont Have security code"));
 
         if(!codeFounded.getSecurity_code().equals(security_code)) throw new IllegalArgumentException("Security Code invalid");
+
+        userFounded.setSecurityCodes(null);
+        userRepository.save(userFounded);
 
         return true;
     }

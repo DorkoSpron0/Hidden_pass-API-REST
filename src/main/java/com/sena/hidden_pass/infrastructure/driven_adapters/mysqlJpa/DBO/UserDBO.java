@@ -44,7 +44,7 @@ public class UserDBO {
     @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<FolderDBO> folderList;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // Si le quito la referencia se borra
     @JoinColumn(name = "id_user", referencedColumnName = "security_code")
     private SecurityCodesDBO securityCodes;
 

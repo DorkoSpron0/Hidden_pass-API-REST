@@ -51,12 +51,10 @@ public class INoteAdapter implements NoteUseCases {
         note.setId_priority(PriorityMapper.priorityDBOToModel(priority));
 
         NoteDBO noteSaved = noteRepository.save(NoteMapper.noteModelToDBO(note));
-
-        UserDBO userFounded = userRepository.findById(user_id)
-                .orElseThrow(() -> new IllegalArgumentException("USER NOT FOUND"));
-
+        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
         userFounded.getNoteList().add(noteSaved);
-        userRepository.save(userFounded); // o el método que uses para persistir
+
+        userRepository.save(userFounded);
 
         return NoteMapper.noteDBOToModel(noteSaved);
     }
