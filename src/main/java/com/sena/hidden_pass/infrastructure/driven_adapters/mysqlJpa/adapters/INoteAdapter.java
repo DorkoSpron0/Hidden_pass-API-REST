@@ -9,6 +9,7 @@ import com.sena.hidden_pass.domain.models.PriorityNames;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.INoteRepository;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import com.sena.hidden_pass.infrastructure.mappers.NoteMapper;
 import com.sena.hidden_pass.infrastructure.mappers.PriorityMapper;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
@@ -26,6 +27,7 @@ public class INoteAdapter implements NoteUseCases {
 
     private INoteRepository noteRepository;
     private IUserAdapter userAdapter;
+    private IUserRepository userRepository;
 
     @Autowired
     private IPriorityRepository priorityRepository;
@@ -49,10 +51,12 @@ public class INoteAdapter implements NoteUseCases {
         note.setId_priority(PriorityMapper.priorityDBOToModel(priority));
 
         NoteDBO noteSaved = noteRepository.save(NoteMapper.noteModelToDBO(note));
-        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
-        userFounded.getNoteList().add(noteSaved);
-        userAdapter.registerUser(UserMapper.userDBOToModel(userFounded));
 
+        UserDBO userFounded = userRepository.findById(user_id)
+                .orElseThrow(() -> new IllegalArgumentException("USER NOT FOUND"));
+
+        userFounded.getNoteList().add(noteSaved);
+        userRepository.save(userFounded); // o el método que uses para persistir
 
         return NoteMapper.noteDBOToModel(noteSaved);
     }
