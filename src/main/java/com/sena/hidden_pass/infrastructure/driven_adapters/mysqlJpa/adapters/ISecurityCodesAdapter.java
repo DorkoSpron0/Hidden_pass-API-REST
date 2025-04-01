@@ -8,6 +8,7 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.ISecurityCodesRepository;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
+import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,8 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
 
     private IUserRepository userRepository;
 
+    private MailService mailService;
+
     @Override
     public String sendSecurityCode(String email) throws MessagingException {
         UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserByUEmail(email));
@@ -41,15 +44,7 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
 
         userAdapter.registerUser(UserMapper.userDBOToModel(userFounded));
 
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-        helper.setTo(email);
-        helper.setSubject("HIDDEN PASS - SECURITY CODE");
-        helper.setText("Tu codigo de seguridad es: " + newSecurityCode.getSecurity_code(), true); // 'true' permite HTML en el mensaje
-
-        javaMailSender.send(message);
-
+        mailService.sendEmailAyncImpl(email, "HIDDEN PASS - SECURITY CODE", "Tu codigo de seguridad es: " + newSecurityCode.getSecurity_code());
 
         return "El código de seguridad fue enviado al correo: " + email +  " revisa tu bandeja de entrada.";
     }
