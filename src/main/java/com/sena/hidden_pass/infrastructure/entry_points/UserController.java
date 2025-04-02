@@ -3,12 +3,10 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.LoginUserDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.RecoverPasswordDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
+import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +23,8 @@ public class UserController {
 
     private UserUseCases userUseCases;
 
+    private MailService mailService;
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id){
         try{
@@ -39,6 +39,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO user){
         try{
+            mailService.sendEmailAyncImpl(user.getEmail().getEmail(), "BIENVENIDO A HIDDEN PASS", "Bienvenido <3");
             return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));
         }catch (Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
