@@ -10,6 +10,8 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPasswordRep
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import com.sena.hidden_pass.infrastructure.mappers.PasswordMapper;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
+import com.sena.hidden_pass.infrastructure.utils.AESUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,30 +35,50 @@ public class IPasswordAdapter implements PasswordUseCases {
     @Override
     public Set<PasswordModel> getAllPassword(UUID user_id) {
         UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
-        return userFounded.getPasswordList().stream().map(PasswordMapper::passwordDBOToModel).collect(Collectors.toSet());
+        return userFounded.getPasswordList().stream().map(
+                passwordDBO -> {
+                    try {
+                        passwordDBO.setPassword(AESUtil.decrypt(passwordDBO.getPassword()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    return PasswordMapper.passwordDBOToModel(passwordDBO);
+                }
+        ).collect(Collectors.toSet());
     }
 
     @Override
     public PasswordModel getPasswordById(UUID password_id) {
-        return PasswordMapper.passwordDBOToModel(passwordRepository.findById(password_id).orElseThrow(() -> new IllegalArgumentException("Password not found")));
+        try{
+            PasswordModel passwordFounded = PasswordMapper.passwordDBOToModel(passwordRepository.findById(password_id).orElseThrow(() -> new IllegalArgumentException("Password not found")));
+
+            passwordFounded.setPassword(AESUtil.decrypt(passwordFounded.getPassword()));
+            return passwordFounded;
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
     public PasswordModel createPassword(PasswordModel password, UUID user_id) {
-        // Guardar la contraseña primero
-        PasswordDBO passwordSaved = passwordRepository.save(PasswordMapper.passwordModelToDBO(password));
+        try{
+            // Guardar la contraseña primero
+            password.setPassword(AESUtil.encrypt(password.getPassword()));
+            PasswordDBO passwordSaved = passwordRepository.save(PasswordMapper.passwordModelToDBO(password));
 
-        // Obtener el usuario
-        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
+            // Obtener el usuario
+            UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
 
-        // Añadir la contraseña guardada (persistida) a la lista
-        userFounded.getPasswordList().add(passwordSaved);  // Usar 'passwordSaved' en lugar de un nuevo objeto
+            // Añadir la contraseña guardada (persistida) a la lista
+            userFounded.getPasswordList().add(passwordSaved);  // Usar 'passwordSaved' en lugar de un nuevo objeto
 
-        // Guardar el usuario actualizado
-        userRepository.save(userFounded);
+            // Guardar el usuario actualizado
+            userRepository.save(userFounded);
 
-        return PasswordMapper.passwordDBOToModel(passwordSaved);
-
+            return PasswordMapper.passwordDBOToModel(passwordSaved);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
@@ -64,7 +86,11 @@ public class IPasswordAdapter implements PasswordUseCases {
         PasswordDBO passwordFounded = PasswordMapper.passwordModelToDBO(getPasswordById(password_id));
 
         passwordFounded.setName(password.getName());
-        passwordFounded.setPassword(password.getPassword());
+        try{
+            passwordFounded.setPassword(AESUtil.encrypt(password.getPassword()));
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
         passwordFounded.setEmail_user(password.getEmail_user());
         passwordFounded.setUrl(password.getUrl());
         if(password.getId_folder() != null){
