@@ -4,6 +4,7 @@ import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
@@ -52,9 +53,9 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public UserModel updateUser(@PathVariable UUID id, @RequestBody UserDTO user){
+    public UserModel updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
         System.out.println(user.toString());
-        return userUseCases.updateUser(id, UserMapper.userDTOToModel(user));
+        return userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user), user.getMaster_password_saved().getMaster_password());
     }
 
     @PutMapping("/update/password")

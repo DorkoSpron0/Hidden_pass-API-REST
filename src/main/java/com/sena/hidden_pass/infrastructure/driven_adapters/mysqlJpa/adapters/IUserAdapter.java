@@ -59,17 +59,25 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public UserModel updateUser(UUID id, UserModel userModel) {
+    public UserModel updateUser(UUID id, UserModel userModel, String passwordSaved) {
+
+
         UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
-        userFounded.setEmail(userModel.getEmail());
-        userFounded.setUsername(userModel.getUsername());
-        userFounded.setMaster_password(passwordEncoder.encode(userModel.getMaster_password()));
+        if(passwordEncoder.matches(passwordSaved, userFounded.getMaster_password())){
+            userFounded.setEmail(userModel.getEmail());
+            userFounded.setUsername(userModel.getUsername());
+            userFounded.setMaster_password(passwordEncoder.encode(userModel.getMaster_password()));
 
-        userFounded.setPasswordList(userFounded.getPasswordList());
-        userFounded.setNoteList(userFounded.getNoteList());
-        userFounded.setFolderList(userFounded.getFolderList());
+            userFounded.setUrl_image(userModel.getUrl_image());
 
-        return UserMapper.userDBOToModel(userRepository.save(userFounded));
+            userFounded.setPasswordList(userFounded.getPasswordList());
+            userFounded.setNoteList(userFounded.getNoteList());
+            userFounded.setFolderList(userFounded.getFolderList());
+
+            return UserMapper.userDBOToModel(userRepository.save(userFounded));
+        }else{
+            throw new IllegalArgumentException("La contraseña ingresada no es correcta");
+        }
     }
 
     @Override

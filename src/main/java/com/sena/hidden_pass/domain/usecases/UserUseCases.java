@@ -12,7 +12,7 @@ public interface UserUseCases {
     UserModel getUserByUsername(String username);
     UserModel getUserByUEmail(String email);
     String loginUser(UserModel UserModel);
-    UserModel updateUser(UUID id,UserModel UserModel);
+    UserModel updateUser(UUID id,UserModel UserModel, String passwordSaved);
     UserModel deleteUser(UUID id);
 
     UserModel updateMasterPassword(String password, EmailValueObject email);
