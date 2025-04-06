@@ -24,7 +24,6 @@ public class UpdateUserDTO {
     private UsernameValueObject username;
     private EmailValueObject email;
     private MasterPasswordValueObject master_password_saved;
-    private MasterPasswordValueObject new_master_password;
     private String url_image;
 
     @Override
@@ -33,7 +32,6 @@ public class UpdateUserDTO {
                 "email=" + email +
                 ", username=" + username +
                 ", master_password_saved=" + master_password_saved +
-                ", new_master_password=" + new_master_password +
                 ", url_image='" + url_image + '\'' +
                 '}';
     }

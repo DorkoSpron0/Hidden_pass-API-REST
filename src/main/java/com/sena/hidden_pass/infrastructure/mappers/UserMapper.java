@@ -135,13 +135,13 @@ public class UserMapper {
         );
     }
 
-    public static UserModel updateUserDTOToModel(UpdateUserDTO updateUserDTO){
+    public static UserModel updateUserDTOToModel(UpdateUserDTO dto){
         return new UserModel(
                 null,
-                updateUserDTO.getEmail(),
-                updateUserDTO.getUsername(),
-                updateUserDTO.getNew_master_password().getMaster_password(),
-                updateUserDTO.getUrl_image(),
+                dto.getEmail(),
+                dto.getUsername(),
+                dto.getMaster_password_saved().getMaster_password(),
+                dto.getUrl_image(),
                 null,
                 null,
                 null,

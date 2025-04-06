@@ -86,11 +86,23 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public UserModel updateMasterPassword(String password, EmailValueObject email) {
+    public UserModel recoverMasterPassword(String password, EmailValueObject email) {
         UserDBO userFounded = UserMapper.userModelToDBO(getUserByUEmail(email.getEmail()));
 
         userFounded.setMaster_password(passwordEncoder.encode(password));
 
+        userRepository.save(userFounded);
+
+        return UserMapper.userDBOToModel(userFounded);
+    }
+
+    @Override
+    public UserModel updateMasterPassword(UUID id, String current_password, String new_password) {
+        UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
+
+        if(!matchPassword(current_password, userFounded.getMaster_password())) throw new IllegalArgumentException("La contraseña ingresada no es correcta");
+
+        userFounded.setMaster_password(passwordEncoder.encode(new_password));
         userRepository.save(userFounded);
 
         return UserMapper.userDBOToModel(userFounded);
