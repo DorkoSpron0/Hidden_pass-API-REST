@@ -41,7 +41,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO user){
         try{
-            mailService.sendEmailAyncImpl(user.getEmail().getEmail(), "BIENVENIDO A HIDDEN PASS", "Bienvenido <3");
             return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));
         }catch (Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
@@ -56,7 +55,7 @@ public class UserController {
     @PutMapping("/update/{id}")
     public UserModel updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
         System.out.println(user.toString());
-        return userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user), user.getMaster_password_saved().getMaster_password());
+        return userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));
     }
 
     @PutMapping("/update/password")

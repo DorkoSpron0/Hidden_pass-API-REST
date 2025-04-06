@@ -42,9 +42,52 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
 
         userFounded.setSecurityCodes(newSecurityCode);
 
-        userAdapter.registerUser(UserMapper.userDBOToModel(userFounded));
+        userRepository.save(userFounded);
 
-        mailService.sendEmailAyncImpl(email, "HIDDEN PASS - SECURITY CODE", "Tu codigo de seguridad es: " + newSecurityCode.getSecurity_code());
+        String body = String.format("""
+    <!DOCTYPE html>
+    <html lang="es">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Código de verificación - Hidden Pass</title>
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #f4f4f7; font-family: Arial, sans-serif;">
+        <table align="center" width="100%%" cellpadding="0" cellspacing="0" style="padding: 40px 0;">
+          <tr>
+            <td>
+              <table align="center" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; padding: 30px; border-radius: 6px;">
+                <tr>
+                  <td align="center" style="padding-bottom: 20px;">
+                    <img src="https://i.ibb.co/7xP5SDfn/Logo-Simple.png" alt="Hidden Pass Logo" width="80" style="display: block; margin-bottom: 10px;" />
+                    <h1 style="margin: 0; font-size: 24px; color: #222222;">Código de verificación</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px; color: #333333; line-height: 1.5;">
+                    <p>Hola,</p>
+                    <p>Estás intentando realizar una acción que requiere verificación.</p>
+                    <p><strong>Tu código de seguridad es:</strong></p>
+                    <p style="font-size: 28px; font-weight: bold; text-align: center; color: #007bff; margin: 20px 0;">%s</p>
+                    <p>Si no fuiste tú quien lo solicitó, puedes ignorar este mensaje de forma segura.</p>
+                    <p>— El equipo de Hidden Pass</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="font-size: 12px; color: #999999; padding-top: 30px;">
+                    © 2025 Hidden Pass. Todos los derechos reservados.<br />
+                    Este correo fue enviado automáticamente, por favor no respondas a esta dirección.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+    """, newSecurityCode.getSecurity_code());
+
+
+        mailService.sendEmailAyncImpl(email, "HIDDEN PASS - SECURITY CODE", body);
 
         return "El código de seguridad fue enviado al correo: " + email +  " revisa tu bandeja de entrada.";
     }

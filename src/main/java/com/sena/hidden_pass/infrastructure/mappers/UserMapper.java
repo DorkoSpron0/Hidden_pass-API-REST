@@ -140,7 +140,7 @@ public class UserMapper {
                 null,
                 dto.getEmail(),
                 dto.getUsername(),
-                dto.getMaster_password_saved().getMaster_password(),
+                null,
                 dto.getUrl_image(),
                 null,
                 null,

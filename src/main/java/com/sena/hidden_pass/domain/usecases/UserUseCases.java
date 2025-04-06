@@ -11,7 +11,7 @@ public interface UserUseCases {
     UserModel getUserByUsername(String username);
     UserModel getUserByUEmail(String email);
     String loginUser(UserModel UserModel);
-    UserModel updateUser(UUID id,UserModel UserModel, String passwordSaved);
+    UserModel updateUser(UUID id,UserModel UserModel);
     UserModel deleteUser(UUID id);
 
     UserModel recoverMasterPassword(String password, EmailValueObject email);
