@@ -4,7 +4,6 @@ import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import jakarta.persistence.Embedded;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

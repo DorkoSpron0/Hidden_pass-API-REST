@@ -1,7 +1,5 @@
 package com.sena.hidden_pass.domain.models;
 
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityDBO;
-
 import java.util.UUID;
 
 public class NoteModel {

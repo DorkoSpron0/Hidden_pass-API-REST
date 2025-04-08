@@ -3,7 +3,6 @@ package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Builder

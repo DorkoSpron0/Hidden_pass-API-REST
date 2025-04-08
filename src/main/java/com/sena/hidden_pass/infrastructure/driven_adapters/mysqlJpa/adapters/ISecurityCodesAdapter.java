@@ -1,7 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.domain.models.SecurityCodesModel;
-import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.SecurityCodesCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.SecurityCodesDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
@@ -10,14 +9,11 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserReposit
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor

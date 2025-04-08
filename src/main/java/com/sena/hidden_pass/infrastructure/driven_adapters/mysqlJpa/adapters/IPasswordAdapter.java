@@ -11,7 +11,6 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserReposit
 import com.sena.hidden_pass.infrastructure.mappers.PasswordMapper;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.utils.AESUtil;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points.DTO;
 
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

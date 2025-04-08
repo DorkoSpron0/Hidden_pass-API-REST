@@ -2,7 +2,6 @@ package com.sena.hidden_pass.domain.usecases;
 
 import com.sena.hidden_pass.domain.models.PasswordModel;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

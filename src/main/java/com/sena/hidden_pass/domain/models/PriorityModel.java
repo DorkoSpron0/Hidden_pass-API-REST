@@ -1,8 +1,5 @@
 package com.sena.hidden_pass.domain.models;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 import java.util.UUID;
 
 public class PriorityModel {

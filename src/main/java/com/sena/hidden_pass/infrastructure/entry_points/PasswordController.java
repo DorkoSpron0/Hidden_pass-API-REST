@@ -1,6 +1,5 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
-import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.IPasswordAdapter;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.PasswordDTO;
 import com.sena.hidden_pass.infrastructure.mappers.PasswordMapper;

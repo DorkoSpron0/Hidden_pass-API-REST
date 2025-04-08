@@ -119,7 +119,7 @@ public class IUserAdapter implements UserUseCases {
         UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
             userFounded.setEmail(userModel.getEmail());
             userFounded.setUsername(userModel.getUsername());
-            userFounded.setMaster_password(passwordEncoder.encode(userModel.getMaster_password()));
+            userFounded.setMaster_password(userFounded.getMaster_password());
 
             userFounded.setUrl_image(userModel.getUrl_image());
 

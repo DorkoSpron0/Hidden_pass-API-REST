@@ -1,7 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.domain.models.NoteModel;
-import com.sena.hidden_pass.domain.models.PriorityModel;
 import com.sena.hidden_pass.domain.usecases.NoteUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.NoteDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityDBO;

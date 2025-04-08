@@ -5,7 +5,6 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRep
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.INoteAdapter;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.NoteDTO;
 import com.sena.hidden_pass.infrastructure.mappers.NoteMapper;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

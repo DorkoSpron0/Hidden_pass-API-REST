@@ -2,7 +2,6 @@ package com.sena.hidden_pass.application.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Hidden;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
