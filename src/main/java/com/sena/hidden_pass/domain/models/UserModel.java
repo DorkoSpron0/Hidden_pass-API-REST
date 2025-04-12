@@ -3,6 +3,7 @@ package com.sena.hidden_pass.domain.models;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,6 +32,21 @@ public class UserModel {
         this.noteList = noteList;
         this.folderList = folderList;
         this.securityCodes = securityCodes;
+    }
+
+    public UserModel(UserModel other) {
+        this.id_usuario = other.id_usuario;
+        this.username = new UsernameValueObject(other.username.getUsername()); // suponiendo inmutable
+        this.email = new EmailValueObject(other.email.getEmail()); // idem
+        this.master_password = other.master_password;
+        this.url_image = other.url_image;
+
+        // Copia defensiva de las listas (shallow copy)
+        this.passwordList = other.getPasswordList() != null ? new HashSet<>(other.passwordList) : new HashSet<>();
+        this.noteList = other.noteList != null ? new HashSet<>(other.noteList) : new HashSet<>();
+        this.folderList = other.folderList != null ? new HashSet<>(other.folderList) : new HashSet<>();
+
+        this.securityCodes = other.getSecurityCodes();
     }
 
     public EmailValueObject getEmail() {
