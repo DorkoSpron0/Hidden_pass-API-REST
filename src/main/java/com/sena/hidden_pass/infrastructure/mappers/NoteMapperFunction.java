@@ -13,9 +13,11 @@ public class NoteMapperFunction {
     public static final Function<NoteModel, NoteDBO> functionModelToDBO = (NoteModel model) ->
             new NoteDBO(
                     model.getId_note(),
-                    model.getId_priority() != null ? new PriorityDBO(
-                            model.getId_priority().getName()
-                    ) : null,
+                    model.getId_priority() != null ?
+                            new PriorityDBO(
+                                    model.getId_priority().getId_priority(),
+                                    model.getId_priority().getName()
+                            ) : null,
                     model.getTitle(),
                     model.getDescription()
             );

@@ -78,7 +78,7 @@ public class IUserAdapter implements UserUseCases {
             String username = user.getUsername().getUsername(); // Asumiendo que getUsername() devuelve el nombre directamente
 
             String body = MailTemplate.buildTemplate(username);
-            mailService.sendEmailAyncImpl(user.getEmail().getEmail(), "BIENVENIDO A HIDDEN PASS", body);
+            //mailService.sendEmailAyncImpl(user.getEmail().getEmail(), "BIENVENIDO A HIDDEN PASS", body);
             return registerUser.apply(user);
         }catch (Exception ex){
             throw new RuntimeException(ex.getMessage());
