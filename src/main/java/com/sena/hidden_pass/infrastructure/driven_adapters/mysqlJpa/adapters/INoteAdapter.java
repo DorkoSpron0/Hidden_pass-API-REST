@@ -12,10 +12,16 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserReposit
 import com.sena.hidden_pass.infrastructure.mappers.NoteMapper;
 import com.sena.hidden_pass.infrastructure.mappers.PriorityMapper;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
+import com.sena.hidden_pass.infrastructure.utils.AESUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,7 +40,18 @@ public class INoteAdapter implements NoteUseCases {
     @Override
     public Set<NoteModel> getAllNotesByUser(UUID user_id) {
         UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
-        return userFounded.getNoteList().stream().map(NoteMapper::noteDBOToModel).collect(Collectors.toSet());
+        Set<NoteModel> notes = userFounded.getNoteList().stream().map(NoteMapper::noteDBOToModel).collect(Collectors.toSet());
+
+        return notes.stream().map(noteModel -> {
+            try {
+                noteModel.setTitle(AESUtil.decrypt(noteModel.getTitle()));
+                noteModel.setDescription(AESUtil.decrypt(noteModel.getDescription()));
+
+                return noteModel;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toSet());
     }
 
     @Override
@@ -45,17 +62,25 @@ public class INoteAdapter implements NoteUseCases {
     @Override
     public NoteModel createNote(NoteModel note, UUID user_id, PriorityNames priority_name) {
 
-        PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException("PRIORITY NOT FOUND"));
+       try{
+           PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException("PRIORITY NOT FOUND"));
 
-        note.setId_priority(PriorityMapper.priorityDBOToModel(priority));
+           note.setId_priority(PriorityMapper.priorityDBOToModel(priority));
 
-        NoteDBO noteSaved = noteRepository.save(NoteMapper.noteModelToDBO(note));
-        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
-        userFounded.getNoteList().add(noteSaved);
+           // AES
+           note.setTitle(AESUtil.encrypt(note.getTitle()));
+           note.setDescription(AESUtil.encrypt(note.getDescription()));
 
-        userRepository.save(userFounded);
+           NoteDBO noteSaved = noteRepository.save(NoteMapper.noteModelToDBO(note));
+           UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
+           userFounded.getNoteList().add(noteSaved);
 
-        return NoteMapper.noteDBOToModel(noteSaved);
+           userRepository.save(userFounded);
+
+           return NoteMapper.noteDBOToModel(noteSaved);
+       }catch (Exception e){
+           throw new RuntimeException(e.getMessage());
+       }
     }
 
     @Override
@@ -63,17 +88,14 @@ public class INoteAdapter implements NoteUseCases {
 
         NoteDBO noteDBO = NoteMapper.noteModelToDBO(getNoteById(note_id));
 
-        System.out.println(note.toString());
-        System.out.println(noteDBO.toString());
-
-        noteDBO.setDescription(note.getDescription());
-        noteDBO.setTitle(note.getTitle());
+        try {
+            noteDBO.setDescription(AESUtil.encrypt(note.getDescription()));
+            noteDBO.setTitle(AESUtil.encrypt(note.getTitle()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         PriorityDBO priorityDBO = priorityRepository.getByName(note.getId_priority().getName()).orElseThrow(() -> new IllegalArgumentException("Priority not found"));
-
-        System.out.println(PriorityMapper.priorityDBOToModel(noteDBO.getId_priority()));
-        System.out.println(PriorityMapper.priorityModelToDBO(note.getId_priority()));
-
         noteDBO.setId_priority(priorityDBO);
 
 
