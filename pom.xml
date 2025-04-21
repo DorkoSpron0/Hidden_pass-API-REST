@@ -132,6 +132,76 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<excludes>
+
+								<exclude>**/HiddenPassApplication.class</exclude>
+
+								<!-- APP.CONFIG -->
+								<exclude>**/SecurityConfig.class</exclude>
+								<exclude>**/WebConfiguration.class</exclude>
+
+								<!-- DOMAIN -->
+								<exclude>**/models/**</exclude>
+								<exclude>**/usecases/**</exclude>
+								<exclude>**/valueObjects/**</exclude>
+
+								<!-- ENTRY POINTS -->
+								<exclude>**/DTO/**</exclude>
+
+								<!-- DRIVEN ADAPTERS.MYSQL -->
+								<exclude>**/IFolderRepository.class</exclude>
+								<exclude>**/INoteRepository.class</exclude>
+								<exclude>**/IPasswordRepository.class</exclude>
+								<exclude>**/IPriorityRepository.class</exclude>
+								<exclude>**/ISecurityCodesRepository.class</exclude>
+								<exclude>**/IUserRepository.class</exclude>
+
+								<exclude>**/DBO/**</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>jacoco-check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>BUNDLE</element>
+									<!-- Package significa que cada paquete debe tener el mínimo de cobertura - Bundle es global -->
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.90</minimum>
+											<!-- Debe tener un mínmimo del 90% cubierto -->
+
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
