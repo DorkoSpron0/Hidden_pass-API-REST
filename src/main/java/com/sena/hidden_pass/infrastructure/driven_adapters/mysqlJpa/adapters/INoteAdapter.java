@@ -17,11 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,6 +28,7 @@ public class INoteAdapter implements NoteUseCases {
     private INoteRepository noteRepository;
     private IUserAdapter userAdapter;
     private IUserRepository userRepository;
+    private AESUtil aesUtil;
 
     @Autowired
     private IPriorityRepository priorityRepository;
@@ -44,8 +40,8 @@ public class INoteAdapter implements NoteUseCases {
 
         return notes.stream().map(noteModel -> {
             try {
-                noteModel.setTitle(AESUtil.decrypt(noteModel.getTitle()));
-                noteModel.setDescription(AESUtil.decrypt(noteModel.getDescription()));
+                noteModel.setTitle(aesUtil.decrypt(noteModel.getTitle()));
+                noteModel.setDescription(aesUtil.decrypt(noteModel.getDescription()));
 
                 return noteModel;
             } catch (Exception e) {
@@ -61,15 +57,14 @@ public class INoteAdapter implements NoteUseCases {
 
     @Override
     public NoteModel createNote(NoteModel note, UUID user_id, PriorityNames priority_name) {
-
-       try{
-           PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException("PRIORITY NOT FOUND"));
+        PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -> new IllegalArgumentException("PRIORITY NOT FOUND"));
+        try{
 
            note.setId_priority(PriorityMapper.priorityDBOToModel(priority));
 
            // AES
-           note.setTitle(AESUtil.encrypt(note.getTitle()));
-           note.setDescription(AESUtil.encrypt(note.getDescription()));
+           note.setTitle(aesUtil.encrypt(note.getTitle()));
+           note.setDescription(aesUtil.encrypt(note.getDescription()));
 
            NoteDBO noteSaved = noteRepository.save(NoteMapper.noteModelToDBO(note));
            UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
@@ -78,8 +73,8 @@ public class INoteAdapter implements NoteUseCases {
            userRepository.save(userFounded);
 
            return NoteMapper.noteDBOToModel(noteSaved);
-       }catch (Exception e){
-           throw new RuntimeException(e.getMessage());
+       }catch (Exception e) {
+           throw new RuntimeException("Error creating note ", e);
        }
     }
 
@@ -89,8 +84,8 @@ public class INoteAdapter implements NoteUseCases {
         NoteDBO noteDBO = NoteMapper.noteModelToDBO(getNoteById(note_id));
 
         try {
-            noteDBO.setDescription(AESUtil.encrypt(note.getDescription()));
-            noteDBO.setTitle(AESUtil.encrypt(note.getTitle()));
+            noteDBO.setTitle(aesUtil.encrypt(note.getTitle()));
+            noteDBO.setDescription(aesUtil.encrypt(note.getDescription()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

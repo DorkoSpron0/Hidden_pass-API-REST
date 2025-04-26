@@ -108,7 +108,7 @@ public class IUserAdapter implements UserUseCases {
     public String loginUser(UserModel UserDBO) {
         UserDBO userFounded = userRepository.findByEmail_Email(UserDBO.getEmail().getEmail()).orElseThrow(() -> new UsernameNotFoundException("User with email " + UserDBO.getEmail() + " not found"));
 
-        if(!matchPassword(UserDBO.getMaster_password(), userFounded.getMaster_password())) throw new IllegalArgumentException("Password don't match");
+        if(!matchPassword(UserDBO.getMaster_password(), userFounded.getMaster_password())) throw new IllegalArgumentException("Credenciales incorrectas");
 
         return jwtFilter.generateToken(userFounded.getId_usuario());
     }
@@ -150,7 +150,7 @@ public class IUserAdapter implements UserUseCases {
     public UserModel updateMasterPassword(UUID id, String current_password, String new_password) {
         UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
 
-        if(!matchPassword(current_password, userFounded.getMaster_password())) throw new IllegalArgumentException("La contraseña ingresada no es correcta");
+        if(!matchPassword(current_password, userFounded.getMaster_password())) throw new IllegalArgumentException("Credenciales incorrectas");
 
         userFounded.setMaster_password(passwordEncoder.encode(new_password));
         userRepository.save(userFounded);
@@ -158,8 +158,7 @@ public class IUserAdapter implements UserUseCases {
         return UserMapper.userDBOToModel(userFounded);
     }
 
-
-    private boolean matchPassword(String rawPassword, String encodedPassword){
+    public boolean matchPassword(String rawPassword, String encodedPassword){
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

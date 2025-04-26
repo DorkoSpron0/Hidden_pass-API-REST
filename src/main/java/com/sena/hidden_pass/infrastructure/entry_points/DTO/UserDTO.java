@@ -19,9 +19,9 @@ public class UserDTO {
     private UsernameValueObject username;
     private EmailValueObject email;
     private MasterPasswordValueObject master_password;
-    private Set<NoteDBO> noteList;
+    private Set<NoteDTO> noteList;
     private String url_image;
-    private Set<PasswordDBO> passwordList;
+    private Set<PasswordDTO> passwordList;
     private Set<FolderDBO> folderList;
     private SecurityCodesDBO securityCodes;
 

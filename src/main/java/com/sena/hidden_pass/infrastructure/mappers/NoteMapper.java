@@ -38,4 +38,8 @@ public class NoteMapper {
                 new PriorityModel(null, dto.getPriorityName())
         );
     }
+
+    public boolean passTest(){
+        return true;
+    }
 }

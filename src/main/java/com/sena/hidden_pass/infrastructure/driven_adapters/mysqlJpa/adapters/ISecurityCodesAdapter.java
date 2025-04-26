@@ -10,7 +10,6 @@ import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,8 +22,6 @@ public class ISecurityCodesAdapter implements SecurityCodesCases {
     private IUserAdapter userAdapter;
 
     private ISecurityCodesRepository securityCodesRepository;
-
-    private JavaMailSender javaMailSender;
 
     private IUserRepository userRepository;
 

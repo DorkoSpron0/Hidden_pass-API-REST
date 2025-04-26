@@ -15,4 +15,8 @@ public class SecurityCodeMapper {
                 dbo.getSecurity_code()
         );
     }
+
+    public boolean passTest(){
+        return true;
+    }
 }

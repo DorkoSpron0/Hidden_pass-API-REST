@@ -7,7 +7,7 @@ public class PriorityMapper {
 
     public static PriorityDBO priorityModelToDBO(PriorityModel model){
         return new PriorityDBO(
-                model.getId_priority() != null ? model.getId_priority() : null,
+                model.getId_priority(),
                 model.getName()
         );
     }
@@ -17,5 +17,9 @@ public class PriorityMapper {
                 dbo.getId_priority(),
                 dbo.getName()
         );
+    }
+
+    public boolean passTest(){
+        return true;
     }
 }

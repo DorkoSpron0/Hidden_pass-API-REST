@@ -24,6 +24,7 @@ public class IPasswordAdapter implements PasswordUseCases {
     private UserUseCases userAdapter;
     private IPasswordRepository passwordRepository;
     private IUserRepository userRepository;
+    private AESUtil aesUtil;
 
     public IPasswordAdapter(IPasswordRepository passwordRepository, UserUseCases userAdapter, IUserRepository userRepository) {
         this.passwordRepository = passwordRepository;
@@ -37,7 +38,7 @@ public class IPasswordAdapter implements PasswordUseCases {
         return userFounded.getPasswordList().stream().map(
                 passwordDBO -> {
                     try {
-                        passwordDBO.setPassword(AESUtil.decrypt(passwordDBO.getPassword()));
+                        passwordDBO.setPassword(aesUtil.decrypt(passwordDBO.getPassword()));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -51,7 +52,7 @@ public class IPasswordAdapter implements PasswordUseCases {
         try{
             PasswordModel passwordFounded = PasswordMapper.passwordDBOToModel(passwordRepository.findById(password_id).orElseThrow(() -> new IllegalArgumentException("Password not found")));
 
-            passwordFounded.setPassword(AESUtil.decrypt(passwordFounded.getPassword()));
+            passwordFounded.setPassword(aesUtil.decrypt(passwordFounded.getPassword()));
             return passwordFounded;
         }catch (Exception ex){
             throw new RuntimeException(ex);
@@ -62,7 +63,7 @@ public class IPasswordAdapter implements PasswordUseCases {
     public PasswordModel createPassword(PasswordModel password, UUID user_id) {
         try{
             // Guardar la contraseña primero
-            password.setPassword(AESUtil.encrypt(password.getPassword()));
+            password.setPassword(aesUtil.encrypt(password.getPassword()));
             PasswordDBO passwordSaved = passwordRepository.save(PasswordMapper.passwordModelToDBO(password));
 
             // Obtener el usuario
@@ -86,7 +87,7 @@ public class IPasswordAdapter implements PasswordUseCases {
 
         passwordFounded.setName(password.getName());
         try{
-            passwordFounded.setPassword(AESUtil.encrypt(password.getPassword()));
+            passwordFounded.setPassword(aesUtil.encrypt(password.getPassword()));
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }

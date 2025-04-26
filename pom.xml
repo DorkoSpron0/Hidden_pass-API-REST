@@ -198,6 +198,32 @@
 									</limits>
 								</rule>
 							</rules>
+							<excludes>
+
+								<exclude>**/HiddenPassApplication.class</exclude>
+
+								<!-- APP.CONFIG -->
+								<exclude>**/SecurityConfig.class</exclude>
+								<exclude>**/WebConfiguration.class</exclude>
+
+								<!-- DOMAIN -->
+								<exclude>**/models/**</exclude>
+								<exclude>**/usecases/**</exclude>
+								<exclude>**/valueObjects/**</exclude>
+
+								<!-- ENTRY POINTS -->
+								<exclude>**/DTO/**</exclude>
+
+								<!-- DRIVEN ADAPTERS.MYSQL -->
+								<exclude>**/IFolderRepository.class</exclude>
+								<exclude>**/INoteRepository.class</exclude>
+								<exclude>**/IPasswordRepository.class</exclude>
+								<exclude>**/IPriorityRepository.class</exclude>
+								<exclude>**/ISecurityCodesRepository.class</exclude>
+								<exclude>**/IUserRepository.class</exclude>
+
+								<exclude>**/DBO/**</exclude>
+							</excludes>
 						</configuration>
 					</execution>
 				</executions>

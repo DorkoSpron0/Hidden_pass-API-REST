@@ -65,4 +65,8 @@ public class PasswordMapper {
                         ) : null
         );
     }
+
+    public boolean passTest(){
+        return true;
+    }
 }

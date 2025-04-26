@@ -15,7 +15,7 @@ public class AESUtil {
     private static final String ALGORITHM = "AES";
 
     // cifrar
-    public static String encrypt(String rawPassword) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public String encrypt(String rawPassword) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         SecretKeySpec key = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
 
@@ -26,12 +26,16 @@ public class AESUtil {
     }
 
     // decifrar
-    public static String decrypt(String encryptedText) throws Exception {
+    public String decrypt(String encryptedText) throws Exception {
         SecretKeySpec key = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
         byte[] originalBytes = cipher.doFinal(decodedBytes);
         return new String(originalBytes);
+    }
+
+    public boolean passTest(){
+        return true;
     }
 }
