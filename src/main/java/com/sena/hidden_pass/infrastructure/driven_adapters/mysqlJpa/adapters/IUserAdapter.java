@@ -138,8 +138,10 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public UserModel deleteUser(UUID id) {
-        return null;
+    public String deleteUser(UUID id) {
+        UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
+        this.userRepository.delete(userFounded);
+        return "User with id " + id + " deleted successfully";
     }
 
     @Override

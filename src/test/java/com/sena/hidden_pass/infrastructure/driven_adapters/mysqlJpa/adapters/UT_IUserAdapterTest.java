@@ -309,16 +309,48 @@ public class UT_IUserAdapterTest {
         assertEquals("User with id " + id + " not found", exception.getMessage());
     }
 
-    @Test // TODO - TDD
+    @Test
     void testDeleteUser(){
         // Given
         UUID id = UUID.randomUUID();
 
+        ArgumentCaptor<UserDBO> userRemovedCaptor = ArgumentCaptor.forClass(UserDBO.class);
+        UserDBO userExpected = new UserDBO();
+        userExpected.setId_usuario(id);
         // When
-        UserModel result = this.userAdapter.deleteUser(id);
+        when(this.userRepository.findById(eq(id))).thenReturn(Optional.of(userExpected));
+        doNothing().when(this.userRepository).delete(any(UserDBO.class));
+        String result = this.userAdapter.deleteUser(id);
 
         // Then
-        assertNull(result);
+        assertNotNull(result);
+
+        assertEquals("User with id " + id + " deleted successfully", result);
+
+        verify(this.userRepository).delete(userRemovedCaptor.capture());
+        UserDBO userFounded = userRemovedCaptor.getValue();
+
+        assertEquals(id, userFounded.getId_usuario());
+        verify(this.userRepository).delete(any(UserDBO.class));
+
+    }
+
+    @Test
+    void testDeleteUserNotFound(){
+        // Given
+        UUID id = UUID.randomUUID();
+
+        // When
+        when(this.userRepository.findById(eq(id))).thenReturn(Optional.empty());
+        doNothing().when(this.userRepository).delete(any(UserDBO.class));
+
+
+        // Then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.userAdapter.deleteUser(id);
+        });
+
+        assertEquals("User with id " + id + " not found", exception.getMessage());
     }
 
     @Test

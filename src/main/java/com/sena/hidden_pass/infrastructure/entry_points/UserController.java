@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public UserModel deleteUser(@PathVariable UUID id){
+    public String deleteUser(@PathVariable UUID id){
         return userUseCases.deleteUser(id);
     }
 }

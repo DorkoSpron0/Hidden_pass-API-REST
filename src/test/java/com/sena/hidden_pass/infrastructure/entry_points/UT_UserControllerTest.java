@@ -333,4 +333,34 @@ class UT_UserControllerTest {
 
         verify(this.userUseCases).updateMasterPassword(eq(id), eq(currentPassword), eq(newPassword));
     }
+
+    @Test
+    void testDeleteUser() throws Exception {
+        // given
+        UUID userId = UUID.randomUUID();
+
+        // When
+        when(this.userUseCases.deleteUser(eq(userId))).thenReturn("User deleted successfully");
+
+        // Then
+        mockMvc.perform(delete("/api/v1/hidden_pass/users/delete/{id}", userId))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User deleted successfully"));
+
+        verify(this.userUseCases).deleteUser(eq(userId));
+    }
+
+    @Test
+    void testDeleteUserNotFound() throws Exception {
+        // given
+        UUID userId = UUID.randomUUID();
+
+        // When
+        when(this.userUseCases.deleteUser(eq(userId))).thenThrow(new IllegalArgumentException("User not found"));
+
+        // Then
+        mockMvc.perform(delete("/api/v1/hidden_pass/users/delete/{id}", userId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("User not found"));
+    }
 }

@@ -32,15 +32,15 @@ public class UserDBO {
 
     private String url_image;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<NoteDBO> noteList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<PasswordDBO> passwordList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<FolderDBO> folderList;
 
