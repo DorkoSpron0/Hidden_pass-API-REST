@@ -2,6 +2,7 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 
 import com.sena.hidden_pass.UserDataProvider;
 import com.sena.hidden_pass.application.config.JwtFilter;
+import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
@@ -134,7 +135,13 @@ class UT_UserControllerTest {
         UserDTO dto = UserDataProvider.getUserDTO();
 
         // When
-        when(this.userUseCases.loginUser(any(UserModel.class))).thenReturn("jwtValidToken");
+        when(this.userUseCases.loginUser(any(UserModel.class))).thenReturn(new UserLoginModel(
+                UUID.randomUUID(),
+                new UsernameValueObject("username"),
+                new EmailValueObject("email@email.com"),
+                "jwtValidToken",
+                "url"
+        ));
 
         // Then
         mockMvc.perform(post("/api/v1/hidden_pass/users/login")
@@ -145,7 +152,7 @@ class UT_UserControllerTest {
                             "master_password": "Admin123@"
                         }
                         """)
-        ).andExpect(content().string("jwtValidToken"));
+        ).andExpect(jsonPath("$.token").value("jwtValidToken"));
     }
 
     @Test

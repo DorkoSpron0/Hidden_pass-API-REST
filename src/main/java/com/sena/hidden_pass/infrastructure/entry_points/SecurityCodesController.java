@@ -1,6 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.ISecurityCodesAdapter;
+import com.sena.hidden_pass.domain.usecases.SecurityCodesCases;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.SendSecurityCodeDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.ValidateSecurityCodeDTO;
 import jakarta.mail.MessagingException;
@@ -18,17 +18,11 @@ import java.util.UUID;
 @RequestMapping("/api/v1/hidden_pass/codes")
 public class SecurityCodesController {
 
-    private ISecurityCodesAdapter securityCodesAdapter;
+    private SecurityCodesCases securityCodesAdapter;
 
     @PostMapping("/send")
-    public String sendSecurityCode(@Valid @RequestBody SendSecurityCodeDTO sendSecurityCode) {
-
-        try{
+    public String sendSecurityCode(@Valid @RequestBody SendSecurityCodeDTO sendSecurityCode) throws MessagingException {
             return securityCodesAdapter.sendSecurityCode(sendSecurityCode.getEmail());
-        }catch (MessagingException ex){
-            return ex.getMessage();
-        }
-
     }
 
     @PostMapping("/validate")

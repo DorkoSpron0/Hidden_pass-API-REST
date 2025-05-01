@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
+import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@Valid @RequestBody UserDTO user){
+    public UserLoginModel loginUser(@Valid @RequestBody UserDTO user){
         return userUseCases.loginUser(UserMapper.userDTOToModel(user));
     }
 

@@ -2,6 +2,7 @@ package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.UserDataProvider;
 import com.sena.hidden_pass.application.config.JwtFilter;
+import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
@@ -214,12 +215,12 @@ public class UT_IUserAdapterTest {
         when(this.passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(this.jwtFilter.generateToken(any(UUID.class))).thenReturn("faketoken"); // 👈 mock agregado
 
-        String token = this.userAdapter.loginUser(model);
+        UserLoginModel userLoginModel = this.userAdapter.loginUser(model);
 
         // Then
-        assertNotNull(token);
+        assertNotNull(userLoginModel);
 
-        assertEquals("faketoken", token);
+        assertEquals("faketoken", userLoginModel.getToken());
         verify(this.userRepository).findByEmail_Email(anyString());
         verify(this.passwordEncoder).matches(anyString(), anyString());
         verify(this.jwtFilter).generateToken(any());

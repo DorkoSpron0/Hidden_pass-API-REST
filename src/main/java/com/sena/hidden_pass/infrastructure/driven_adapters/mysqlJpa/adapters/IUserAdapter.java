@@ -1,6 +1,7 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.application.config.JwtFilter;
+import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
@@ -105,12 +106,18 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public String loginUser(UserModel UserDBO) {
+    public UserLoginModel loginUser(UserModel UserDBO) {
         UserDBO userFounded = userRepository.findByEmail_Email(UserDBO.getEmail().getEmail()).orElseThrow(() -> new UsernameNotFoundException("User with email " + UserDBO.getEmail() + " not found"));
 
         if(!matchPassword(UserDBO.getMaster_password(), userFounded.getMaster_password())) throw new IllegalArgumentException("Credenciales incorrectas");
 
-        return jwtFilter.generateToken(userFounded.getId_usuario());
+        return new UserLoginModel(
+                userFounded.getId_usuario(),
+                userFounded.getUsername(),
+                userFounded.getEmail(),
+                jwtFilter.generateToken(userFounded.getId_usuario()),
+                userFounded.getUrl_image()
+        );
     }
 
     @Override
