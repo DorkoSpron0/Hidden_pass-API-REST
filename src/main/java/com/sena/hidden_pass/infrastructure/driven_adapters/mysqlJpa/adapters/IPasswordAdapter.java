@@ -26,7 +26,8 @@ public class IPasswordAdapter implements PasswordUseCases {
     private IUserRepository userRepository;
     private AESUtil aesUtil;
 
-    public IPasswordAdapter(IPasswordRepository passwordRepository, UserUseCases userAdapter, IUserRepository userRepository) {
+    public IPasswordAdapter(AESUtil aesUtil, IPasswordRepository passwordRepository, UserUseCases userAdapter, IUserRepository userRepository) {
+        this.aesUtil = aesUtil;
         this.passwordRepository = passwordRepository;
         this.userAdapter = userAdapter;
         this.userRepository = userRepository;
@@ -49,8 +50,8 @@ public class IPasswordAdapter implements PasswordUseCases {
 
     @Override
     public PasswordModel getPasswordById(UUID password_id) {
+        PasswordModel passwordFounded = PasswordMapper.passwordDBOToModel(passwordRepository.findById(password_id).orElseThrow(() -> new IllegalArgumentException("Password not found")));
         try{
-            PasswordModel passwordFounded = PasswordMapper.passwordDBOToModel(passwordRepository.findById(password_id).orElseThrow(() -> new IllegalArgumentException("Password not found")));
 
             passwordFounded.setPassword(aesUtil.decrypt(passwordFounded.getPassword()));
             return passwordFounded;
@@ -61,13 +62,14 @@ public class IPasswordAdapter implements PasswordUseCases {
 
     @Override
     public PasswordModel createPassword(PasswordModel password, UUID user_id) {
+
+        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
         try{
             // Guardar la contraseña primero
             password.setPassword(aesUtil.encrypt(password.getPassword()));
             PasswordDBO passwordSaved = passwordRepository.save(PasswordMapper.passwordModelToDBO(password));
 
             // Obtener el usuario
-            UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
 
             // Añadir la contraseña guardada (persistida) a la lista
             userFounded.getPasswordList().add(passwordSaved);  // Usar 'passwordSaved' en lugar de un nuevo objeto
@@ -79,6 +81,7 @@ public class IPasswordAdapter implements PasswordUseCases {
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
+
     }
 
     @Override

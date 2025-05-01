@@ -33,5 +33,4 @@ public class CustomExceptionHandlerResolver{
         public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException ex){
             return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());
         }
-
 }

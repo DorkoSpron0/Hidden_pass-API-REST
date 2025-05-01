@@ -1,5 +1,7 @@
 package com.sena.hidden_pass.infrastructure.utils;
 
+import org.springframework.stereotype.Component;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -9,6 +11,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+@Component
 public class AESUtil {
 
     private static final String SECRET_KEY = "MiClaveAES123456";

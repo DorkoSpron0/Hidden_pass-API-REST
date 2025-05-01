@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
+import com.sena.hidden_pass.domain.usecases.PasswordUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.IPasswordAdapter;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.PasswordDTO;
 import com.sena.hidden_pass.infrastructure.mappers.PasswordMapper;
@@ -14,62 +15,34 @@ import java.util.UUID;
 @RequestMapping("/api/v1/hidden_pass/passwords")
 public class PasswordController {
 
-    private IPasswordAdapter passwordAdapter;
+    private PasswordUseCases passwordAdapter;
 
-    public PasswordController(IPasswordAdapter iPasswordAdapter){
+    public PasswordController(PasswordUseCases iPasswordAdapter){
         this.passwordAdapter = iPasswordAdapter;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPasswords(@PathVariable UUID id){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.getAllPassword(id));
-        }catch (IllegalArgumentException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.getAllPassword(id));
     }
 
     @GetMapping("/password/{id}")
     public ResponseEntity<?> getPasswordById(@PathVariable UUID id){
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.getPasswordById(id));
-        }catch (IllegalArgumentException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.getPasswordById(id));
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<?> createPassword(@Valid @RequestBody PasswordDTO passwordDTO, @PathVariable UUID id){
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.createPassword(PasswordMapper.passwordDTOToModel(passwordDTO), id));
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.createPassword(PasswordMapper.passwordDTOToModel(passwordDTO), id));
     }
 
     @PutMapping("/password/{id}")
     public ResponseEntity<?> updatePassword(@Valid @RequestBody PasswordDTO passwordDTO, @PathVariable UUID id){
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.editPassword(PasswordMapper.passwordDTOToModel(passwordDTO), id));
-        }catch (IllegalArgumentException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(passwordAdapter.editPassword(PasswordMapper.passwordDTOToModel(passwordDTO), id));
     }
 
     @DeleteMapping("/password/{id}")
     public ResponseEntity<?> deletePassword(@PathVariable UUID id){
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.deletePassword(id));
-        }catch (IllegalArgumentException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(passwordAdapter.deletePassword(id));
     }
 }

@@ -1,11 +1,12 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
 import com.sena.hidden_pass.domain.models.NoteModel;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.INoteAdapter;
+import com.sena.hidden_pass.domain.usecases.NoteUseCases;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.NoteDTO;
 import com.sena.hidden_pass.infrastructure.mappers.NoteMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -16,8 +17,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/hidden_pass/notes")
 public class NoteController {
 
-    private INoteAdapter noteAdapter;
-    private IPriorityRepository priorityRepository;
+    private NoteUseCases noteAdapter;
 
     @GetMapping("/{user_id}")
     public Set<NoteModel> getNotesByUserId(@PathVariable UUID user_id){
@@ -25,9 +25,9 @@ public class NoteController {
     }
 
     @PostMapping("/{user_id}")
-    public NoteModel createNote(@RequestBody NoteDTO noteDTO, @PathVariable UUID user_id){
-        System.out.println(noteDTO.getPriorityName());
-        return noteAdapter.createNote(NoteMapper.noteDTOToModel(noteDTO), user_id, noteDTO.getPriorityName());
+    public ResponseEntity<NoteModel> createNote(@RequestBody NoteDTO noteDTO, @PathVariable UUID user_id){
+        NoteModel note = noteAdapter.createNote(NoteMapper.noteDTOToModel(noteDTO), user_id, noteDTO.getPriorityName());
+        return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
 
     @PutMapping("/{note_id}")

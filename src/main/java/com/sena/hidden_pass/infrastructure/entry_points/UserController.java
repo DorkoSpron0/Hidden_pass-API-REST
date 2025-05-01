@@ -11,6 +11,7 @@ import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +26,9 @@ public class UserController {
 
     private UserUseCases userUseCases;
 
-    private MailService mailService;
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(500).body(e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));
     }
 
     @PostMapping("/register")
@@ -53,9 +46,9 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public UserModel updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
-        System.out.println(user.toString());
-        return userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));
+    public ResponseEntity<UserModel> updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
+        UserModel model = userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));
+        return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
     @PutMapping("/update/password")
