@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomExceptionHandlerResolver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hidden_pass</a> &gt; <a href="index.source.html" class="el_package">com.sena.hidden_pass.application.config</a> &gt; <span class="el_source">CustomExceptionHandlerResolver.java</span></div><h1>CustomExceptionHandlerResolver.java</h1><pre class="source lang-java linenums">package com.sena.hidden_pass.application.config;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.mail.MessagingException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
+@Hidden
+@RestControllerAdvice
+<span class="fc" id="L17">public class CustomExceptionHandlerResolver{</span>
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;?&gt; handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+<span class="nc" id="L21">        return ResponseEntity.status(BAD_REQUEST).body(ex.getFieldErrors().getFirst().getField() + &quot;= &quot; + ex.getFieldErrors().getFirst().getDefaultMessage());</span>
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity&lt;?&gt; handleExpiredJwtException(ExpiredJwtException ex){
+<span class="nc" id="L26">        return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());</span>
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity&lt;?&gt; handleIllegalArgumentException(IllegalArgumentException ex){
+<span class="fc" id="L31">        return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());</span>
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+        public ResponseEntity&lt;?&gt; handleUsernameNotFoundException(UsernameNotFoundException ex){
+<span class="fc" id="L36">            return ResponseEntity.status(BAD_REQUEST).body(ex.getMessage());</span>
+        }
+
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity&lt;?&gt; handleMessagingException(MessagingException ex){
+<span class="fc" id="L41">        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(ex.getMessage());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

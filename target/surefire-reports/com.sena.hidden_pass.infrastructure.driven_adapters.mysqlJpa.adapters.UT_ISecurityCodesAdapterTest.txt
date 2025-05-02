@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_ISecurityCodesAdapterTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.158 s -- in com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_ISecurityCodesAdapterTest

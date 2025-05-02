@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hidden_pass</a> &gt; <a href="index.source.html" class="el_package">com.sena.hidden_pass.infrastructure.entry_points</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.sena.hidden_pass.infrastructure.entry_points;
+
+import com.sena.hidden_pass.domain.models.UserLoginModel;
+import com.sena.hidden_pass.domain.models.UserModel;
+import com.sena.hidden_pass.domain.usecases.UserUseCases;
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateMasterPassword;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
+import com.sena.hidden_pass.infrastructure.services.MailService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+
+@RestController
+@RequestMapping(&quot;/api/v1/hidden_pass/users&quot;)
+@AllArgsConstructor
+public class UserController {
+
+    private UserUseCases userUseCases;
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; getUserById(@PathVariable UUID id){
+<span class="fc" id="L32">        return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));</span>
+    }
+
+    @PostMapping(&quot;/register&quot;)
+    public ResponseEntity&lt;?&gt; registerUser(@Valid @RequestBody UserDTO user){
+        try{
+<span class="fc" id="L38">            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));</span>
+<span class="fc" id="L39">        }catch (Exception exception){</span>
+<span class="fc" id="L40">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());</span>
+        }
+    }
+
+    @PostMapping(&quot;/login&quot;)
+    public UserLoginModel loginUser(@Valid @RequestBody UserDTO user){
+<span class="fc" id="L46">        return userUseCases.loginUser(UserMapper.userDTOToModel(user));</span>
+    }
+
+    @PutMapping(&quot;/update/{id}&quot;)
+    public ResponseEntity&lt;UserModel&gt; updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
+<span class="fc" id="L51">        UserModel model = userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));</span>
+<span class="fc" id="L52">        return new ResponseEntity&lt;&gt;(model, HttpStatus.OK);</span>
+    }
+
+    @PutMapping(&quot;/update/password&quot;)
+    public UserModel recoverMasterPassword(@RequestBody ResetMasterPasswordDTO resetMasterPassword){
+<span class="fc" id="L57">        return userUseCases.recoverMasterPassword(resetMasterPassword.getNew_password(), new EmailValueObject(resetMasterPassword.getEmail()));</span>
+    }
+
+    @PutMapping(&quot;/update/password/{id}&quot;)
+    public UserModel updateMasterPassword(@PathVariable UUID id, @RequestBody UpdateMasterPassword updateMasterPassword){
+<span class="fc" id="L62">        return userUseCases.updateMasterPassword(id, updateMasterPassword.getCurrent_password(), updateMasterPassword.getNew_password());</span>
+    }
+
+    @DeleteMapping(&quot;/delete/{id}&quot;)
+    public UserModel deleteUser(@PathVariable UUID id){
+<span class="nc" id="L67">        return userUseCases.deleteUser(id);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

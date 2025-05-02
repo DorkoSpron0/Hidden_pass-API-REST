@@ -1,0 +1,20 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+hidden_pass,com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters,ISecurityCodesAdapter,0,81,0,2,0,16,0,5,0,4
+hidden_pass,com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters,IUserAdapter,0,256,0,4,0,44,0,17,0,15
+hidden_pass,com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters,INoteAdapter,0,189,0,0,0,33,0,9,0,9
+hidden_pass,com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters,IPasswordAdapter,0,194,0,2,0,47,0,9,0,8
+hidden_pass,com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters,IPriorityAdapter,0,44,0,0,0,10,0,2,0,2
+hidden_pass,com.sena.hidden_pass.infrastructure.services,MailService,79,0,0,0,30,0,5,0,5,0
+hidden_pass,com.sena.hidden_pass.infrastructure.mappers,SecurityCodeMapper,0,17,0,0,0,6,0,4,0,4
+hidden_pass,com.sena.hidden_pass.infrastructure.mappers,PasswordMapper,0,118,0,6,0,46,0,8,0,5
+hidden_pass,com.sena.hidden_pass.infrastructure.mappers,NoteMapper,0,68,0,4,0,21,0,7,0,5
+hidden_pass,com.sena.hidden_pass.infrastructure.mappers,UserMapper,0,325,0,24,0,97,0,24,0,12
+hidden_pass,com.sena.hidden_pass.infrastructure.mappers,PriorityMapper,0,21,0,0,0,8,0,4,0,4
+hidden_pass,com.sena.hidden_pass.application.config,CustomExceptionHandlerResolver,21,21,0,0,2,4,2,4,2,4
+hidden_pass,com.sena.hidden_pass.application.config,WebConfiguration.new WebMvcConfigurer() {...},0,45,0,0,0,6,0,2,0,2
+hidden_pass,com.sena.hidden_pass.application.config,JwtFilter,108,0,10,0,27,0,9,0,4,0
+hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,NoteController,0,32,0,0,0,5,0,4,0,4
+hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,PasswordController,0,50,0,0,0,8,0,6,0,6
+hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,UserController,5,63,0,0,1,9,1,6,1,6
+hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,SecurityCodesController,0,21,0,2,0,4,0,3,0,2
+hidden_pass,com.sena.hidden_pass.infrastructure.utils,AESUtil,0,55,0,0,0,13,0,4,0,4
