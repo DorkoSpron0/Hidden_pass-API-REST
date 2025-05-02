@@ -24,10 +24,10 @@ public class FolderDBO {
     private String Description;
 
     @ManyToOne
-    @JoinColumn(name = "id_folder", referencedColumnName = "id_folder")
     private UserDBO user;
 
     @OneToMany
+    @JoinColumn(name = "id_folder", referencedColumnName = "id_folder")
     List<PasswordDBO> passwords = new ArrayList<>();
 
     public FolderDBO(UUID id_folder, String name, String icon, String description) {
