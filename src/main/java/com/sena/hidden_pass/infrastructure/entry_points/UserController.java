@@ -4,10 +4,7 @@ import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateMasterPassword;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.validation.Valid;
@@ -63,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable UUID id){
-        return userUseCases.deleteUser(id);
+    public String deleteUser(@PathVariable UUID id, @RequestBody DeleteUserDTO deleteUserDTO){
+        return userUseCases.deleteUser(id, deleteUserDTO.getCurrent_password());
     }
 }

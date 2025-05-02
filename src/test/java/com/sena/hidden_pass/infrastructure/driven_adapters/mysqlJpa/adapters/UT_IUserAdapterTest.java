@@ -317,10 +317,14 @@ public class UT_IUserAdapterTest {
         ArgumentCaptor<UserDBO> userRemovedCaptor = ArgumentCaptor.forClass(UserDBO.class);
         UserDBO userExpected = new UserDBO();
         userExpected.setId_usuario(id);
+        userExpected.setMaster_password("encodedPassword");
+
         // When
         when(this.userRepository.findById(eq(id))).thenReturn(Optional.of(userExpected));
+        when(this.passwordEncoder.matches(anyString(), eq("encodedPassword"))).thenReturn(true);
         doNothing().when(this.userRepository).delete(any(UserDBO.class));
-        String result = this.userAdapter.deleteUser(id);
+
+        String result = this.userAdapter.deleteUser(id, userExpected.getMaster_password());
 
         // Then
         assertNotNull(result);
@@ -332,8 +336,31 @@ public class UT_IUserAdapterTest {
 
         assertEquals(id, userFounded.getId_usuario());
         verify(this.userRepository).delete(any(UserDBO.class));
-
     }
+
+    @Test
+    void testDeleteUserIncorrectCredentials(){
+        // Given
+        UUID id = UUID.randomUUID();
+
+        ArgumentCaptor<UserDBO> userRemovedCaptor = ArgumentCaptor.forClass(UserDBO.class);
+        UserDBO userExpected = new UserDBO();
+        userExpected.setId_usuario(id);
+        userExpected.setMaster_password("password123");
+
+        // When
+        when(this.userRepository.findById(eq(id))).thenReturn(Optional.of(userExpected));
+        when(this.passwordEncoder.matches(anyString(), eq("encodedPassword"))).thenReturn(true);
+        doNothing().when(this.userRepository).delete(any(UserDBO.class));
+
+        // Then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.userAdapter.deleteUser(id, userExpected.getMaster_password());
+        });
+
+        assertEquals("Credenciales incorrectas", exception.getMessage());
+    }
+
 
     @Test
     void testDeleteUserNotFound(){
@@ -347,7 +374,7 @@ public class UT_IUserAdapterTest {
 
         // Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.userAdapter.deleteUser(id);
+            this.userAdapter.deleteUser(id, "current_password");
         });
 
         assertEquals("User with id " + id + " not found", exception.getMessage());

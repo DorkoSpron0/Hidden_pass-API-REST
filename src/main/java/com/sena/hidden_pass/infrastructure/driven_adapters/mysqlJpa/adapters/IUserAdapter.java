@@ -138,8 +138,12 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public String deleteUser(UUID id) {
+    public String deleteUser(UUID id, String current_password) {
         UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
+
+        if(!matchPassword(current_password, userFounded.getMaster_password())){
+            throw new IllegalArgumentException("Credenciales incorrectas");
+        }
         this.userRepository.delete(userFounded);
         return "User with id " + id + " deleted successfully";
     }
