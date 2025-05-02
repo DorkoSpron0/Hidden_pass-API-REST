@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sena.hidden_pass.UserDataProvider;
 import com.sena.hidden_pass.application.config.JwtFilter;
 import com.sena.hidden_pass.domain.models.UserLoginModel;
@@ -7,10 +8,7 @@ import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateMasterPassword;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,6 +39,9 @@ class UT_UserControllerTest {
 
     @Autowired
     private UserUseCases userUseCases;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @TestConfiguration
     static class MockConfig {
@@ -338,12 +339,16 @@ class UT_UserControllerTest {
     void testDeleteUser() throws Exception {
         // given
         UUID userId = UUID.randomUUID();
+        DeleteUserDTO deleteUserDTO = new DeleteUserDTO("current_password");
 
         // When
         when(this.userUseCases.deleteUser(eq(userId), anyString())).thenReturn("User deleted successfully");
 
         // Then
-        mockMvc.perform(delete("/api/v1/hidden_pass/users/delete/{id}", userId))
+        mockMvc.perform(delete("/api/v1/hidden_pass/users/delete/{id}", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(deleteUserDTO))
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().string("User deleted successfully"));
 
@@ -354,12 +359,16 @@ class UT_UserControllerTest {
     void testDeleteUserNotFound() throws Exception {
         // given
         UUID userId = UUID.randomUUID();
+        DeleteUserDTO deleteUserDTO = new DeleteUserDTO("current_password");
 
         // When
         when(this.userUseCases.deleteUser(eq(userId), anyString())).thenThrow(new IllegalArgumentException("User not found"));
 
         // Then
-        mockMvc.perform(delete("/api/v1/hidden_pass/users/delete/{id}", userId))
+        mockMvc.perform(delete("/api/v1/hidden_pass/users/delete/{id}", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(deleteUserDTO))
+                )
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("User not found"));
     }

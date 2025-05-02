@@ -4,10 +4,7 @@ import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.ResetMasterPasswordDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateMasterPassword;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.validation.Valid;
@@ -29,42 +26,42 @@ public class UserController {
 
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;?&gt; getUserById(@PathVariable UUID id){
-<span class="fc" id="L32">        return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));</span>
+<span class="fc" id="L29">        return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));</span>
     }
 
     @PostMapping(&quot;/register&quot;)
     public ResponseEntity&lt;?&gt; registerUser(@Valid @RequestBody UserDTO user){
         try{
-<span class="fc" id="L38">            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));</span>
-<span class="fc" id="L39">        }catch (Exception exception){</span>
-<span class="fc" id="L40">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());</span>
+<span class="fc" id="L35">            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));</span>
+<span class="fc" id="L36">        }catch (Exception exception){</span>
+<span class="fc" id="L37">            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());</span>
         }
     }
 
     @PostMapping(&quot;/login&quot;)
     public UserLoginModel loginUser(@Valid @RequestBody UserDTO user){
-<span class="fc" id="L46">        return userUseCases.loginUser(UserMapper.userDTOToModel(user));</span>
+<span class="fc" id="L43">        return userUseCases.loginUser(UserMapper.userDTOToModel(user));</span>
     }
 
     @PutMapping(&quot;/update/{id}&quot;)
     public ResponseEntity&lt;UserModel&gt; updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
-<span class="fc" id="L51">        UserModel model = userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));</span>
-<span class="fc" id="L52">        return new ResponseEntity&lt;&gt;(model, HttpStatus.OK);</span>
+<span class="fc" id="L48">        UserModel model = userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));</span>
+<span class="fc" id="L49">        return new ResponseEntity&lt;&gt;(model, HttpStatus.OK);</span>
     }
 
     @PutMapping(&quot;/update/password&quot;)
     public UserModel recoverMasterPassword(@RequestBody ResetMasterPasswordDTO resetMasterPassword){
-<span class="fc" id="L57">        return userUseCases.recoverMasterPassword(resetMasterPassword.getNew_password(), new EmailValueObject(resetMasterPassword.getEmail()));</span>
+<span class="fc" id="L54">        return userUseCases.recoverMasterPassword(resetMasterPassword.getNew_password(), new EmailValueObject(resetMasterPassword.getEmail()));</span>
     }
 
     @PutMapping(&quot;/update/password/{id}&quot;)
     public UserModel updateMasterPassword(@PathVariable UUID id, @RequestBody UpdateMasterPassword updateMasterPassword){
-<span class="fc" id="L62">        return userUseCases.updateMasterPassword(id, updateMasterPassword.getCurrent_password(), updateMasterPassword.getNew_password());</span>
+<span class="fc" id="L59">        return userUseCases.updateMasterPassword(id, updateMasterPassword.getCurrent_password(), updateMasterPassword.getNew_password());</span>
     }
 
     @DeleteMapping(&quot;/delete/{id}&quot;)
-    public UserModel deleteUser(@PathVariable UUID id){
-<span class="nc" id="L67">        return userUseCases.deleteUser(id);</span>
+    public String deleteUser(@PathVariable UUID id, @RequestBody DeleteUserDTO deleteUserDTO){
+<span class="fc" id="L64">        return userUseCases.deleteUser(id, deleteUserDTO.getCurrent_password());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -10,6 +10,7 @@ com\sena\hidden_pass\infrastructure\entry_points\NoteController.class
 com\sena\hidden_pass\infrastructure\driven_adapters\mysqlJpa\DBO\NoteDBO.class
 com\sena\hidden_pass\infrastructure\entry_points\DTO\NoteDTO.class
 com\sena\hidden_pass\infrastructure\driven_adapters\mysqlJpa\IFolderRepository.class
+com\sena\hidden_pass\infrastructure\entry_points\DTO\DeleteUserDTO.class
 com\sena\hidden_pass\infrastructure\entry_points\DTO\RecoverPasswordDTO.class
 com\sena\hidden_pass\infrastructure\mappers\PriorityMapper.class
 com\sena\hidden_pass\infrastructure\entry_points\DTO\UserDTO.class
@@ -29,16 +30,19 @@ com\sena\hidden_pass\infrastructure\driven_adapters\mysqlJpa\IPasswordRepository
 com\sena\hidden_pass\infrastructure\entry_points\DTO\UpdateUserDTO.class
 com\sena\hidden_pass\domain\models\UserModel.class
 com\sena\hidden_pass\domain\valueObjects\MasterPasswordValueObject.class
+com\sena\hidden_pass\infrastructure\driven_adapters\mysqlJpa\adapters\IFolderAdapter.class
 com\sena\hidden_pass\domain\usecases\NoteUseCases.class
 com\sena\hidden_pass\infrastructure\entry_points\DTO\ResetMasterPasswordDTO.class
 com\sena\hidden_pass\application\config\WebConfiguration$1.class
 com\sena\hidden_pass\infrastructure\driven_adapters\mysqlJpa\DBO\FolderDBO.class
+com\sena\hidden_pass\infrastructure\mappers\FolderMapper.class
 com\sena\hidden_pass\infrastructure\mappers\UserMapper.class
 com\sena\hidden_pass\domain\usecases\PasswordUseCases.class
 com\sena\hidden_pass\infrastructure\driven_adapters\mysqlJpa\DBO\NoteDBO$NoteDBOBuilder.class
 com\sena\hidden_pass\application\config\JwtFilter.class
 com\sena\hidden_pass\domain\models\FolderModel.class
 com\sena\hidden_pass\application\config\CustomExceptionHandlerResolver.class
+com\sena\hidden_pass\domain\models\UserLoginModel.class
 com\sena\hidden_pass\application\config\WebConfiguration.class
 com\sena\hidden_pass\domain\models\PasswordModel.class
 com\sena\hidden_pass\infrastructure\entry_points\SecurityCodesController.class

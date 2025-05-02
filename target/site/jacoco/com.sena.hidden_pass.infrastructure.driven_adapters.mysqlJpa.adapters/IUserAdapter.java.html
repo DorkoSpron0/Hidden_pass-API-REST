@@ -138,35 +138,41 @@ public class IUserAdapter implements UserUseCases {
     }
 
     @Override
-    public UserModel deleteUser(UUID id) {
-<span class="fc" id="L142">        return null;</span>
+    public String deleteUser(UUID id, String current_password) {
+<span class="fc" id="L142">        UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if(!matchPassword(current_password, userFounded.getMaster_password())){</span>
+<span class="fc" id="L145">            throw new IllegalArgumentException(&quot;Credenciales incorrectas&quot;);</span>
+        }
+<span class="fc" id="L147">        this.userRepository.delete(userFounded);</span>
+<span class="fc" id="L148">        return &quot;User with id &quot; + id + &quot; deleted successfully&quot;;</span>
     }
 
     @Override
     public UserModel recoverMasterPassword(String password, EmailValueObject email) {
-<span class="fc" id="L147">        UserDBO userFounded = UserMapper.userModelToDBO(getUserByUEmail(email.getEmail()));</span>
+<span class="fc" id="L153">        UserDBO userFounded = UserMapper.userModelToDBO(getUserByUEmail(email.getEmail()));</span>
 
-<span class="fc" id="L149">        userFounded.setMaster_password(passwordEncoder.encode(password));</span>
+<span class="fc" id="L155">        userFounded.setMaster_password(passwordEncoder.encode(password));</span>
 
-<span class="fc" id="L151">        userRepository.save(userFounded);</span>
+<span class="fc" id="L157">        userRepository.save(userFounded);</span>
 
-<span class="fc" id="L153">        return UserMapper.userDBOToModel(userFounded);</span>
+<span class="fc" id="L159">        return UserMapper.userDBOToModel(userFounded);</span>
     }
 
     @Override
     public UserModel updateMasterPassword(UUID id, String current_password, String new_password) {
-<span class="fc" id="L158">        UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));</span>
+<span class="fc" id="L164">        UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));</span>
 
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        if(!matchPassword(current_password, userFounded.getMaster_password())) throw new IllegalArgumentException(&quot;Credenciales incorrectas&quot;);</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if(!matchPassword(current_password, userFounded.getMaster_password())) throw new IllegalArgumentException(&quot;Credenciales incorrectas&quot;);</span>
 
-<span class="fc" id="L162">        userFounded.setMaster_password(passwordEncoder.encode(new_password));</span>
-<span class="fc" id="L163">        userRepository.save(userFounded);</span>
+<span class="fc" id="L168">        userFounded.setMaster_password(passwordEncoder.encode(new_password));</span>
+<span class="fc" id="L169">        userRepository.save(userFounded);</span>
 
-<span class="fc" id="L165">        return UserMapper.userDBOToModel(userFounded);</span>
+<span class="fc" id="L171">        return UserMapper.userDBOToModel(userFounded);</span>
     }
 
     public boolean matchPassword(String rawPassword, String encodedPassword){
-<span class="fc" id="L169">        return passwordEncoder.matches(rawPassword, encodedPassword);</span>
+<span class="fc" id="L175">        return passwordEncoder.matches(rawPassword, encodedPassword);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
