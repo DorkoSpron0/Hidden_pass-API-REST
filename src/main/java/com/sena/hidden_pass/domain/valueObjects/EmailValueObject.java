@@ -2,6 +2,8 @@ package com.sena.hidden_pass.domain.valueObjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -11,6 +13,8 @@ public class EmailValueObject {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 
+    @NotBlank
+    @NotNull
     private String email;
 
     public EmailValueObject() {

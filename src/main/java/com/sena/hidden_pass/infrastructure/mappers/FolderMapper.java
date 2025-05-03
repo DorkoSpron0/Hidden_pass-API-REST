@@ -1,7 +1,6 @@
 package com.sena.hidden_pass.infrastructure.mappers;
 
 import com.sena.hidden_pass.domain.models.FolderModel;
-import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
 
 import java.util.ArrayList;
@@ -14,7 +13,9 @@ public class FolderMapper {
                 model.getName(),
                 model.getIcon(),
                 model.getDescription(),
-                UserMapper.userModelToDBO(model.getUser()),
+
+                model.getUser() != null ? UserMapper.userModelToDBO(model.getUser()) : null,
+
                 model.getPasswordModels() != null ? model.getPasswordModels().stream()
                         .map(PasswordMapper::passwordModelToDBO).toList() : new ArrayList<>()
         );
@@ -26,9 +27,13 @@ public class FolderMapper {
                 dbo.getIcon(),
                 dbo.getId_folder(),
                 dbo.getName(),
-                UserMapper.userDBOToModel(dbo.getUser()),
+                dbo.getUser() != null ? UserMapper.userDBOToModel(dbo.getUser()) : null,
                 dbo.getPasswords() != null ? dbo.getPasswords().stream()
                         .map(PasswordMapper::passwordDBOToModel).toList() : new ArrayList<>()
         );
+    }
+
+    public boolean passTest(){
+        return true;
     }
 }

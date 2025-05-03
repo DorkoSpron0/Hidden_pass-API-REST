@@ -4,7 +4,12 @@ import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.LoginUserRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.RegisterUserRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.RegisterUserResponseDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserLoginResponseDTO;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.validation.Valid;
@@ -30,17 +35,50 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO user){
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(userUseCases.registerUser(UserMapper.userDTOToModel(user)));
-        }catch (Exception exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-        }
+    public ResponseEntity<RegisterUserResponseDTO> registerUser(@Valid @RequestBody RegisterUserRequestDTO user){
+        UserModel model = userUseCases.registerUser(new UserModel(
+                null,
+                new EmailValueObject(user.email()),
+                new UsernameValueObject(user.username()),
+                user.master_password(),
+                user.url_image(),
+                null,
+                null,
+                null,
+                null
+        ));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterUserResponseDTO(
+                model.getId_usuario(),
+                model.getUsername().getUsername(),
+                model.getEmail().getEmail(),
+                model.getMaster_password(),
+                model.getUrl_image()
+        ));
     }
 
     @PostMapping("/login")
-    public UserLoginModel loginUser(@Valid @RequestBody UserDTO user){
-        return userUseCases.loginUser(UserMapper.userDTOToModel(user));
+    public ResponseEntity<UserLoginResponseDTO> loginUser(@Valid @RequestBody LoginUserRequestDTO user){
+        UserLoginModel model = userUseCases.loginUser(new UserModel(
+                null,
+                new EmailValueObject(user.email()),
+                null, user.master_password(),
+                null,
+                null,
+                null,
+                null,
+                null)
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new UserLoginResponseDTO(
+                        model.getUserId(),
+                        model.getUsername().getUsername(),
+                        model.getEmailValueObject().getEmail(),
+                        model.getToken(),
+                        model.getUrlImage()
+                )
+        );
     }
 
     @PutMapping("/update/{id}")

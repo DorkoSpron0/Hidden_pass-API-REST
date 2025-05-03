@@ -3,6 +3,8 @@ package com.sena.hidden_pass.domain.valueObjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -12,6 +14,8 @@ public class UsernameValueObject {
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9\\d]{4,}$");
 
+    @NotBlank
+    @NotNull
     private String username;
 
     protected UsernameValueObject(){}

@@ -1,16 +1,15 @@
 package com.sena.hidden_pass.domain.usecases;
 
 import com.sena.hidden_pass.domain.models.FolderModel;
-import com.sena.hidden_pass.domain.models.PasswordModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface FolderUseCases {
-    List<FolderModel> getAllFolders();
+    List<FolderModel> getAllFolders(UUID userId);
     FolderModel getFolderById(UUID id);
-    FolderModel createFolder(FolderModel folder);
-    FolderModel updateFolder(FolderModel folder);
-    FolderModel setPasswordToFolder(PasswordModel password);
-    String deleteFolder(FolderModel folder);
+    FolderModel createFolder(FolderModel folder, UUID userId);
+    FolderModel updateFolder(FolderModel folder, UUID id);
+    FolderModel setPasswordToFolder(UUID folderId, UUID passwordId);
+    String deleteFolder(UUID id);
 }

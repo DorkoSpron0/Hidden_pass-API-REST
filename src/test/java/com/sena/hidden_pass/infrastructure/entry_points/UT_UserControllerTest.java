@@ -120,9 +120,6 @@ class UT_UserControllerTest {
                         .contentType("application/json")
                         .content("""
                         {
-                            "userName": "username",
-                            "gmail": "nicky@nicky.com",
-                            "masterPassword": "MasterPasswor@12d",
                             "urImage": "http://image.co"
                         }
                         """)

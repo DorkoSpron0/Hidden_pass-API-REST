@@ -8,6 +8,7 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -74,12 +75,13 @@ public class UserDataProvider {
                         new FolderDBO(UUID.randomUUID(), "folderName", "icon.png", "DescriptionFolder"))
                 ),
 
-                Set.of(new FolderDBO(
+                new HashSet<>(Set.of(new FolderDBO(
                         UUID.randomUUID(),
                         "folderName",
-                        "descriptionFolder",
-                        "icon.png")
-                ),
+                        "icon.png",
+                        "descriptionFolder"
+                        )
+                )),
 
                 new SecurityCodesDBO(UUID.randomUUID())
         );

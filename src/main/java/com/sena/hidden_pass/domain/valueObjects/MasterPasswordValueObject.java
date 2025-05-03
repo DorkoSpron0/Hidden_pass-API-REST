@@ -3,6 +3,8 @@ package com.sena.hidden_pass.domain.valueObjects;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -12,6 +14,8 @@ public class MasterPasswordValueObject {
 
     private static final Pattern MASTER_PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
 
+    @NotBlank
+    @NotNull
     private String master_password;
 
     protected MasterPasswordValueObject() {
