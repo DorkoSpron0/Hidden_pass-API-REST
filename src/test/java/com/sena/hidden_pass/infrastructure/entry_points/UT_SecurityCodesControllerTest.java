@@ -3,8 +3,8 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sena.hidden_pass.application.config.JwtFilter;
 import com.sena.hidden_pass.domain.usecases.SecurityCodesCases;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.SendSecurityCodeDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.ValidateSecurityCodeDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.SendSecurityCodeRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.ValidateSecurityCodeRequestDTO;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers = SecurityCodesController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtFilter.class)
@@ -61,10 +60,10 @@ public class UT_SecurityCodesControllerTest {
     @Test
     void testSendSecurityCode() throws Exception {
         // given
-        SendSecurityCodeDTO sendSecurityCodeDTO = new SendSecurityCodeDTO("test@test.com");
+        SendSecurityCodeRequestDTO sendSecurityCodeDTO = new SendSecurityCodeRequestDTO("test@test.com");
 
         // When
-        when(this.securityCodesCases.sendSecurityCode(eq(sendSecurityCodeDTO.getEmail()))).thenReturn("Email sent successfully");
+        when(this.securityCodesCases.sendSecurityCode(eq(sendSecurityCodeDTO.email()))).thenReturn("Email sent successfully");
 
         // Then
         mockMvc.perform(post("/api/v1/hidden_pass/codes/send")
@@ -74,13 +73,13 @@ public class UT_SecurityCodesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Email sent successfully"));
 
-        verify(this.securityCodesCases).sendSecurityCode(eq(sendSecurityCodeDTO.getEmail()));
+        verify(this.securityCodesCases).sendSecurityCode(eq(sendSecurityCodeDTO.email()));
     }
 
     @Test
     void testSendSecurityCodeMessagingException() throws Exception {
         // given
-        SendSecurityCodeDTO sendSecurityCodeDTO = new SendSecurityCodeDTO("test@test.com");
+        SendSecurityCodeRequestDTO sendSecurityCodeDTO = new SendSecurityCodeRequestDTO("test@test.com");
 
         // When
         when(this.securityCodesCases.sendSecurityCode(anyString())).thenThrow(new MessagingException("Error sending the email"));
@@ -93,13 +92,13 @@ public class UT_SecurityCodesControllerTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("Error sending the email"));
 
-        verify(this.securityCodesCases).sendSecurityCode(eq(sendSecurityCodeDTO.getEmail()));
+        verify(this.securityCodesCases).sendSecurityCode(eq(sendSecurityCodeDTO.email()));
     }
 
     @Test
     void testValidateSecurityCode() throws Exception {
         // Given
-        ValidateSecurityCodeDTO validateSecurityCodeDTO = new ValidateSecurityCodeDTO("test@test.com", UUID.randomUUID().toString());
+        ValidateSecurityCodeRequestDTO validateSecurityCodeDTO = new ValidateSecurityCodeRequestDTO("test@test.com", UUID.randomUUID().toString());
 
         // When
         when(this.securityCodesCases.validateSecurityCode(any(UUID.class), anyString())).thenReturn(true);
@@ -116,7 +115,7 @@ public class UT_SecurityCodesControllerTest {
     @Test
     void testValidateSecurityCodeNotValid() throws Exception {
         // Given
-        ValidateSecurityCodeDTO validateSecurityCodeDTO = new ValidateSecurityCodeDTO("test@test.com", UUID.randomUUID().toString());
+        ValidateSecurityCodeRequestDTO validateSecurityCodeDTO = new ValidateSecurityCodeRequestDTO("test@test.com", UUID.randomUUID().toString());
 
         // When
         when(this.securityCodesCases.validateSecurityCode(any(UUID.class), anyString())).thenReturn(false);
@@ -126,14 +125,14 @@ public class UT_SecurityCodesControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validateSecurityCodeDTO))
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string("NO VALID"));
     }
 
     @Test
     void testValidateSecurityCodeNotFound() throws Exception {
         // Given
-        ValidateSecurityCodeDTO validateSecurityCodeDTO = new ValidateSecurityCodeDTO("test@test.com", UUID.randomUUID().toString());
+        ValidateSecurityCodeRequestDTO validateSecurityCodeDTO = new ValidateSecurityCodeRequestDTO("test@test.com", UUID.randomUUID().toString());
 
         // When
         when(this.securityCodesCases.validateSecurityCode(any(UUID.class), anyString())).thenThrow(new UsernameNotFoundException("User not found"));

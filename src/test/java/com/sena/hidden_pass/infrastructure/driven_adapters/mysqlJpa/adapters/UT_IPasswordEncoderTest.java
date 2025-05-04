@@ -257,7 +257,7 @@ public class UT_IPasswordEncoderTest {
         assertEquals("passwordEncrypted", saved.getPassword());
         assertEquals("Description", saved.getDescription());
 
-        assertEquals("Title", saved.getId_folder().getName());
+        assertEquals("Name", saved.getId_folder().getName());
     }
 
     @Test

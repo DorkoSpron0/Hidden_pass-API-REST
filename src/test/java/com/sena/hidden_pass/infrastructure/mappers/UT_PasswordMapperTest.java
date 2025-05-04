@@ -3,7 +3,6 @@ package com.sena.hidden_pass.infrastructure.mappers;
 import com.sena.hidden_pass.PasswordDataProvider;
 import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.PasswordDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -106,52 +105,6 @@ public class UT_PasswordMapperTest {
         assertEquals(dbo.getUrl(), result.getUrl());
         assertEquals(dbo.getDateTime(), result.getDateTime());
         assertEquals(dbo.getEmail_user(), result.getEmail_user());
-
-        assertNull(result.getId_folder());
-    }
-
-    @Test
-    void testPasswordDTOToModel(){
-        // Given
-        PasswordDTO dto = PasswordDataProvider.getPasswordDTO();
-
-        // When
-        PasswordModel result = PasswordMapper.passwordDTOToModel(dto);
-
-
-        // Then
-        assertNotNull(result);
-
-        assertEquals(dto.getName(), result.getName());
-        assertEquals(dto.getDescription(), result.getDescription());
-        assertEquals(dto.getPassword(), result.getPassword());
-        assertEquals(dto.getUrl(), result.getUrl());
-        assertEquals(dto.getDateTime(), result.getDateTime());
-        assertEquals(dto.getEmail_user(), result.getEmail_user());
-
-        assertEquals(dto.getId_folder().getId_folder(), result.getId_folder().getId_folder());
-        assertEquals(dto.getId_folder().getName(), result.getId_folder().getName());
-    }
-
-    @Test
-    void testPasswordDTOToModelWithFolderNull(){
-        // Given
-        PasswordDTO dto = PasswordDataProvider.getPasswordDTO();
-        dto.setId_folder(null);
-
-        // When
-        PasswordModel result = PasswordMapper.passwordDTOToModel(dto);
-
-
-        // Then
-        assertNotNull(result);
-
-        assertEquals(dto.getName(), result.getName());
-        assertEquals(dto.getDescription(), result.getDescription());
-        assertEquals(dto.getPassword(), result.getPassword());
-        assertEquals(dto.getUrl(), result.getUrl());
-        assertEquals(dto.getDateTime(), result.getDateTime());
-        assertEquals(dto.getEmail_user(), result.getEmail_user());
 
         assertNull(result.getId_folder());
     }

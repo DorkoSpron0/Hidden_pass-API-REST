@@ -3,7 +3,6 @@ package com.sena.hidden_pass.infrastructure.mappers;
 import com.sena.hidden_pass.NoteDataProvider;
 import com.sena.hidden_pass.domain.models.NoteModel;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.NoteDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.NoteDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -95,23 +94,6 @@ public class UT_NoteMapperTest {
         assertEquals(dbo.getDescription(), result.getDescription());
 
         assertNull(result.getId_priority());
-    }
-
-    @Test
-    @DisplayName("should map note dto to model with all parameters")
-    void testNoteDTOToModel(){
-        // Given
-        NoteDTO dto = NoteDataProvider.getNoteDTO();
-
-        // When
-        NoteModel result = NoteMapper.noteDTOToModel(dto);
-
-        // Then
-        assertNotNull(result);
-
-        assertEquals(dto.getPriorityName().name(), result.getId_priority().getName().name());
-        assertEquals(dto.getTitle(), result.getTitle());
-        assertEquals(dto.getDescription(), result.getDescription());
     }
 
     @Test

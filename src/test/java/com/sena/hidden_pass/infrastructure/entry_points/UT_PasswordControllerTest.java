@@ -1,12 +1,10 @@
 package com.sena.hidden_pass.infrastructure.entry_points;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sena.hidden_pass.PasswordDataProvider;
 import com.sena.hidden_pass.application.config.JwtFilter;
 import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.domain.usecases.PasswordUseCases;
-import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.PasswordDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.PasswordRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -137,15 +135,24 @@ public class UT_PasswordControllerTest {
     @Test
     void testCreatePassword() throws Exception{
         // Given
-        PasswordDTO password = PasswordDataProvider.getPasswordDTO();
+        PasswordRequestDTO password = new PasswordRequestDTO(
+                "Name",
+                "HttP::Localhost.com",
+                LocalDateTime.now(),
+                "test@test.com",
+                "Passwird",
+                "description",
+                "Name");
+
         UUID userId = UUID.randomUUID();
         PasswordModel modelExpected = new PasswordModel();
-        modelExpected.setPassword(password.getPassword());
-        modelExpected.setName(password.getName());
-        modelExpected.setEmail_user(password.getEmail_user());
+        modelExpected.setPassword(password.password());
+        modelExpected.setName(password.name());
+        modelExpected.setEmail_user(password.email_user());
+        modelExpected.setId_password(UUID.randomUUID());
 
         // When
-        when(this.passwordUseCases.createPassword(any(PasswordModel.class), eq(userId), isNull())).thenReturn(modelExpected);
+        when(this.passwordUseCases.createPassword(any(), eq(userId), any())).thenReturn(modelExpected);
 
         // THen
         mockMvc.perform(post("/api/v1/hidden_pass/passwords/{id}", userId)
@@ -153,24 +160,22 @@ public class UT_PasswordControllerTest {
                 .content(objectMapper.writeValueAsString(password))
         )
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value(password.getName()))
-                .andExpect(jsonPath("$.password").value(password.getPassword()))
-                .andExpect(jsonPath("$.email_user").value(password.getEmail_user()));
-
+                .andExpect(jsonPath("$.name").value(password.name()))
+                .andExpect(jsonPath("$.password").value(password.password()))
+                .andExpect(jsonPath("$.email_user").value(password.email_user()));
     }
 
     @Test
     void testUpdatePassword() throws Exception {
          // Given
-        PasswordDTO password = new PasswordDTO(
-                "Name",
+        PasswordRequestDTO password = new PasswordRequestDTO("Name",
                 "HttP::Localhost.com",
                 LocalDateTime.now(),
                 "test@test.com",
                 "Passwird",
                 "description",
-                new FolderDBO(UUID.randomUUID(), "Name", "icon.png", "Description")
-        );
+                "Name");
+
         UUID passwordId = UUID.randomUUID();
 
         PasswordModel modelExpected = new PasswordModel();
@@ -181,7 +186,7 @@ public class UT_PasswordControllerTest {
         ArgumentCaptor<PasswordModel> captor = ArgumentCaptor.forClass(PasswordModel.class);
 
         // When
-        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId), isNull())).thenReturn(modelExpected);
+        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId), any())).thenReturn(modelExpected);
 
         // Then
         mockMvc.perform(put("/api/v1/hidden_pass/passwords/password/{id}", passwordId)
@@ -189,13 +194,13 @@ public class UT_PasswordControllerTest {
                 .content(objectMapper.writeValueAsString(password))
         )
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value(password.getName()))
-                .andExpect(jsonPath("$.password").value(password.getPassword()))
-                .andExpect(jsonPath("$.email_user").value(password.getEmail_user()));
+                .andExpect(jsonPath("$.name").value(password.name()))
+                .andExpect(jsonPath("$.password").value(password.password()))
+                .andExpect(jsonPath("$.email_user").value(password.email_user()));
 
-        verify(this.passwordUseCases).editPassword(any(PasswordModel.class), eq(passwordId), isNull());
+        verify(this.passwordUseCases).editPassword(any(PasswordModel.class), eq(passwordId), any());
 
-        verify(passwordUseCases).editPassword(captor.capture(), eq(passwordId), isNull());
+        verify(passwordUseCases).editPassword(captor.capture(), eq(passwordId), any());
         PasswordModel captured = captor.getValue();
         assertEquals("Name", captured.getName());
         assertEquals("test@test.com", captured.getEmail_user());
@@ -204,19 +209,18 @@ public class UT_PasswordControllerTest {
     @Test
     void testUpdatePasswordNotFound() throws Exception {
         // Given
-        PasswordDTO password = new PasswordDTO(
-                "Name",
+        PasswordRequestDTO password = new PasswordRequestDTO("Name",
                 "HttP::Localhost.com",
                 LocalDateTime.now(),
                 "test@test.com",
                 "Passwird",
                 "description",
-                new FolderDBO(UUID.randomUUID(), "Name", "icon.png", "Description")
-        );
+                "Name");
+
         UUID passwordId = UUID.randomUUID();
 
         // When
-        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId), isNull())).thenThrow(new IllegalArgumentException("User not found"));
+        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId), any())).thenThrow(new IllegalArgumentException("User not found"));
 
         // Then
         mockMvc.perform(put("/api/v1/hidden_pass/passwords/password/{id}", passwordId)

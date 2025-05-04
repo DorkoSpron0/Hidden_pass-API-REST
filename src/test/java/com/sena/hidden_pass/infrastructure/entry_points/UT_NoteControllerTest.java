@@ -7,7 +7,7 @@ import com.sena.hidden_pass.domain.models.NoteModel;
 import com.sena.hidden_pass.domain.models.PriorityModel;
 import com.sena.hidden_pass.domain.models.PriorityNames;
 import com.sena.hidden_pass.domain.usecases.NoteUseCases;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.NoteDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.NoteRequestDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -90,11 +90,11 @@ public class UT_NoteControllerTest {
     @Test
     void testCreateNote() throws Exception {
         // Given
-        NoteDTO note = new NoteDTO(PriorityNames.ALTA, "Title", "Description");
+        NoteRequestDTO note = new NoteRequestDTO(PriorityNames.ALTA, "Title", "Description");
         UUID userId = UUID.randomUUID();
 
         // When
-        when(this.noteUseCases.createNote(any(NoteModel.class), eq(userId), eq(note.getPriorityName()))).thenReturn(NoteDataProvider.getNoteModel());
+        when(this.noteUseCases.createNote(any(NoteModel.class), eq(userId), eq(note.priorityName()))).thenReturn(NoteDataProvider.getNoteModel());
 
         // Then
         mockMvc.perform(post("/api/v1/hidden_pass/notes/{user_id}", userId)
@@ -102,20 +102,20 @@ public class UT_NoteControllerTest {
                 .content(objectMapper.writeValueAsString(note))
         )
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value(note.getTitle()))
-                .andExpect(jsonPath("$.description").value(note.getDescription()));
+                .andExpect(jsonPath("$.title").value(note.title()))
+                .andExpect(jsonPath("$.description").value(note.description()));
 
-        verify(this.noteUseCases).createNote(any(NoteModel.class), eq(userId), eq(note.getPriorityName()));
+        verify(this.noteUseCases).createNote(any(NoteModel.class), eq(userId), eq(note.priorityName()));
     }
 
     @Test
     void testCreateNoteNotFound() throws Exception {
         // Given
-        NoteDTO note = new NoteDTO(PriorityNames.ALTA, "Title", "Description");
+        NoteRequestDTO note = new NoteRequestDTO(PriorityNames.ALTA, "Title", "Description");
         UUID userId = UUID.randomUUID();
 
         // When
-        when(this.noteUseCases.createNote(any(NoteModel.class), eq(userId), eq(note.getPriorityName()))).thenThrow(new IllegalArgumentException("User not found"));
+        when(this.noteUseCases.createNote(any(NoteModel.class), eq(userId), eq(note.priorityName()))).thenThrow(new IllegalArgumentException("User not found"));
 
         // Then
         mockMvc.perform(post("/api/v1/hidden_pass/notes/{user_id}", userId)
@@ -129,13 +129,13 @@ public class UT_NoteControllerTest {
     @Test
     void testUpdateNote() throws Exception {
         // Given
-        NoteDTO note = NoteDataProvider.getNoteDTO();
+        NoteRequestDTO note = new NoteRequestDTO(PriorityNames.ALTA, "title", "description");
         UUID noteId = UUID.randomUUID();
 
         NoteModel noteExpected = new NoteModel();
-        noteExpected.setTitle(note.getTitle());
-        noteExpected.setDescription(note.getDescription());
-        noteExpected.setId_priority(new PriorityModel(UUID.randomUUID(), note.getPriorityName()));
+        noteExpected.setTitle(note.title());
+        noteExpected.setDescription(note.description());
+        noteExpected.setId_priority(new PriorityModel(UUID.randomUUID(), note.priorityName()));
 
         // When
         when(this.noteUseCases.updateNote(any(NoteModel.class), eq(noteId))).thenReturn(noteExpected);
@@ -146,9 +146,9 @@ public class UT_NoteControllerTest {
                 .content(objectMapper.writeValueAsString(note))
         )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(note.getTitle()))
-                .andExpect(jsonPath("$.description").value(note.getDescription()))
-                .andExpect(jsonPath("$.id_priority").value(note.getPriorityName().name()));
+                .andExpect(jsonPath("$.title").value(note.title()))
+                .andExpect(jsonPath("$.description").value(note.description()))
+                .andExpect(jsonPath("$.id_priority").value(note.priorityName().name()));
 
         verify(this.noteUseCases).updateNote(any(NoteModel.class), eq(noteId));
     }
@@ -156,13 +156,13 @@ public class UT_NoteControllerTest {
     @Test
     void testUpdateNoteNotFound() throws Exception {
         // Given
-        NoteDTO note = NoteDataProvider.getNoteDTO();
+        NoteRequestDTO note = new NoteRequestDTO(PriorityNames.ALTA, "title", "description");
         UUID noteId = UUID.randomUUID();
 
         NoteModel noteExpected = new NoteModel();
-        noteExpected.setTitle(note.getTitle());
-        noteExpected.setDescription(note.getDescription());
-        noteExpected.setId_priority(new PriorityModel(UUID.randomUUID(), note.getPriorityName()));
+        noteExpected.setTitle(note.title());
+        noteExpected.setDescription(note.description());
+        noteExpected.setId_priority(new PriorityModel(UUID.randomUUID(), note.priorityName()));
 
         // When
         when(this.noteUseCases.updateNote(any(NoteModel.class), eq(noteId))).thenThrow(new IllegalArgumentException("Note not found"));
