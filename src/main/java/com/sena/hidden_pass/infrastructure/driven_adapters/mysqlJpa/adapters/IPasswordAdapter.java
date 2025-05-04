@@ -107,8 +107,8 @@ public class IPasswordAdapter implements PasswordUseCases {
         passwordFounded.setEmail_user(password.getEmail_user());
         passwordFounded.setUrl(password.getUrl());
         if(folder_name != null) {
-            FolderModel folderFounded = folderUseCases.getFolderByName(folder_name);
-            password.setId_folder(folderFounded);
+            FolderDBO folderFounded = FolderMapper.folderModelToDBO(folderUseCases.getFolderByName(folder_name));
+            passwordFounded.setId_folder(folderFounded);
         }else{
             password.setId_folder(null);
         }
