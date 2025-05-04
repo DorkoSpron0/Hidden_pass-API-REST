@@ -5,7 +5,6 @@ import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -200,28 +199,6 @@ public class UT_UserMapperTest {
         assertEquals(dto.getId(), result.getId_usuario());
         assertEquals(dto.getEmail(), result.getEmail());
         assertEquals(dto.getMaster_password().getMaster_password(), result.getMaster_password());
-        assertEquals(dto.getUsername(), result.getUsername());
-        assertEquals(dto.getUrl_image(), result.getUrl_image());
-
-        assertNull(result.getFolderList());
-        assertNull(result.getNoteList());
-        assertNull(result.getPasswordList());
-        assertNull(result.getSecurityCodes());
-    }
-
-    @Test
-    @DisplayName("Test should map update user dto to user model with all valid")
-    void testUpdateUserDTOToModel(){
-        // Given
-        UpdateUserDTO dto = new UpdateUserDTO(new UsernameValueObject("username"), new EmailValueObject("NIcky@nikcy.com"), "urlImage");
-
-        // When
-        UserModel result = UserMapper.updateUserDTOToModel(dto);
-
-        // Then
-        assertNotNull(result);
-
-        assertEquals(dto.getEmail(), result.getEmail());
         assertEquals(dto.getUsername(), result.getUsername());
         assertEquals(dto.getUrl_image(), result.getUrl_image());
 

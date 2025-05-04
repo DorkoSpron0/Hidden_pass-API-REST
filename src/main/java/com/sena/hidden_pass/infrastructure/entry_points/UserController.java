@@ -6,12 +6,10 @@ import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.LoginUserRequestDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.RegisterUserRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.*;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.RegisterUserResponseDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserInfoResponseDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserLoginResponseDTO;
-import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
-import com.sena.hidden_pass.infrastructure.services.MailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
@@ -30,8 +28,15 @@ public class UserController {
     private UserUseCases userUseCases;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id){
-        return ResponseEntity.status(HttpStatus.OK).body(userUseCases.getUserById(id));
+    public ResponseEntity<UserInfoResponseDTO> getUserById(@PathVariable UUID id){
+        UserModel model = userUseCases.getUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new UserInfoResponseDTO(
+                model.getId_usuario(),
+                model.getUsername().getUsername(),
+                model.getEmail().getEmail(),
+                model.getMaster_password(),
+                model.getUrl_image()
+        ));
     }
 
     @PostMapping("/register")
@@ -82,23 +87,62 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserModel> updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO user){
-        UserModel model = userUseCases.updateUser(id, UserMapper.updateUserDTOToModel(user));
-        return new ResponseEntity<>(model, HttpStatus.OK);
+    public ResponseEntity<UserInfoResponseDTO> updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequestDTO user){
+
+        UserModel model = userUseCases.updateUser(id, new UserModel(
+                null,
+                new EmailValueObject(user.email()),
+                new UsernameValueObject(user.username()),
+                null,
+                user.url_image(),
+                null,
+                null,
+                null,
+                null
+        ));
+
+        return new ResponseEntity<>(new UserInfoResponseDTO(
+                model.getId_usuario(),
+                model.getUsername().getUsername(),
+                model.getEmail().getEmail(),
+                model.getMaster_password(),
+                model.getUrl_image()
+        ), HttpStatus.OK);
     }
 
     @PutMapping("/update/password")
-    public UserModel recoverMasterPassword(@RequestBody ResetMasterPasswordDTO resetMasterPassword){
-        return userUseCases.recoverMasterPassword(resetMasterPassword.getNew_password(), new EmailValueObject(resetMasterPassword.getEmail()));
+    public ResponseEntity<UserInfoResponseDTO> recoverMasterPassword(@RequestBody ResetMasterPasswordRequestDTO resetMasterPassword){
+
+        UserModel model = userUseCases.recoverMasterPassword(resetMasterPassword.new_password(), new EmailValueObject(resetMasterPassword.email()));
+
+        return ResponseEntity.status(HttpStatus.OK).body(new UserInfoResponseDTO(
+                model.getId_usuario(),
+                model.getUsername().getUsername(),
+                model.getEmail().getEmail(),
+                model.getMaster_password(),
+                model.getUrl_image()
+        ));
     }
 
     @PutMapping("/update/password/{id}")
-    public UserModel updateMasterPassword(@PathVariable UUID id, @RequestBody UpdateMasterPassword updateMasterPassword){
-        return userUseCases.updateMasterPassword(id, updateMasterPassword.getCurrent_password(), updateMasterPassword.getNew_password());
+    public ResponseEntity<UserInfoResponseDTO> updateMasterPassword(@PathVariable UUID id, @Valid @RequestBody UpdateMasterPasswordRequestDTO updateMasterPassword){
+
+        UserModel model = userUseCases.updateMasterPassword(id, updateMasterPassword.current_password(), updateMasterPassword.new_password());
+
+        return ResponseEntity.status(HttpStatus.OK).body(new UserInfoResponseDTO(
+                model.getId_usuario(),
+                model.getUsername().getUsername(),
+                model.getEmail().getEmail(),
+                model.getMaster_password(),
+                model.getUrl_image()
+        ));
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable UUID id, @RequestBody DeleteUserDTO deleteUserDTO){
-        return userUseCases.deleteUser(id, deleteUserDTO.getCurrent_password());
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id, @RequestBody DeleteUserDTO deleteUserDTO){
+
+        String result = userUseCases.deleteUser(id, deleteUserDTO.getCurrent_password());
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

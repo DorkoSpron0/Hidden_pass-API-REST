@@ -2,7 +2,6 @@ package com.sena.hidden_pass.infrastructure.mappers;
 
 import com.sena.hidden_pass.domain.models.*;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UpdateUserDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 
 import java.util.HashSet;
@@ -135,19 +134,6 @@ public class UserMapper {
         );
     }
 
-    public static UserModel updateUserDTOToModel(UpdateUserDTO dto){
-        return new UserModel(
-                null,
-                dto.getEmail(),
-                dto.getUsername(),
-                null,
-                dto.getUrl_image(),
-                null,
-                null,
-                null,
-                null
-        );
-    }
 
     public boolean passTests(){return true;}
 }
