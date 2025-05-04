@@ -139,9 +139,9 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable UUID id, @RequestBody DeleteUserDTO deleteUserDTO){
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id, @RequestBody DeleteUserRequestDTO deleteUserDTO){
 
-        String result = userUseCases.deleteUser(id, deleteUserDTO.getCurrent_password());
+        String result = userUseCases.deleteUser(id, deleteUserDTO.current_password());
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

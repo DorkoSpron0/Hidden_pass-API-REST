@@ -10,6 +10,7 @@ import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.ResetMasterPasswordRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.UpdateMasterPasswordRequestDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.UpdateUserRequestDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -298,37 +299,38 @@ class UT_UserControllerTest {
         // Verify
         verify(userUseCases).recoverMasterPassword(eq(newPassword), any(EmailValueObject.class));
     }
-//
-//    @Test
-//    void testUpdateMasterPassword() throws Exception {
-//        // Given
-//        UUID id = UUID.randomUUID();
-//        String currentPassword = "Password123@";
-//        String newPassword = "Test1235434@";
-//
-//        Update masterPassword = new UpdateMasterPasswordRequestDTO(currentPassword, newPassword);
-//
-//        UserModel userExpected = new UserModel();
-//        userExpected.setMaster_password(newPassword);
-//
-//        // When
-//        when(this.userUseCases.updateMasterPassword(eq(id), eq(currentPassword), eq(newPassword))).thenReturn(userExpected);
-//
-//        // Then
-//        mockMvc.perform(put("/api/v1/hidden_pass/users/update/password/{id}", id)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("""
-//                        {
-//                            "current_password": "Password123@",
-//                            "new_password": "Test1235434@"
-//                        }
-//                        """)
-//        )
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.master_password").value(newPassword));
-//
-//        verify(this.userUseCases).updateMasterPassword(eq(id), eq(currentPassword), eq(newPassword));
-//    }
+
+    @Test
+    void testUpdateMasterPassword() throws Exception {
+        // Given
+        UUID id = UUID.randomUUID();
+        String currentPassword = "Password123@";
+        String newPassword = "Test1235434@";
+
+        UpdateMasterPasswordRequestDTO masterPassword = new UpdateMasterPasswordRequestDTO(currentPassword, newPassword);
+
+        // When
+        when(this.userUseCases.updateMasterPassword(eq(id), eq(currentPassword), eq(newPassword))).thenReturn(new UserModel(
+                id,
+                new EmailValueObject("m@m.com"),
+                new UsernameValueObject("username"),
+                newPassword,
+                "url",
+                null,
+                null,
+                null,
+                null
+        ));
+
+        // Then
+        mockMvc.perform(put("/api/v1/hidden_pass/users/update/password/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(masterPassword)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.master_password").value(newPassword));
+
+        verify(this.userUseCases).updateMasterPassword(eq(id), eq(currentPassword), eq(newPassword));
+    }
 
     @Test
     void testDeleteUser() throws Exception {
