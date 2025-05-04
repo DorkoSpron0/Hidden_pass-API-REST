@@ -5,7 +5,6 @@ import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.*;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.RegisterUserResponseDTO;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserInfoResponseDTO;

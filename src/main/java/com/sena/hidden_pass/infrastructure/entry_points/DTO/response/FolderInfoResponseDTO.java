@@ -6,6 +6,6 @@ import java.util.UUID;
 public record FolderInfoResponseDTO(UUID id_folder,
                                     String name,
                                     String icon,
-                                    String Description,
+                                    String description,
                                     List<PasswordInfoResponseDTO> passwordModels) {
 }

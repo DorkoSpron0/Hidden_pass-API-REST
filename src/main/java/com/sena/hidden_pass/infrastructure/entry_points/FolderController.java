@@ -85,7 +85,7 @@ public class FolderController {
     }
 
 
-    private FolderInfoResponseDTO modelToDTO(FolderModel model){
+    public FolderInfoResponseDTO modelToDTO(FolderModel model){
         return new FolderInfoResponseDTO(
                 model.getId_folder(),
                 model.getName(),

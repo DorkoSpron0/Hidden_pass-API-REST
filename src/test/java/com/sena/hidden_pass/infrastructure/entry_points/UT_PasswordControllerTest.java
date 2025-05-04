@@ -2,12 +2,17 @@ package com.sena.hidden_pass.infrastructure.entry_points;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sena.hidden_pass.application.config.JwtFilter;
+import com.sena.hidden_pass.domain.models.FolderModel;
 import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.domain.usecases.PasswordUseCases;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.PasswordRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.PasswordInfoResponseDTO;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,7 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,6 +59,14 @@ public class UT_PasswordControllerTest {
         public PasswordUseCases passwordUseCases(){
             return Mockito.mock(PasswordUseCases.class);
         }
+    }
+
+    @InjectMocks
+    private PasswordController passwordController;
+
+    @BeforeEach
+    void init(){
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -259,6 +272,66 @@ public class UT_PasswordControllerTest {
         mockMvc.perform(delete("/api/v1/hidden_pass/passwords/password/{id}", passwordId))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Password not found"));
+    }
+
+    @Test
+    void testModelToDTOWithFolder() {
+        // Given
+        UUID passwordId = UUID.randomUUID();
+        UUID folderId = UUID.randomUUID();
+        PasswordModel model = new PasswordModel(
+                passwordId,
+                "name",
+                "description",
+                "email@email.com",
+                "Password123@",
+                "url",
+                LocalDateTime.now(),
+                new FolderModel(folderId, "foldername", "folderdescription", "icon")
+        );
+
+        // when
+        PasswordInfoResponseDTO response = this.passwordController.modelToDTO(model);
+
+        // Then
+        assertEquals(passwordId, response.id_password());
+        assertEquals(folderId, response.id_folder());
+        assertEquals(passwordId, response.id_password());
+        assertEquals("name", response.name());
+        assertEquals("description", response.description());
+        assertEquals("email@email.com", response.email_user());
+        assertEquals("Password123@", response.password());
+
+        assertNotNull(response.id_folder());
+
+    }
+
+    @Test
+    void testModelToDTOWithoutFolder() {
+        // Given
+        UUID passwordId = UUID.randomUUID();
+        PasswordModel model = new PasswordModel(
+                passwordId,
+                "name",
+                "description",
+                "email@email.com",
+                "Password123@",
+                "url",
+                LocalDateTime.now(),
+                null
+        );
+
+        // when
+        PasswordInfoResponseDTO response = this.passwordController.modelToDTO(model);
+
+        // Then
+        assertEquals(passwordId, response.id_password());
+        assertEquals(passwordId, response.id_password());
+        assertEquals("name", response.name());
+        assertEquals("description", response.description());
+        assertEquals("email@email.com", response.email_user());
+        assertEquals("Password123@", response.password());
+        assertNull(response.id_folder());
     }
 
 }

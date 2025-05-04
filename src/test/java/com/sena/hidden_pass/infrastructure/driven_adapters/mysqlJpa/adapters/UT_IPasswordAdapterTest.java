@@ -2,8 +2,10 @@ package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.PasswordDataProvider;
 import com.sena.hidden_pass.UserDataProvider;
+import com.sena.hidden_pass.domain.models.FolderModel;
 import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.domain.models.UserModel;
+import com.sena.hidden_pass.domain.usecases.FolderUseCases;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
@@ -33,7 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class UT_IPasswordEncoderTest {
+public class UT_IPasswordAdapterTest {
 
     @Mock
     private UserUseCases userAdapter;
@@ -43,6 +45,9 @@ public class UT_IPasswordEncoderTest {
 
     @Mock
     private IUserRepository userRepository;
+
+    @Mock
+    private FolderUseCases folderUseCases;
 
     @Mock
     private AESUtil aesUtil;
@@ -177,6 +182,44 @@ public class UT_IPasswordEncoderTest {
         when(this.userAdapter.getUserById(any(UUID.class))).thenReturn(UserDataProvider.getUserModel());
         when(this.userRepository.save(any(UserDBO.class))).thenReturn(UserDataProvider.getUserDBO());
 
+        when(this.folderUseCases.getFolderByName(anyString())).thenReturn(new FolderModel(
+                null,
+                "Name",
+                null,
+                null,
+                null,
+                null
+        ));
+
+        PasswordModel model = this.passwordAdapter.createPassword(password, user_id, "Name");
+
+        // THen
+        assertNotNull(model);
+
+        verify(this.passwordRepository).save(passwordSavedCaptor.capture());
+        PasswordDBO saved = passwordSavedCaptor.getValue();
+
+        assertEquals(model.getName(), saved.getName());
+        assertEquals(model.getDescription(), saved.getDescription());
+        assertEquals(model.getEmail_user(), saved.getEmail_user());
+        assertEquals("Name", model.getId_folder().getName());
+    }
+
+    @Test
+    void testCreatePasswordSuccessfullyWithoutFolder() throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        // Given
+        PasswordModel password = PasswordDataProvider.getPasswordModel();
+        UUID user_id = UUID.randomUUID();
+
+        ArgumentCaptor<PasswordDBO> passwordSavedCaptor = ArgumentCaptor.forClass(PasswordDBO.class);
+
+        // When
+        when(this.aesUtil.encrypt(anyString())).thenReturn("passwordEncrypted");
+        when(this.passwordRepository.save(any(PasswordDBO.class))).thenReturn(PasswordDataProvider.getPasswordDBO());
+
+        when(this.userAdapter.getUserById(any(UUID.class))).thenReturn(UserDataProvider.getUserModel());
+        when(this.userRepository.save(any(UserDBO.class))).thenReturn(UserDataProvider.getUserDBO());
+
         PasswordModel model = this.passwordAdapter.createPassword(password, user_id, null);
 
         // THen
@@ -241,8 +284,15 @@ public class UT_IPasswordEncoderTest {
         when(this.passwordRepository.findById(any(UUID.class))).thenReturn(Optional.of(PasswordDataProvider.getPasswordDBO()));
         when(this.aesUtil.encrypt(anyString())).thenReturn("passwordEncrypted");
         when(this.passwordRepository.save(any(PasswordDBO.class))).thenReturn(PasswordDataProvider.getPasswordDBO());
+        when(this.folderUseCases.getFolderByName(anyString())).thenReturn(new FolderModel(
+                null,
+                "Name",
+                null,
+                null,
+                null
+        ));
 
-        PasswordModel updated = this.passwordAdapter.editPassword(password, password_id, null);
+        PasswordModel updated = this.passwordAdapter.editPassword(password, password_id, "Name");
 
         // Then
         assertNotNull(updated);
@@ -257,7 +307,7 @@ public class UT_IPasswordEncoderTest {
         assertEquals("passwordEncrypted", saved.getPassword());
         assertEquals("Description", saved.getDescription());
 
-        assertEquals("Name", saved.getId_folder().getName());
+        assertEquals("Name", updated.getId_folder().getName());
     }
 
     @Test

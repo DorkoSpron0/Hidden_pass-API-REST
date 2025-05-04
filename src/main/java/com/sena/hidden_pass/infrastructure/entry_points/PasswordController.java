@@ -84,7 +84,7 @@ public class PasswordController {
     }
 
 
-    private PasswordInfoResponseDTO modelToDTO(PasswordModel model){
+    public PasswordInfoResponseDTO modelToDTO(PasswordModel model){
         return new PasswordInfoResponseDTO(
                 model.getId_password(),
                 model.getName(),

@@ -135,6 +135,42 @@ public class UT_FolderAdapterTest {
     }
 
     @Test
+    void testGetFolderByName() {
+        // Given
+        String name = "FolderName";
+
+        // When
+        when(this.folderRepository.findFolderDBOByName(eq(name))).thenReturn(Optional.of(new FolderDBO(
+                null,
+                "FolderName",
+                null,
+                null
+        )));
+
+        FolderModel model = this.folderAdapter.getFolderByName(name);
+
+        // Then
+        verify(this.folderRepository).findFolderDBOByName(eq(name));
+
+        assertEquals(name, model.getName());
+    }
+
+    @Test
+    void testGetFolderByNameNotFound() {
+        // Given
+        String name = "FolderName";
+
+        // When
+        when(this.folderRepository.findFolderDBOByName(eq(name))).thenReturn(Optional.empty());
+
+        // Then
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.folderAdapter.getFolderByName(name);
+        });
+        assertEquals("Folder with name " + name + " not found", exception.getMessage());
+    }
+
+    @Test
     void testCreateFolder() {
         // Given
         UUID folderId = UUID.randomUUID();
@@ -152,7 +188,17 @@ public class UT_FolderAdapterTest {
         when(this.userRepository.findById(eq(userId))).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         when(this.folderRepository.save(any(FolderDBO.class))).thenReturn(folderExpected);
         when(this.userRepository.save(any(UserDBO.class))).thenReturn(userExpected);
-        FolderModel result = this.folderAdapter.createFolder(model,userId, null);
+        when(this.passwordRepository.findPasswordDBOByNameIn(any(List.class))).thenReturn(List.of(new PasswordDBO(
+                null,
+                "PasswordName",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        )));
+        FolderModel result = this.folderAdapter.createFolder(model,userId, List.of("PasswordName"));
 
         // Then
         assertNotNull(result);
@@ -162,6 +208,8 @@ public class UT_FolderAdapterTest {
         FolderDBO folderSaved = folderDBOArgumentCaptor.getValue();
 
         assertEquals(folderId, folderSaved.getId_folder());
+
+        assertEquals("Name", result.getPasswordModels().getFirst().getName());
     }
 
     @Test
@@ -184,6 +232,38 @@ public class UT_FolderAdapterTest {
     }
 
     @Test
+    void testCreateFolderWithoutPasswords() {
+        // Given
+        UUID folderId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+
+        FolderModel model = new FolderModel("descriptionFolder", "icon", folderId, "folderName" , new UserModel(), new ArrayList<>(List.of(PasswordDataProvider.getPasswordModel())));
+
+        FolderDBO folderExpected = new FolderDBO(UUID.randomUUID(), "folderName", "icon", "descriptionFolder", new UserDBO(), new ArrayList<>(List.of(PasswordDataProvider.getPasswordDBO())));
+
+        UserDBO userExpected = UserDataProvider.getUserDBO();
+        folderExpected.setPasswords(null);
+
+        ArgumentCaptor<FolderDBO> folderDBOArgumentCaptor = ArgumentCaptor.forClass(FolderDBO.class);
+
+        // When
+        when(this.userRepository.findById(eq(userId))).thenReturn(Optional.of(userExpected));
+        when(this.folderRepository.save(any(FolderDBO.class))).thenReturn(folderExpected);
+        when(this.userRepository.save(any(UserDBO.class))).thenReturn(userExpected);
+        FolderModel result = this.folderAdapter.createFolder(model,userId, null);
+
+        // Then
+        assertNotNull(result);
+
+        verify(this.folderRepository).save(any(FolderDBO.class));
+        verify(this.folderRepository).save(folderDBOArgumentCaptor.capture());
+        FolderDBO folderSaved = folderDBOArgumentCaptor.getValue();
+
+        assertEquals(folderId, folderSaved.getId_folder());
+        assertEquals(0, result.getPasswordModels().size());
+    }
+
+    @Test
     void testUpdateFolder() {
         // Given
         UUID folderId = UUID.randomUUID();
@@ -196,7 +276,7 @@ public class UT_FolderAdapterTest {
         // When
         when(this.folderRepository.findById(eq(folderId))).thenReturn(Optional.of(dboFounded));
         when(this.folderRepository.save(any(FolderDBO.class))).thenReturn(dboExpected);
-        FolderModel result = this.folderAdapter.updateFolder(model, folderId, null);
+        FolderModel result = this.folderAdapter.updateFolder(model, folderId, List.of("PasswordName"));
 
         // Then
         assertNotNull(result);
@@ -206,6 +286,7 @@ public class UT_FolderAdapterTest {
         assertEquals(model.getId_folder(), result.getId_folder());
         assertEquals(model.getName(), result.getName());
         assertEquals(model.getDescription(), result.getDescription());
+        assertEquals("Name", result.getPasswordModels().getFirst().getName());
     }
 
     @Test
@@ -227,6 +308,35 @@ public class UT_FolderAdapterTest {
         });
 
         assertEquals("Folder with id " + folderId + " not found", exception.getMessage());
+    }
+
+    @Test
+    void testUpdateFolderWithoutPasswords() {
+        // Given
+        UUID folderId = UUID.randomUUID();
+        FolderModel model = new FolderModel("new_descriptionFolder", "new_icon", folderId, "new_folderName" , new UserModel(),List.of(PasswordDataProvider.getPasswordModel()));
+
+        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", new UserDBO(),List.of(PasswordDataProvider.getPasswordDBO()));
+
+        FolderDBO dboExpected = new FolderDBO(folderId, "new_folderName", "new_icon", "new_descriptionFolder", new UserDBO(),List.of(PasswordDataProvider.getPasswordDBO()));
+
+        dboExpected.setPasswords(new ArrayList<>());
+
+        // When
+        when(this.folderRepository.findById(eq(folderId))).thenReturn(Optional.of(dboFounded));
+        when(this.folderRepository.save(any(FolderDBO.class))).thenReturn(dboExpected);
+        FolderModel result = this.folderAdapter.updateFolder(model, folderId, null);
+
+        // Then
+        assertNotNull(result);
+        verify(this.folderRepository).findById(eq(folderId));
+        verify(this.folderRepository).save(any(FolderDBO.class));
+
+        assertEquals(model.getId_folder(), result.getId_folder());
+        assertEquals(model.getName(), result.getName());
+
+
+        assertEquals(0, result.getPasswordModels().size());
     }
 
     @Test
