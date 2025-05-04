@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 public class PasswordDTO {
 
     @Pattern(regexp = "^[A-Za-z\\s\\d]{4,}$")
-    private String name;
-    private String url;
-    private LocalDateTime dateTime;
-    private String email_user;
-    private String password;
-    private String description;
-    private FolderDBO id_folder;
+    String name;
+    String url;
+    LocalDateTime dateTime;
+    String email_user;
+    String password;
+    String description;
+    FolderDBO id_folder;
 }

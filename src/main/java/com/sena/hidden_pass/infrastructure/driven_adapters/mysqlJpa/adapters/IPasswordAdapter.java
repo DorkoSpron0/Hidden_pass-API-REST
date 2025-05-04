@@ -1,6 +1,8 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
+import com.sena.hidden_pass.domain.models.FolderModel;
 import com.sena.hidden_pass.domain.models.PasswordModel;
+import com.sena.hidden_pass.domain.usecases.FolderUseCases;
 import com.sena.hidden_pass.domain.usecases.PasswordUseCases;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
@@ -8,6 +10,7 @@ import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.Password
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPasswordRepository;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
+import com.sena.hidden_pass.infrastructure.mappers.FolderMapper;
 import com.sena.hidden_pass.infrastructure.mappers.PasswordMapper;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import com.sena.hidden_pass.infrastructure.utils.AESUtil;
@@ -22,12 +25,14 @@ import java.util.stream.Collectors;
 public class IPasswordAdapter implements PasswordUseCases {
 
     private UserUseCases userAdapter;
+    private FolderUseCases folderUseCases;
     private IPasswordRepository passwordRepository;
     private IUserRepository userRepository;
     private AESUtil aesUtil;
 
-    public IPasswordAdapter(AESUtil aesUtil, IPasswordRepository passwordRepository, UserUseCases userAdapter, IUserRepository userRepository) {
+    public IPasswordAdapter(AESUtil aesUtil, FolderUseCases folderUseCases, IPasswordRepository passwordRepository, UserUseCases userAdapter, IUserRepository userRepository) {
         this.aesUtil = aesUtil;
+        this.folderUseCases = folderUseCases;
         this.passwordRepository = passwordRepository;
         this.userAdapter = userAdapter;
         this.userRepository = userRepository;
@@ -61,12 +66,17 @@ public class IPasswordAdapter implements PasswordUseCases {
     }
 
     @Override
-    public PasswordModel createPassword(PasswordModel password, UUID user_id) {
+    public PasswordModel createPassword(PasswordModel password, UUID user_id, String folder_name) {
 
         UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));
+
         try{
             // Guardar la contraseña primero
             password.setPassword(aesUtil.encrypt(password.getPassword()));
+            if(folder_name != null) {
+                FolderModel folderFounded = folderUseCases.getFolderByName(folder_name);
+                password.setId_folder(folderFounded);
+            }
             PasswordDBO passwordSaved = passwordRepository.save(PasswordMapper.passwordModelToDBO(password));
 
             // Obtener el usuario
@@ -85,7 +95,7 @@ public class IPasswordAdapter implements PasswordUseCases {
     }
 
     @Override
-    public PasswordModel editPassword(PasswordModel password, UUID password_id) {
+    public PasswordModel editPassword(PasswordModel password, UUID password_id, String folder_name) {
         PasswordDBO passwordFounded = PasswordMapper.passwordModelToDBO(getPasswordById(password_id));
 
         passwordFounded.setName(password.getName());
@@ -96,13 +106,11 @@ public class IPasswordAdapter implements PasswordUseCases {
         }
         passwordFounded.setEmail_user(password.getEmail_user());
         passwordFounded.setUrl(password.getUrl());
-        if(password.getId_folder() != null){
-            passwordFounded.setId_folder(new FolderDBO(
-                    password.getId_folder().getId_folder(),
-                    password.getId_folder().getName(),
-                    password.getId_folder().getIcon(),
-                    password.getId_folder().getDescription())
-            );
+        if(folder_name != null) {
+            FolderModel folderFounded = folderUseCases.getFolderByName(folder_name);
+            password.setId_folder(folderFounded);
+        }else{
+            password.setId_folder(null);
         }
         passwordFounded.setDescription(password.getDescription());
         passwordFounded.setDateTime(LocalDateTime.now());

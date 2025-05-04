@@ -3,9 +3,9 @@ spring:
     active: dev # Selecciona el perfil por defecto
   mail:
     host: smtp.gmail.com
-    port: 587
-    username: y2kdsp@gmail.com
-    password: kocu vbig qlhl tdzo
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:

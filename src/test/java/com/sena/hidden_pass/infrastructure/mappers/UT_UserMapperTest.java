@@ -2,10 +2,7 @@ package com.sena.hidden_pass.infrastructure.mappers;
 
 import com.sena.hidden_pass.UserDataProvider;
 import com.sena.hidden_pass.domain.models.UserModel;
-import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -182,30 +179,6 @@ public class UT_UserMapperTest {
                 .findFirst()
                 .map(note -> note.getId_folder() == null)
                 .orElse(false));
-    }
-
-    @Test
-    @DisplayName("Test should map user dto to user model with all valid")
-    void testUserDTOToModel(){
-        // Given
-        UserDTO dto = UserDataProvider.getUserDTO();
-
-        // When
-        UserModel result = UserMapper.userDTOToModel(dto);
-
-        // Then
-        assertNotNull(result);
-
-        assertEquals(dto.getId(), result.getId_usuario());
-        assertEquals(dto.getEmail(), result.getEmail());
-        assertEquals(dto.getMaster_password().getMaster_password(), result.getMaster_password());
-        assertEquals(dto.getUsername(), result.getUsername());
-        assertEquals(dto.getUrl_image(), result.getUrl_image());
-
-        assertNull(result.getFolderList());
-        assertNull(result.getNoteList());
-        assertNull(result.getPasswordList());
-        assertNull(result.getSecurityCodes());
     }
 
     @Test

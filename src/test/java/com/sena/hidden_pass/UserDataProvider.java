@@ -2,10 +2,8 @@ package com.sena.hidden_pass;
 
 import com.sena.hidden_pass.domain.models.*;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
-import com.sena.hidden_pass.domain.valueObjects.MasterPasswordValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.UserDTO;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -84,21 +82,6 @@ public class UserDataProvider {
                 )),
 
                 new SecurityCodesDBO(UUID.randomUUID())
-        );
-    }
-
-    public static UserDTO getUserDTO(){
-        return new UserDTO(
-                UUID.randomUUID(),
-                new UsernameValueObject("username"),
-                new EmailValueObject("Nicky@Nicky.com"),
-                new MasterPasswordValueObject("MasterPasswor@12d"),
-
-                null,
-                null,
-                null,
-                null,
-                null
         );
     }
 }

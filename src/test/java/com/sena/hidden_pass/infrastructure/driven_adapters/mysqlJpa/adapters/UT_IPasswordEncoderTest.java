@@ -177,7 +177,7 @@ public class UT_IPasswordEncoderTest {
         when(this.userAdapter.getUserById(any(UUID.class))).thenReturn(UserDataProvider.getUserModel());
         when(this.userRepository.save(any(UserDBO.class))).thenReturn(UserDataProvider.getUserDBO());
 
-        PasswordModel model = this.passwordAdapter.createPassword(password, user_id);
+        PasswordModel model = this.passwordAdapter.createPassword(password, user_id, null);
 
         // THen
         assertNotNull(model);
@@ -204,7 +204,7 @@ public class UT_IPasswordEncoderTest {
 
         // When + Then
         assertThrows(RuntimeException.class, () -> {
-            passwordAdapter.createPassword(password, user_id);
+            passwordAdapter.createPassword(password, user_id, null);
         });
     }
 
@@ -223,7 +223,7 @@ public class UT_IPasswordEncoderTest {
 
         // THen
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.passwordAdapter.createPassword(password, user_id);
+            this.passwordAdapter.createPassword(password, user_id, null);
         });
 
         assertEquals("User with id " + user_id + " not found", exception.getMessage());
@@ -242,7 +242,7 @@ public class UT_IPasswordEncoderTest {
         when(this.aesUtil.encrypt(anyString())).thenReturn("passwordEncrypted");
         when(this.passwordRepository.save(any(PasswordDBO.class))).thenReturn(PasswordDataProvider.getPasswordDBO());
 
-        PasswordModel updated = this.passwordAdapter.editPassword(password, password_id);
+        PasswordModel updated = this.passwordAdapter.editPassword(password, password_id, null);
 
         // Then
         assertNotNull(updated);
@@ -275,7 +275,7 @@ public class UT_IPasswordEncoderTest {
         when(this.aesUtil.encrypt(anyString())).thenReturn("passwordEncrypted");
         when(this.passwordRepository.save(any(PasswordDBO.class))).thenReturn(PasswordDataProvider.getPasswordDBO());
 
-        PasswordModel updated = this.passwordAdapter.editPassword(password, password_id);
+        PasswordModel updated = this.passwordAdapter.editPassword(password, password_id, null);
 
         // Then
         assertNotNull(updated);
@@ -303,7 +303,7 @@ public class UT_IPasswordEncoderTest {
 
         // Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.passwordAdapter.editPassword(password, password_id);
+            this.passwordAdapter.editPassword(password, password_id, null);
         });
 
         assertEquals("Password not found", exception.getMessage());
@@ -324,7 +324,7 @@ public class UT_IPasswordEncoderTest {
 
         // Then
         assertThrows(RuntimeException.class, () -> {
-            this.passwordAdapter.editPassword(password, password_id);
+            this.passwordAdapter.editPassword(password, password_id, null);
         });
     }
 

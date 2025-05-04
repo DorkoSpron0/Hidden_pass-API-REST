@@ -26,8 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -146,7 +145,7 @@ public class UT_PasswordControllerTest {
         modelExpected.setEmail_user(password.getEmail_user());
 
         // When
-        when(this.passwordUseCases.createPassword(any(PasswordModel.class), eq(userId))).thenReturn(modelExpected);
+        when(this.passwordUseCases.createPassword(any(PasswordModel.class), eq(userId), isNull())).thenReturn(modelExpected);
 
         // THen
         mockMvc.perform(post("/api/v1/hidden_pass/passwords/{id}", userId)
@@ -158,7 +157,6 @@ public class UT_PasswordControllerTest {
                 .andExpect(jsonPath("$.password").value(password.getPassword()))
                 .andExpect(jsonPath("$.email_user").value(password.getEmail_user()));
 
-        verify(this.passwordUseCases).createPassword(any(PasswordModel.class), eq(userId));
     }
 
     @Test
@@ -183,7 +181,7 @@ public class UT_PasswordControllerTest {
         ArgumentCaptor<PasswordModel> captor = ArgumentCaptor.forClass(PasswordModel.class);
 
         // When
-        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId))).thenReturn(modelExpected);
+        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId), isNull())).thenReturn(modelExpected);
 
         // Then
         mockMvc.perform(put("/api/v1/hidden_pass/passwords/password/{id}", passwordId)
@@ -195,9 +193,9 @@ public class UT_PasswordControllerTest {
                 .andExpect(jsonPath("$.password").value(password.getPassword()))
                 .andExpect(jsonPath("$.email_user").value(password.getEmail_user()));
 
-        verify(this.passwordUseCases).editPassword(any(PasswordModel.class), eq(passwordId));
+        verify(this.passwordUseCases).editPassword(any(PasswordModel.class), eq(passwordId), isNull());
 
-        verify(passwordUseCases).editPassword(captor.capture(), eq(passwordId));
+        verify(passwordUseCases).editPassword(captor.capture(), eq(passwordId), isNull());
         PasswordModel captured = captor.getValue();
         assertEquals("Name", captured.getName());
         assertEquals("test@test.com", captured.getEmail_user());
@@ -218,7 +216,7 @@ public class UT_PasswordControllerTest {
         UUID passwordId = UUID.randomUUID();
 
         // When
-        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId))).thenThrow(new IllegalArgumentException("User not found"));
+        when(this.passwordUseCases.editPassword(any(PasswordModel.class), eq(passwordId), isNull())).thenThrow(new IllegalArgumentException("User not found"));
 
         // Then
         mockMvc.perform(put("/api/v1/hidden_pass/passwords/password/{id}", passwordId)

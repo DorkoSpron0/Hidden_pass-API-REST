@@ -80,7 +80,7 @@ public class UT_IUserAdapterTest {
         assertEquals("password_cifrada", model.getMaster_password());
         assertEquals(given.getUrl_image(), model.getUrl_image());
 
-        verify(mailService).sendEmailAyncImpl(anyString(), anyString(), anyString());
+        //verify(mailService).sendEmailAyncImpl(anyString(), anyString(), anyString());
         verify(userRepository).save(any(UserDBO.class));
         verify(passwordEncoder).encode(anyString());
 

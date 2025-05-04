@@ -9,9 +9,8 @@ import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
 import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.entry_points.DTO.*;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.ResetMasterPasswordRequestDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.UpdateMasterPasswordRequestDTO;
-import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.UpdateUserRequestDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.*;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserLoginResponseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -130,7 +129,7 @@ class UT_UserControllerTest {
     @Test
     void testLoginUser() throws Exception {
         // Given
-        UserDTO dto = UserDataProvider.getUserDTO();
+        LoginUserRequestDTO dto = new LoginUserRequestDTO("email@email.com", "master_password");
 
         // When
         when(this.userUseCases.loginUser(any(UserModel.class))).thenReturn(new UserLoginModel(
@@ -336,7 +335,7 @@ class UT_UserControllerTest {
     void testDeleteUser() throws Exception {
         // given
         UUID userId = UUID.randomUUID();
-        DeleteUserDTO deleteUserDTO = new DeleteUserDTO("current_password");
+        DeleteUserRequestDTO deleteUserDTO = new DeleteUserRequestDTO("current_password");
 
         // When
         when(this.userUseCases.deleteUser(eq(userId), anyString())).thenReturn("User deleted successfully");
@@ -356,7 +355,7 @@ class UT_UserControllerTest {
     void testDeleteUserNotFound() throws Exception {
         // given
         UUID userId = UUID.randomUUID();
-        DeleteUserDTO deleteUserDTO = new DeleteUserDTO("current_password");
+        DeleteUserRequestDTO deleteUserDTO = new DeleteUserRequestDTO("current_password");
 
         // When
         when(this.userUseCases.deleteUser(eq(userId), anyString())).thenThrow(new IllegalArgumentException("User not found"));

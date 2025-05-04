@@ -148,7 +148,7 @@ public class UT_NoteControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(note.getTitle()))
                 .andExpect(jsonPath("$.description").value(note.getDescription()))
-                .andExpect(jsonPath("$.id_priority.name").value(note.getPriorityName().name()));
+                .andExpect(jsonPath("$.id_priority").value(note.getPriorityName().name()));
 
         verify(this.noteUseCases).updateNote(any(NoteModel.class), eq(noteId));
     }

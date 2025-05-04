@@ -1,8 +1,6 @@
 package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
 
 import com.sena.hidden_pass.domain.models.FolderModel;
-import com.sena.hidden_pass.domain.models.PasswordModel;
-import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.FolderUseCases;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
@@ -14,6 +12,7 @@ import com.sena.hidden_pass.infrastructure.mappers.FolderMapper;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,11 +43,23 @@ public class IFolderAdapter implements FolderUseCases {
     }
 
     @Override
-    public FolderModel createFolder(FolderModel folder, UUID userId) {
+    public FolderModel getFolderByName(String name) {
+        FolderDBO folderFounded = folderRepository.findFolderDBOByName(name).orElseThrow(() -> new IllegalArgumentException("Folder with name " + name + " not found"));
+        return FolderMapper.folderDBOToModel(folderFounded);
+    }
+
+    @Override
+    public FolderModel createFolder(FolderModel folder, UUID userId, List<String> passwordsNames) {
+
         UserDBO userFounded = this.userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         folder.setUser(UserMapper.userDBOToModel(userFounded));
 
+
         FolderDBO dbo = FolderMapper.folderModelToDBO(folder);
+        if(passwordsNames != null){
+            List<PasswordDBO> passwords = this.passwordRepository.findPasswordDBOByNameIn(passwordsNames);
+            dbo.setPasswords(passwords);
+        }
         dbo.setUser(userFounded);
         FolderDBO folderSaved = folderRepository.save(dbo);
 
@@ -59,12 +70,18 @@ public class IFolderAdapter implements FolderUseCases {
     }
 
     @Override
-    public FolderModel updateFolder(FolderModel folder, UUID id) {
+    public FolderModel updateFolder(FolderModel folder, UUID id, List<String> passwordsNames) {
         FolderDBO folderFounded = folderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Folder with id " + id + " not found"));
+
         folderFounded.setName(folder.getName());
         folderFounded.setDescription(folder.getDescription());
         folderFounded.setIcon(folder.getIcon());
-        folderFounded.setPasswords(folderFounded.getPasswords()); // -> No actualiza el estado
+        if(passwordsNames != null){
+            List<PasswordDBO> passwords = this.passwordRepository.findPasswordDBOByNameIn(passwordsNames);
+            folderFounded.setPasswords(passwords); // Actualiza el estado
+        }else{
+            folderFounded.setPasswords(new ArrayList<>());
+        }
         folderFounded.setUser(folderFounded.getUser()); // -> No actualiza el estado
 
         FolderDBO folderSaved = folderRepository.save(folderFounded);
@@ -80,6 +97,9 @@ public class IFolderAdapter implements FolderUseCases {
         folderFounded.getPasswords().add(passwordFounded);
 
         FolderDBO folderSaved = this.folderRepository.save(folderFounded);
+        passwordFounded.setId_folder(folderSaved);
+
+        passwordRepository.save(passwordFounded);
 
         return FolderMapper.folderDBOToModel(folderSaved);
     }

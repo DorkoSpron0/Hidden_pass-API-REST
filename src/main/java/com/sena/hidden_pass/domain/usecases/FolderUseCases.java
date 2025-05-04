@@ -8,8 +8,9 @@ import java.util.UUID;
 public interface FolderUseCases {
     List<FolderModel> getAllFolders(UUID userId);
     FolderModel getFolderById(UUID id);
-    FolderModel createFolder(FolderModel folder, UUID userId);
-    FolderModel updateFolder(FolderModel folder, UUID id);
+    FolderModel getFolderByName(String name);
+    FolderModel createFolder(FolderModel folder, UUID userId, List<String> passwordsNames);
+    FolderModel updateFolder(FolderModel folder, UUID id, List<String> passwordsNames);
     FolderModel setPasswordToFolder(UUID folderId, UUID passwordId);
     String deleteFolder(UUID id);
 }

@@ -152,7 +152,7 @@ public class UT_FolderAdapterTest {
         when(this.userRepository.findById(eq(userId))).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         when(this.folderRepository.save(any(FolderDBO.class))).thenReturn(folderExpected);
         when(this.userRepository.save(any(UserDBO.class))).thenReturn(userExpected);
-        FolderModel result = this.folderAdapter.createFolder(model,userId);
+        FolderModel result = this.folderAdapter.createFolder(model,userId, null);
 
         // Then
         assertNotNull(result);
@@ -177,7 +177,7 @@ public class UT_FolderAdapterTest {
 
         // Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.folderAdapter.createFolder(model,userId);
+            this.folderAdapter.createFolder(model,userId, null);
         });
 
         assertEquals("User not found", exception.getMessage());
@@ -196,7 +196,7 @@ public class UT_FolderAdapterTest {
         // When
         when(this.folderRepository.findById(eq(folderId))).thenReturn(Optional.of(dboFounded));
         when(this.folderRepository.save(any(FolderDBO.class))).thenReturn(dboExpected);
-        FolderModel result = this.folderAdapter.updateFolder(model, folderId);
+        FolderModel result = this.folderAdapter.updateFolder(model, folderId, null);
 
         // Then
         assertNotNull(result);
@@ -223,7 +223,7 @@ public class UT_FolderAdapterTest {
 
         // Then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            this.folderAdapter.updateFolder(model, folderId);
+            this.folderAdapter.updateFolder(model, folderId, null);
         });
 
         assertEquals("Folder with id " + folderId + " not found", exception.getMessage());
