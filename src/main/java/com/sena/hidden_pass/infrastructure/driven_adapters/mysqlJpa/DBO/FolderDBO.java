@@ -24,6 +24,7 @@ public class FolderDBO {
     private String Description;
 
     @ManyToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private UserDBO user;
 
     @OneToMany

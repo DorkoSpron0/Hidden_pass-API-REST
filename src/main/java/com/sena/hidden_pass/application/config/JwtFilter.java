@@ -21,7 +21,6 @@ import java.util.UUID;
 @Service
 public class JwtFilter extends OncePerRequestFilter {
 
-    // TODO - CHANGE TO REPOSITORY_ADAPTER
     private IUserRepository userRepository;
 
     public JwtFilter(IUserRepository iUserRepository){

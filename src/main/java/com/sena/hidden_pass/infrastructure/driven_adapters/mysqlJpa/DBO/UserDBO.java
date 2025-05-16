@@ -40,12 +40,10 @@ public class UserDBO {
     @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
     private Set<PasswordDBO> passwordList;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "id_user", referencedColumnName = "id_usuario")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Set<FolderDBO> folderList;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // Si le quito la referencia se borra
-    @JoinColumn(name = "id_user", referencedColumnName = "security_code")
     private SecurityCodesDBO securityCodes;
 
     public UserDBO(EmailValueObject email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, UsernameValueObject username, SecurityCodesDBO securityCodes, String url_image) {
