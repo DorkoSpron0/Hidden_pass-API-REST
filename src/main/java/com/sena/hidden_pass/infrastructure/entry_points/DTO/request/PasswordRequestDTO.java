@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public record PasswordRequestDTO(@Pattern(regexp = "^[A-Za-z\\s\\d]{4,}$") String name,
                                 @NotNull @NotBlank String url,
-                                @NotNull LocalDateTime dateTime,
                                 @NotNull @NotBlank String email_user,
                                 @NotNull @NotBlank String password,
                                 @NotNull @NotBlank String description,
