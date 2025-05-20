@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class PasswordController {
                 passwordDTO.email_user(),
                 passwordDTO.password(),
                 passwordDTO.url(),
-                passwordDTO.dateTime(),
+                LocalDateTime.now(),
                 null
         ), id, passwordDTO.folder_name());
 
@@ -69,7 +70,7 @@ public class PasswordController {
                         passwordDTO.email_user(),
                         passwordDTO.password(),
                         passwordDTO.url(),
-                        passwordDTO.dateTime(),
+                        LocalDateTime.now(),
                         null
                 ),
                 id,
