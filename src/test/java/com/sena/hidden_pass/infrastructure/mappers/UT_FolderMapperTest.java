@@ -148,8 +148,8 @@ public class UT_FolderMapperTest {
         UUID folderId = UUID.randomUUID();
         UserDBO dbo = new UserDBO(
                 UUID.randomUUID(),
-                new UsernameValueObject("username"),
-                new EmailValueObject("email@email.com"),
+                "username",
+                "email@email.com",
                 "master_password",
                 "url",
                 new HashSet<>(),
@@ -206,8 +206,8 @@ public class UT_FolderMapperTest {
         UUID folderId = UUID.randomUUID();
         UserDBO dbo = new UserDBO(
                 UUID.randomUUID(),
-                new UsernameValueObject("username"),
-                new EmailValueObject("email@email.com"),
+                "username",
+                "email@email.com",
                 "master_password",
                 "url",
                 new HashSet<>(),

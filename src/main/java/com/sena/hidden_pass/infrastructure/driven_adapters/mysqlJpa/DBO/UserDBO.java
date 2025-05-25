@@ -21,11 +21,11 @@ public class UserDBO {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id_usuario;
 
-    @Embedded
-    private UsernameValueObject username;
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    @Embedded
-    private EmailValueObject email;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "master_password", nullable = false)
     private String master_password;
@@ -46,7 +46,7 @@ public class UserDBO {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) // Si le quito la referencia se borra
     private SecurityCodesDBO securityCodes;
 
-    public UserDBO(EmailValueObject email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, UsernameValueObject username, SecurityCodesDBO securityCodes, String url_image) {
+    public UserDBO(String email, Set<FolderDBO> folderList, String master_password, Set<NoteDBO> noteList, Set<PasswordDBO> passwordList, String username, SecurityCodesDBO securityCodes, String url_image) {
         this.email = email;
         this.folderList = folderList;
         this.master_password = master_password;

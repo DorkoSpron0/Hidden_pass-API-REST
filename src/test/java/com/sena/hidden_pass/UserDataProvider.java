@@ -51,8 +51,8 @@ public class UserDataProvider {
     public static UserDBO getUserDBO(){
         return new UserDBO(
                 UUID.randomUUID(),
-                new UsernameValueObject("username"),
-                new EmailValueObject("nicky@nicky.com"),
+                "username",
+                "nicky@nicky.com",
                 "master_password",
                 "http://image.co",
                 Set.of(new NoteDBO(

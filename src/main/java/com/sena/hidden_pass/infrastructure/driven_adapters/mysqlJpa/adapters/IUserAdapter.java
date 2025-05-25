@@ -5,6 +5,7 @@ import com.sena.hidden_pass.domain.models.UserLoginModel;
 import com.sena.hidden_pass.domain.models.UserModel;
 import com.sena.hidden_pass.domain.usecases.UserUseCases;
 import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
 import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
@@ -102,19 +103,19 @@ public class IUserAdapter implements UserUseCases {
 
     @Override
     public UserModel getUserByUEmail(String email) {
-        return UserMapper.userDBOToModel(userRepository.findByEmail(new EmailValueObject(email)).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found")));
+        return UserMapper.userDBOToModel(userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found")));
     }
 
     @Override
     public UserLoginModel loginUser(UserModel UserDBO) {
-        UserDBO userFounded = userRepository.findByEmail_Email(UserDBO.getEmail().getEmail()).orElseThrow(() -> new UsernameNotFoundException("User with email " + UserDBO.getEmail() + " not found"));
+        UserDBO userFounded = userRepository.findByEmail(UserDBO.getEmail().getEmail()).orElseThrow(() -> new UsernameNotFoundException("User with email " + UserDBO.getEmail() + " not found"));
 
         if(!matchPassword(UserDBO.getMaster_password(), userFounded.getMaster_password())) throw new IllegalArgumentException("Credenciales incorrectas");
 
         return new UserLoginModel(
                 userFounded.getId_usuario(),
-                userFounded.getUsername(),
-                userFounded.getEmail(),
+                new UsernameValueObject(userFounded.getUsername()),
+                new EmailValueObject(userFounded.getEmail()),
                 jwtFilter.generateToken(userFounded.getId_usuario()),
                 userFounded.getUrl_image()
         );
@@ -124,8 +125,8 @@ public class IUserAdapter implements UserUseCases {
     public UserModel updateUser(UUID id, UserModel userModel) {
 
         UserDBO userFounded = UserMapper.userModelToDBO(getUserById(id));
-            userFounded.setEmail(userModel.getEmail());
-            userFounded.setUsername(userModel.getUsername());
+            userFounded.setEmail(userModel.getEmail().getEmail());
+            userFounded.setUsername(userModel.getUsername().getUsername());
             userFounded.setMaster_password(userFounded.getMaster_password());
 
             userFounded.setUrl_image(userModel.getUrl_image());

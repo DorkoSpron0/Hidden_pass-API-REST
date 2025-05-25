@@ -1,6 +1,8 @@
 package com.sena.hidden_pass.infrastructure.mappers;
 
 import com.sena.hidden_pass.domain.models.*;
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.*;
 
 import java.util.HashSet;
@@ -11,8 +13,8 @@ public class UserMapper {
     public static UserDBO userModelToDBO(UserModel model){
         return new UserDBO(
                 model.getId_usuario(),
-                model.getUsername(),
-                model.getEmail(),
+                model.getUsername().getUsername(),
+                model.getEmail().getEmail(),
                 model.getMaster_password(),
                 model.getUrl_image(),
 
@@ -69,8 +71,8 @@ public class UserMapper {
     public static UserModel userDBOToModel(UserDBO dbo){
         return new UserModel(
                 dbo.getId_usuario(),
-                dbo.getEmail(),
-                dbo.getUsername(),
+                new EmailValueObject(dbo.getEmail()),
+                new UsernameValueObject(dbo.getUsername()),
                 dbo.getMaster_password(),
                 dbo.getUrl_image(),
 

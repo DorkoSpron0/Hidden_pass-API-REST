@@ -176,7 +176,7 @@ public class UT_IUserAdapterTest {
         String email = "nicky@nicky.com";
 
         // When
-        when(this.userRepository.findByEmail(any(EmailValueObject.class))).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
+        when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         UserModel result = this.userAdapter.getUserByUEmail(email);
 
         // Then
@@ -186,7 +186,7 @@ public class UT_IUserAdapterTest {
         assertEquals(email, result.getEmail().getEmail());
         assertEquals("master_password", result.getMaster_password());
 
-        verify(this.userRepository).findByEmail(any(EmailValueObject.class));
+        verify(this.userRepository).findByEmail(anyString());
     }
 
     @Test
@@ -195,7 +195,7 @@ public class UT_IUserAdapterTest {
         String email = "nicky@nicky.com";
 
         // When
-        when(this.userRepository.findByEmail(any(EmailValueObject.class))).thenReturn(Optional.empty());
+        when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         // Then
         UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
@@ -211,7 +211,7 @@ public class UT_IUserAdapterTest {
         UserModel model = UserDataProvider.getUserModel();
 
         // When
-        when(this.userRepository.findByEmail_Email(anyString())).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
+        when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         when(this.passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(this.jwtFilter.generateToken(any(UUID.class))).thenReturn("faketoken"); // 👈 mock agregado
 
@@ -221,7 +221,7 @@ public class UT_IUserAdapterTest {
         assertNotNull(userLoginModel);
 
         assertEquals("faketoken", userLoginModel.getToken());
-        verify(this.userRepository).findByEmail_Email(anyString());
+        verify(this.userRepository).findByEmail(anyString());
         verify(this.passwordEncoder).matches(anyString(), anyString());
         verify(this.jwtFilter).generateToken(any());
     }
@@ -232,7 +232,7 @@ public class UT_IUserAdapterTest {
         UserModel model = UserDataProvider.getUserModel();
 
         // When
-        when(this.userRepository.findByEmail_Email(anyString())).thenReturn(Optional.empty());
+        when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         // Then
         UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
@@ -248,7 +248,7 @@ public class UT_IUserAdapterTest {
         UserModel model = UserDataProvider.getUserModel();
 
         // When
-        when(this.userRepository.findByEmail_Email(anyString())).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
+        when(this.userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         when(this.passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
         // Then
@@ -257,7 +257,7 @@ public class UT_IUserAdapterTest {
         });
 
         assertEquals("Credenciales incorrectas", exception.getMessage());
-        verify(this.userRepository).findByEmail_Email(anyString());
+        verify(this.userRepository).findByEmail(anyString());
         verify(this.passwordEncoder).matches(anyString(), anyString());
     }
 
@@ -271,7 +271,7 @@ public class UT_IUserAdapterTest {
         //when
         when(this.userRepository.findById(any(UUID.class))).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         when(this.userRepository.save(any(UserDBO.class))).thenReturn(
-                new UserDBO(id, new UsernameValueObject("user"), new EmailValueObject("test@test.com"), "master_password", "url:http.com",
+                new UserDBO(id, "user", "test@test.com", "master_password", "url:http.com",
                         null, null, null, null
         ));
         UserModel updated = this.userAdapter.updateUser(id, model);
@@ -287,8 +287,8 @@ public class UT_IUserAdapterTest {
         verify(this.userRepository).save(captor.capture());
         UserDBO saved = captor.getValue();
 
-        assertEquals(model.getUsername().getUsername(), saved.getUsername().getUsername());
-        assertEquals(model.getEmail().getEmail(), saved.getEmail().getEmail());
+        assertEquals(model.getUsername().getUsername(), saved.getUsername());
+        assertEquals(model.getEmail().getEmail(), saved.getEmail());
     }
 
     @Test
@@ -388,7 +388,7 @@ public class UT_IUserAdapterTest {
         ArgumentCaptor<UserDBO> captor = ArgumentCaptor.forClass(UserDBO.class);
 
         // When
-        when(this.userRepository.findByEmail(email)).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
+        when(this.userRepository.findByEmail(email.getEmail())).thenReturn(Optional.of(UserDataProvider.getUserDBO()));
         when(this.passwordEncoder.encode(anyString())).thenReturn("passwordencrypted");
         when(this.userRepository.save(any(UserDBO.class))).thenReturn(UserDataProvider.getUserDBO());
         UserModel result = this.userAdapter.recoverMasterPassword(password, email);
@@ -409,7 +409,7 @@ public class UT_IUserAdapterTest {
         EmailValueObject email = new EmailValueObject("test@test.com");
 
         // When
-        when(this.userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(this.userRepository.findByEmail(email.getEmail())).thenReturn(Optional.empty());
 
         // Then
         UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
