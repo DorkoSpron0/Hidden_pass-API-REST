@@ -318,6 +318,8 @@ public class UT_IUserAdapterTest {
         UserDBO userExpected = new UserDBO();
         userExpected.setId_usuario(id);
         userExpected.setMaster_password("encodedPassword");
+        userExpected.setEmail("test@test.com");
+        userExpected.setUsername("username");
 
         // When
         when(this.userRepository.findById(eq(id))).thenReturn(Optional.of(userExpected));
@@ -347,6 +349,8 @@ public class UT_IUserAdapterTest {
         UserDBO userExpected = new UserDBO();
         userExpected.setId_usuario(id);
         userExpected.setMaster_password("password123");
+        userExpected.setEmail("test@test.com");
+        userExpected.setUsername("username");
 
         // When
         when(this.userRepository.findById(eq(id))).thenReturn(Optional.of(userExpected));

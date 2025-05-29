@@ -5,6 +5,8 @@ import com.sena.hidden_pass.UserDataProvider;
 import com.sena.hidden_pass.domain.models.FolderModel;
 import com.sena.hidden_pass.domain.models.PasswordModel;
 import com.sena.hidden_pass.domain.models.UserModel;
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.FolderDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PasswordDBO;
 import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
@@ -176,9 +178,17 @@ public class UT_FolderAdapterTest {
         UUID folderId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        FolderModel model = new FolderModel("descriptionFolder", "icon", folderId, "folderName" , new UserModel(), new ArrayList<>(List.of(PasswordDataProvider.getPasswordModel())));
+        UserDBO userDBO = new UserDBO();
+        userDBO.setEmail("test@example.com");
+        userDBO.setUsername("username");
 
-        FolderDBO folderExpected = new FolderDBO(UUID.randomUUID(), "folderName", "icon", "descriptionFolder", new UserDBO(), new ArrayList<>(List.of(PasswordDataProvider.getPasswordDBO())));
+        UserModel userModel = new UserModel();
+        userModel.setEmail(new EmailValueObject("test@example.com"));
+        userModel.setUsername(new UsernameValueObject("username"));
+
+        FolderModel model = new FolderModel("descriptionFolder", "icon", folderId, "folderName" , userModel, new ArrayList<>(List.of(PasswordDataProvider.getPasswordModel())));
+
+        FolderDBO folderExpected = new FolderDBO(UUID.randomUUID(), "folderName", "icon", "descriptionFolder", userDBO, new ArrayList<>(List.of(PasswordDataProvider.getPasswordDBO())));
 
         UserDBO userExpected = UserDataProvider.getUserDBO();
 
@@ -237,9 +247,17 @@ public class UT_FolderAdapterTest {
         UUID folderId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        FolderModel model = new FolderModel("descriptionFolder", "icon", folderId, "folderName" , new UserModel(), new ArrayList<>(List.of(PasswordDataProvider.getPasswordModel())));
+        UserDBO userDBO = new UserDBO();
+        userDBO.setEmail("test@example.com");
+        userDBO.setUsername("username");
 
-        FolderDBO folderExpected = new FolderDBO(UUID.randomUUID(), "folderName", "icon", "descriptionFolder", new UserDBO(), new ArrayList<>(List.of(PasswordDataProvider.getPasswordDBO())));
+        UserModel userModel = new UserModel();
+        userModel.setEmail(new EmailValueObject("test@example.com"));
+        userModel.setUsername(new UsernameValueObject("username"));
+
+        FolderModel model = new FolderModel("descriptionFolder", "icon", folderId, "folderName" , userModel, new ArrayList<>(List.of(PasswordDataProvider.getPasswordModel())));
+
+        FolderDBO folderExpected = new FolderDBO(UUID.randomUUID(), "folderName", "icon", "descriptionFolder", userDBO, new ArrayList<>(List.of(PasswordDataProvider.getPasswordDBO())));
 
         UserDBO userExpected = UserDataProvider.getUserDBO();
         folderExpected.setPasswords(null);
@@ -267,11 +285,20 @@ public class UT_FolderAdapterTest {
     void testUpdateFolder() {
         // Given
         UUID folderId = UUID.randomUUID();
-        FolderModel model = new FolderModel("new_descriptionFolder", "new_icon", folderId, "new_folderName" , new UserModel(),List.of(PasswordDataProvider.getPasswordModel()));
 
-        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", new UserDBO(),List.of(PasswordDataProvider.getPasswordDBO()));
+        UserDBO userDBO = new UserDBO();
+        userDBO.setEmail("test@example.com");
+        userDBO.setUsername("username");
 
-        FolderDBO dboExpected = new FolderDBO(folderId, "new_folderName", "new_icon", "new_descriptionFolder", new UserDBO(),List.of(PasswordDataProvider.getPasswordDBO()));
+        UserModel userModel = new UserModel();
+        userModel.setEmail(new EmailValueObject("test@example.com"));
+        userModel.setUsername(new UsernameValueObject("username"));
+
+        FolderModel model = new FolderModel("new_descriptionFolder", "new_icon", folderId, "new_folderName" , userModel,List.of(PasswordDataProvider.getPasswordModel()));
+
+        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", userDBO,List.of(PasswordDataProvider.getPasswordDBO()));
+
+        FolderDBO dboExpected = new FolderDBO(folderId, "new_folderName", "new_icon", "new_descriptionFolder", userDBO, List.of(PasswordDataProvider.getPasswordDBO()));
 
         // When
         when(this.folderRepository.findById(eq(folderId))).thenReturn(Optional.of(dboFounded));
@@ -313,12 +340,20 @@ public class UT_FolderAdapterTest {
     @Test
     void testUpdateFolderWithoutPasswords() {
         // Given
+        UserDBO userDBO = new UserDBO();
+        userDBO.setEmail("test@example.com");
+        userDBO.setUsername("username");
+
+        UserModel userModel = new UserModel();
+        userModel.setEmail(new EmailValueObject("test@example.com"));
+        userModel.setUsername(new UsernameValueObject("username"));
+
         UUID folderId = UUID.randomUUID();
-        FolderModel model = new FolderModel("new_descriptionFolder", "new_icon", folderId, "new_folderName" , new UserModel(),List.of(PasswordDataProvider.getPasswordModel()));
+        FolderModel model = new FolderModel("new_descriptionFolder", "new_icon", folderId, "new_folderName" , userModel,List.of(PasswordDataProvider.getPasswordModel()));
 
-        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", new UserDBO(),List.of(PasswordDataProvider.getPasswordDBO()));
+        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", userDBO,List.of(PasswordDataProvider.getPasswordDBO()));
 
-        FolderDBO dboExpected = new FolderDBO(folderId, "new_folderName", "new_icon", "new_descriptionFolder", new UserDBO(),List.of(PasswordDataProvider.getPasswordDBO()));
+        FolderDBO dboExpected = new FolderDBO(folderId, "new_folderName", "new_icon", "new_descriptionFolder", userDBO,List.of(PasswordDataProvider.getPasswordDBO()));
 
         dboExpected.setPasswords(new ArrayList<>());
 
@@ -345,11 +380,15 @@ public class UT_FolderAdapterTest {
         UUID folderId = UUID.randomUUID();
         UUID passwordId = UUID.randomUUID();
 
-        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", new UserDBO(), new ArrayList<>());
+        UserDBO userDBO = new UserDBO();
+        userDBO.setEmail("test@example.com");
+        userDBO.setUsername("username");
+
+        FolderDBO dboFounded = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", userDBO, new ArrayList<>());
 
         PasswordDBO passwordFounded = new PasswordDBO(passwordId, "passwordName", "url", LocalDateTime.now(), "test@test.com", "Password123@", "Description", null);
 
-        FolderDBO dboExpected = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", new UserDBO(),List.of(passwordFounded));
+        FolderDBO dboExpected = new FolderDBO(folderId, "folderName", "icon", "descriptionFolder", userDBO,List.of(passwordFounded));
 
         // When
         when(this.folderRepository.findById(eq(folderId))).thenReturn(Optional.of(dboFounded));

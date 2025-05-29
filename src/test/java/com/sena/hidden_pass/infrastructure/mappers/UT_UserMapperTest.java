@@ -33,9 +33,9 @@ public class UT_UserMapperTest {
         assertNotNull(result);
 
         assertEquals(model.getId_usuario(), result.getId_usuario());
-        assertEquals(model.getEmail(), result.getEmail());
+        assertEquals(model.getEmail().getEmail(), result.getEmail());
         assertEquals(model.getMaster_password(), result.getMaster_password());
-        assertEquals(model.getUsername(), result.getUsername());
+        assertEquals(model.getUsername().getUsername(), result.getUsername());
         assertEquals(model.getUrl_image(), result.getUrl_image());
 
         assertEquals(1, result.getPasswordList().size());
@@ -57,9 +57,9 @@ public class UT_UserMapperTest {
         UserDBO result = UserMapper.userModelToDBO(model);
 
         assertEquals(model.getId_usuario(), result.getId_usuario());
-        assertEquals(model.getEmail(), result.getEmail());
+        assertEquals(model.getEmail().getEmail(), result.getEmail());
         assertEquals(model.getMaster_password(), result.getMaster_password());
-        assertEquals(model.getUsername(), result.getUsername());
+        assertEquals(model.getUsername().getUsername(), result.getUsername());
         assertEquals(model.getUrl_image(), result.getUrl_image());
 
         assertEquals(0, result.getPasswordList().size());
@@ -79,9 +79,9 @@ public class UT_UserMapperTest {
         UserDBO result = UserMapper.userModelToDBO(model);
 
         assertEquals(model.getId_usuario(), result.getId_usuario());
-        assertEquals(model.getEmail(), result.getEmail());
+        assertEquals(model.getEmail().getEmail(), result.getEmail());
         assertEquals(model.getMaster_password(), result.getMaster_password());
-        assertEquals(model.getUsername(), result.getUsername());
+        assertEquals(model.getUsername().getUsername(), result.getUsername());
         assertEquals(model.getUrl_image(), result.getUrl_image());
 
         assertEquals(1, result.getPasswordList().size());
@@ -112,9 +112,9 @@ public class UT_UserMapperTest {
         assertNotNull(result);
 
         assertEquals(dbo.getId_usuario(), result.getId_usuario());
-        assertEquals(dbo.getEmail(), result.getEmail());
+        assertEquals(dbo.getEmail(), result.getEmail().getEmail());
         assertEquals(dbo.getMaster_password(), result.getMaster_password());
-        assertEquals(dbo.getUsername(), result.getUsername());
+        assertEquals(dbo.getUsername(), result.getUsername().getUsername());
         assertEquals(dbo.getUrl_image(), result.getUrl_image());
 
         assertEquals(1, result.getPasswordList().size());
@@ -139,9 +139,9 @@ public class UT_UserMapperTest {
         assertNotNull(result);
 
         assertEquals(dbo.getId_usuario(), result.getId_usuario());
-        assertEquals(dbo.getEmail(), result.getEmail());
+        assertEquals(dbo.getEmail(), result.getEmail().getEmail());
         assertEquals(dbo.getMaster_password(), result.getMaster_password());
-        assertEquals(dbo.getUsername(), result.getUsername());
+        assertEquals(dbo.getUsername(), result.getUsername().getUsername());
         assertEquals(dbo.getUrl_image(), result.getUrl_image());
 
         assertEquals(0, result.getPasswordList().size());
@@ -161,9 +161,9 @@ public class UT_UserMapperTest {
         UserModel result = UserMapper.userDBOToModel(dbo);
 
         assertEquals(dbo.getId_usuario(), result.getId_usuario());
-        assertEquals(dbo.getEmail(), result.getEmail());
+        assertEquals(dbo.getEmail(), result.getEmail().getEmail());
         assertEquals(dbo.getMaster_password(), result.getMaster_password());
-        assertEquals(dbo.getUsername(), result.getUsername());
+        assertEquals(dbo.getUsername(), result.getUsername().getUsername());
         assertEquals(dbo.getUrl_image(), result.getUrl_image());
 
         assertEquals(1, result.getPasswordList().size());

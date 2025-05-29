@@ -60,8 +60,8 @@ public class UT_FolderMapperTest {
         assertEquals(folderModel.getDescription(), folderMapped.getDescription());
         assertEquals(folderModel.getIcon(), folderMapped.getIcon());
         assertEquals(folderModel.getUser().getId_usuario(), folderMapped.getUser().getId_usuario());
-        assertEquals(folderModel.getUser().getUsername(), folderMapped.getUser().getUsername());
-        assertEquals(folderModel.getUser().getEmail(), folderMapped.getUser().getEmail());
+        assertEquals(folderModel.getUser().getUsername().getUsername(), folderMapped.getUser().getUsername());
+        assertEquals(folderModel.getUser().getEmail().getEmail(), folderMapped.getUser().getEmail());
         assertEquals(folderModel.getPasswordModels().getFirst().getId_password(), folderMapped.getPasswords().getFirst().getId_password());
         assertEquals(folderModel.getPasswordModels().getFirst().getName(), folderMapped.getPasswords().getFirst().getName());
         assertEquals(folderModel.getPasswordModels().getFirst().getEmail_user(), folderMapped.getPasswords().getFirst().getEmail_user());
@@ -136,8 +136,8 @@ public class UT_FolderMapperTest {
         assertEquals(folderModel.getDescription(), folderMapped.getDescription());
         assertEquals(folderModel.getIcon(), folderMapped.getIcon());
         assertEquals(folderModel.getUser().getId_usuario(), folderMapped.getUser().getId_usuario());
-        assertEquals(folderModel.getUser().getUsername(), folderMapped.getUser().getUsername());
-        assertEquals(folderModel.getUser().getEmail(), folderMapped.getUser().getEmail());
+        assertEquals(folderModel.getUser().getUsername().getUsername(), folderMapped.getUser().getUsername());
+        assertEquals(folderModel.getUser().getEmail().getEmail(), folderMapped.getUser().getEmail());
         assertInstanceOf(ArrayList.class, folderMapped.getPasswords());
         assertEquals(0, folderMapped.getPasswords().size());
     }
@@ -168,8 +168,8 @@ public class UT_FolderMapperTest {
         assertEquals(folderModel.getDescription(), folderMapped.getDescription());
         assertEquals(folderModel.getIcon(), folderMapped.getIcon());
         assertEquals(folderModel.getUser().getId_usuario(), folderMapped.getUser().getId_usuario());
-        assertEquals(folderModel.getUser().getUsername(), folderMapped.getUser().getUsername());
-        assertEquals(folderModel.getUser().getEmail(), folderMapped.getUser().getEmail());
+        assertEquals(folderModel.getUser().getUsername(), folderMapped.getUser().getUsername().getUsername());
+        assertEquals(folderModel.getUser().getEmail(), folderMapped.getUser().getEmail().getEmail());
         assertEquals(folderModel.getPasswords().getFirst().getId_password(), folderMapped.getPasswordModels().getFirst().getId_password());
         assertEquals(folderModel.getPasswords().getFirst().getName(), folderMapped.getPasswordModels().getFirst().getName());
         assertEquals(folderModel.getPasswords().getFirst().getEmail_user(), folderMapped.getPasswordModels().getFirst().getEmail_user());
@@ -228,8 +228,8 @@ public class UT_FolderMapperTest {
         assertEquals(folderModel.getDescription(), folderMapped.getDescription());
         assertEquals(folderModel.getIcon(), folderMapped.getIcon());
         assertEquals(folderModel.getUser().getId_usuario(), folderMapped.getUser().getId_usuario());
-        assertEquals(folderModel.getUser().getUsername(), folderMapped.getUser().getUsername());
-        assertEquals(folderModel.getUser().getEmail(), folderMapped.getUser().getEmail());
+        assertEquals(folderModel.getUser().getUsername(), folderMapped.getUser().getUsername().getUsername());
+        assertEquals(folderModel.getUser().getEmail(), folderMapped.getUser().getEmail().getEmail());
         assertInstanceOf(ArrayList.class, folderMapped.getPasswordModels());
         assertEquals(0, folderMapped.getPasswordModels().size());
     }
