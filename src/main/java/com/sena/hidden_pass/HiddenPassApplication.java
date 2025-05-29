@@ -11,12 +11,24 @@ public class HiddenPassApplication {
 
 	public static void main(String[] args) {
 
-		Dotenv dotenv = Dotenv.configure().load();
-		dotenv.entries().forEach(entry ->
-				System.setProperty(entry.getKey(), entry.getValue())
-		);
+		try {
+			// Intenta cargar .env solo si está presente (modo desarrollo)
+			Dotenv dotenv = Dotenv.configure()
+					.ignoreIfMalformed()
+					.ignoreIfMissing() // importante para producción
+					.load();
+
+			dotenv.entries().forEach(entry -> {
+				// Solo asigna si la variable del sistema NO está ya definida
+				if (System.getenv(entry.getKey()) == null && System.getProperty(entry.getKey()) == null) {
+					System.setProperty(entry.getKey(), entry.getValue());
+				}
+			});
+
+		} catch (Exception e) {
+			System.out.println("⚠️ No se cargó el archivo .env (modo producción o no existe): " + e.getMessage());
+		}
 
 		SpringApplication.run(HiddenPassApplication.class, args);
 	}
-
 }
