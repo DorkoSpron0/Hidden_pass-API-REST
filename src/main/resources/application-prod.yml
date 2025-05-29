@@ -11,3 +11,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  security:
+    secret-password: ${SPRING_SECURITY_SECRET_PASSWORD}

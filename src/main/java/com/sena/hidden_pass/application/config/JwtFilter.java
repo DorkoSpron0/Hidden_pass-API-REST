@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,11 +24,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private IUserRepository userRepository;
 
+    @Value("${spring.security.secret-password}")
+    private String secretKet;
+
     public JwtFilter(IUserRepository iUserRepository){
         this.userRepository = iUserRepository;
     }
 
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("my-ultra-super-key-my-ultra-super-key".getBytes());
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(secretKet.getBytes());
 
     public String generateToken(UUID id){
         return Jwts.builder()

@@ -11,3 +11,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  security:
+    secret-password: "my-ultra-super-key-my-ultra-super-key"
