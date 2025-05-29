@@ -5,6 +5,13 @@ HELP.md
 
 .env
 
+/surefire-reports/
+/test-output/
+/jacoco.exec
+/build/reports/
+/build/test-results/
+/build/test-outputs/
+
 ### STS ###
 .apt_generated
 .classpath
