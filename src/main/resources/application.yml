@@ -19,3 +19,9 @@ spring:
 springdoc:
   packages-to-scan: com.sena.hidden_pass.infrastructure.entry_points
   paths-to-match: "/api/v1/hidden_pass/**"  # Ajusta según tu estructura de rutas
+
+# Custom
+# Custom
+APP:
+  CORS:
+    ALLOWED-ORIGINS: ${APP_CORS_ALLOWED_ORIGINS}
