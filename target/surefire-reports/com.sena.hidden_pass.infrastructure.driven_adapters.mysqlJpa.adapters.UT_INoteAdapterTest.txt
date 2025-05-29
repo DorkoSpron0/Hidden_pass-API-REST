@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_INoteAdapterTest
 -------------------------------------------------------------------------------
-Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.521 s -- in com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_INoteAdapterTest
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.548 s -- in com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_INoteAdapterTest
