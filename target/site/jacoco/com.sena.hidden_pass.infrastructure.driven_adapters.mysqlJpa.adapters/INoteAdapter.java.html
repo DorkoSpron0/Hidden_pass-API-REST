@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>INoteAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hidden_pass</a> &gt; <a href="index.source.html" class="el_package">com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters</a> &gt; <span class="el_source">INoteAdapter.java</span></div><h1>INoteAdapter.java</h1><pre class="source lang-java linenums">package com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters;
+
+import com.sena.hidden_pass.domain.models.NoteModel;
+import com.sena.hidden_pass.domain.usecases.NoteUseCases;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.NoteDBO;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.PriorityDBO;
+import com.sena.hidden_pass.domain.models.PriorityNames;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.UserDBO;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.INoteRepository;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IPriorityRepository;
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.IUserRepository;
+import com.sena.hidden_pass.infrastructure.mappers.NoteMapper;
+import com.sena.hidden_pass.infrastructure.mappers.PriorityMapper;
+import com.sena.hidden_pass.infrastructure.mappers.UserMapper;
+import com.sena.hidden_pass.infrastructure.utils.AESUtil;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@AllArgsConstructor
+public class INoteAdapter implements NoteUseCases {
+
+    private INoteRepository noteRepository;
+    private IUserAdapter userAdapter;
+    private IUserRepository userRepository;
+    private AESUtil aesUtil;
+
+    @Autowired
+    private IPriorityRepository priorityRepository;
+
+    @Override
+    public Set&lt;NoteModel&gt; getAllNotesByUser(UUID user_id) {
+<span class="fc" id="L38">        UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));</span>
+<span class="fc" id="L39">        Set&lt;NoteModel&gt; notes = userFounded.getNoteList().stream().map(NoteMapper::noteDBOToModel).collect(Collectors.toSet());</span>
+
+<span class="fc" id="L41">        return notes.stream().map(noteModel -&gt; {</span>
+            try {
+<span class="fc" id="L43">                noteModel.setTitle(aesUtil.decrypt(noteModel.getTitle()));</span>
+<span class="fc" id="L44">                noteModel.setDescription(aesUtil.decrypt(noteModel.getDescription()));</span>
+
+<span class="fc" id="L46">                return noteModel;</span>
+<span class="fc" id="L47">            } catch (Exception e) {</span>
+<span class="fc" id="L48">                throw new RuntimeException(e);</span>
+            }
+<span class="fc" id="L50">        }).collect(Collectors.toSet());</span>
+    }
+
+    @Override
+    public NoteModel getNoteById(UUID id) {
+<span class="fc" id="L55">        return NoteMapper.noteDBOToModel(noteRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Note with id &quot; + id + &quot; not found&quot;)));</span>
+    }
+
+    @Override
+    public NoteModel createNote(NoteModel note, UUID user_id, PriorityNames priority_name) {
+<span class="fc" id="L60">        PriorityDBO priority =  priorityRepository.getByName(priority_name).orElseThrow(() -&gt; new IllegalArgumentException(&quot;PRIORITY NOT FOUND&quot;));</span>
+        try{
+
+<span class="fc" id="L63">           note.setId_priority(PriorityMapper.priorityDBOToModel(priority));</span>
+
+           // AES
+<span class="fc" id="L66">           note.setTitle(aesUtil.encrypt(note.getTitle()));</span>
+<span class="fc" id="L67">           note.setDescription(aesUtil.encrypt(note.getDescription()));</span>
+
+<span class="fc" id="L69">           NoteDBO noteSaved = noteRepository.save(NoteMapper.noteModelToDBO(note));</span>
+<span class="fc" id="L70">           UserDBO userFounded = UserMapper.userModelToDBO(userAdapter.getUserById(user_id));</span>
+<span class="fc" id="L71">           userFounded.getNoteList().add(noteSaved);</span>
+
+<span class="fc" id="L73">           userRepository.save(userFounded);</span>
+
+<span class="fc" id="L75">           return NoteMapper.noteDBOToModel(noteSaved);</span>
+<span class="fc" id="L76">       }catch (Exception e) {</span>
+<span class="fc" id="L77">           throw new RuntimeException(&quot;Error creating note &quot;, e);</span>
+       }
+    }
+
+    @Override
+    public NoteModel updateNote(NoteModel note, UUID note_id) {
+
+<span class="fc" id="L84">        NoteDBO noteDBO = NoteMapper.noteModelToDBO(getNoteById(note_id));</span>
+
+        try {
+<span class="fc" id="L87">            noteDBO.setTitle(aesUtil.encrypt(note.getTitle()));</span>
+<span class="fc" id="L88">            noteDBO.setDescription(aesUtil.encrypt(note.getDescription()));</span>
+<span class="fc" id="L89">        } catch (Exception e) {</span>
+<span class="fc" id="L90">            throw new RuntimeException(e);</span>
+<span class="fc" id="L91">        }</span>
+
+<span class="fc" id="L93">        PriorityDBO priorityDBO = priorityRepository.getByName(note.getId_priority().getName()).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Priority not found&quot;));</span>
+<span class="fc" id="L94">        noteDBO.setId_priority(priorityDBO);</span>
+
+
+<span class="fc" id="L97">        return NoteMapper.noteDBOToModel(noteRepository.save(noteDBO));</span>
+    }
+
+    @Override
+    public String deleteNote(UUID note_id) {
+
+<span class="fc" id="L103">        NoteDBO noteDBO = NoteMapper.noteModelToDBO(getNoteById(note_id));</span>
+<span class="fc" id="L104">        noteRepository.delete(noteDBO);</span>
+
+<span class="fc" id="L106">        return &quot;Note deleted successfully&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MailService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hidden_pass</a> &gt; <a href="index.source.html" class="el_package">com.sena.hidden_pass.infrastructure.services</a> &gt; <span class="el_source">MailService.java</span></div><h1>MailService.java</h1><pre class="source lang-java linenums">package com.sena.hidden_pass.infrastructure.services;
+
+import com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.DBO.SecurityCodesDBO;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.Future;
+
+@Service
+public class MailService {
+
+    private JavaMailSender javaMailSender;
+
+<span class="nc" id="L19">    public MailService(JavaMailSender javaMailSender) {</span>
+<span class="nc" id="L20">        this.javaMailSender = javaMailSender;</span>
+<span class="nc" id="L21">    }</span>
+
+    @Async
+    public void asyncMethodWithVoidReturnType() {
+<span class="nc" id="L25">        System.out.println(&quot;Execute method asynchronously. &quot;</span>
+<span class="nc" id="L26">                + Thread.currentThread().getName());</span>
+<span class="nc" id="L27">    }</span>
+
+
+    @Async
+    public Future&lt;String&gt; asyncMethodWithReturnType() {
+<span class="nc" id="L32">        System.out.println(&quot;Execute method asynchronously - &quot;</span>
+<span class="nc" id="L33">                + Thread.currentThread().getName());</span>
+        try {
+<span class="nc" id="L35">            Thread.sleep(5000);</span>
+<span class="nc" id="L36">            return new AsyncResult&lt;&gt;(&quot;hello world !!!!&quot;);</span>
+<span class="nc" id="L37">        } catch (InterruptedException e) {</span>
+            //
+        }
+
+<span class="nc" id="L41">        return null;</span>
+    }
+
+    @Async
+    public void sendEmailAsync(String to, String subject, String body) {
+<span class="nc" id="L46">        System.out.println(&quot;Sending email in thread: &quot; + Thread.currentThread().getName());</span>
+
+        // Simula envío de correo
+        try {
+<span class="nc" id="L50">            Thread.sleep(5000); // Simula tiempo de envío</span>
+<span class="nc" id="L51">            System.out.println(&quot;Correo enviado a &quot; + to);</span>
+<span class="nc" id="L52">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L53">            System.out.println(&quot;Error al enviar el correo&quot;);</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">    }</span>
+
+    @Async
+    public void sendEmailAyncImpl(String email, String subject, String body) throws MessagingException {
+        try{
+<span class="nc" id="L60">            MimeMessage message = javaMailSender.createMimeMessage();</span>
+<span class="nc" id="L61">            MimeMessageHelper helper = new MimeMessageHelper(message, true);</span>
+
+<span class="nc" id="L63">            helper.setTo(email);</span>
+<span class="nc" id="L64">            helper.setSubject(subject);</span>
+<span class="nc" id="L65">            helper.setText(body, true); // 'true' permite HTML en el mensaje</span>
+
+<span class="nc" id="L67">            javaMailSender.send(message);</span>
+
+<span class="nc" id="L69">            System.out.println(&quot;Correo enviado a &quot; + email);</span>
+<span class="nc" id="L70">        }catch (MessagingException ex){</span>
+<span class="nc" id="L71">            System.out.println(ex.getMessage());</span>
+<span class="nc" id="L72">        }</span>
+<span class="nc" id="L73">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
