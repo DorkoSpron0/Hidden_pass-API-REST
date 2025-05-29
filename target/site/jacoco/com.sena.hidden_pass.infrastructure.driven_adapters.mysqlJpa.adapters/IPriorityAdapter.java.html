@@ -22,12 +22,16 @@ public class IPriorityAdapter implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception { // Insert when server starts
-<span class="fc" id="L25">        List&lt;PriorityDBO&gt; priorityDBOS = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L26">        priorityDBOS.add(new PriorityDBO(PriorityNames.BAJA));</span>
-<span class="fc" id="L27">        priorityDBOS.add(new PriorityDBO(PriorityNames.MEDIA));</span>
-<span class="fc" id="L28">        priorityDBOS.add(new PriorityDBO(PriorityNames.ALTA));</span>
-<span class="fc" id="L29">        priorityDBOS.add(new PriorityDBO(PriorityNames.CRITICA));</span>
-<span class="fc" id="L30">        priorityRepository.saveAll(priorityDBOS);</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L25">        List&lt;PriorityDBO&gt; priorityList = priorityRepository.findAll();</span>
+
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if(priorityList.isEmpty()){</span>
+<span class="fc" id="L28">            List&lt;PriorityDBO&gt; priorityDBOS = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L29">            priorityDBOS.add(new PriorityDBO(PriorityNames.BAJA));</span>
+<span class="fc" id="L30">            priorityDBOS.add(new PriorityDBO(PriorityNames.MEDIA));</span>
+<span class="fc" id="L31">            priorityDBOS.add(new PriorityDBO(PriorityNames.ALTA));</span>
+<span class="fc" id="L32">            priorityDBOS.add(new PriorityDBO(PriorityNames.CRITICA));</span>
+<span class="fc" id="L33">            priorityRepository.saveAll(priorityDBOS);</span>
+        }
+<span class="fc" id="L35">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
