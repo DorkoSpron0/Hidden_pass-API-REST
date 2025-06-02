@@ -16,22 +16,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
 @Service
 public class JwtFilter extends OncePerRequestFilter {
 
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
+    private final SecretKey SECRET_KEY;
 
-    @Value("${spring.security.secret-password}")
-    private String secretKet;
-
-    public JwtFilter(IUserRepository iUserRepository){
-        this.userRepository = iUserRepository;
+    public JwtFilter(@Value("${spring.security.secret-password}") String secretPassword, IUserRepository userRepository) {
+        System.out.println("SECRET: " + secretPassword);
+        if (secretPassword == null || secretPassword.length() < 32) {
+            throw new IllegalArgumentException("La clave secreta debe tener al menos 32 caracteres.");
+        }
+        this.SECRET_KEY = Keys.hmacShaKeyFor(secretPassword.getBytes(StandardCharsets.UTF_8));
+        this.userRepository = userRepository;
     }
-
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(secretKet.getBytes());
 
     public String generateToken(UUID id){
         return Jwts.builder()
