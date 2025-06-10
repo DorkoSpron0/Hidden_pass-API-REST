@@ -14,7 +14,7 @@ hidden_pass,com.sena.hidden_pass.infrastructure.mappers,UserMapper,0,298,0,24,0,
 hidden_pass,com.sena.hidden_pass.infrastructure.mappers,PriorityMapper,0,21,0,0,0,8,0,4,0,4
 hidden_pass,com.sena.hidden_pass.application.config,CustomExceptionHandlerResolver,6,36,0,0,1,5,1,5,1,5
 hidden_pass,com.sena.hidden_pass.application.config,WebConfiguration.new WebMvcConfigurer() {...},0,50,0,0,0,6,0,2,0,2
-hidden_pass,com.sena.hidden_pass.application.config,JwtFilter,108,0,10,0,27,0,9,0,4,0
+hidden_pass,com.sena.hidden_pass.application.config,JwtFilter,124,0,14,0,30,0,11,0,4,0
 hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,NoteController,0,98,0,0,0,24,0,6,0,6
 hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,PasswordController,0,129,0,2,0,37,0,8,0,7
 hidden_pass,com.sena.hidden_pass.infrastructure.entry_points,UserController,0,225,0,0,0,53,0,7,0,7
