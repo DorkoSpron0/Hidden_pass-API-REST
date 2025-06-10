@@ -1,5 +1,6 @@
 package com.sena.hidden_pass.infrastructure.utils;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.BadPaddingException;
@@ -13,9 +14,13 @@ import java.util.Base64;
 
 @Component
 public class AESUtil {
-
-    private static final String SECRET_KEY = "MiClaveAES123456";
+    
+    private final String SECRET_KEY;
     private static final String ALGORITHM = "AES";
+
+    public AESUtil(@Value("${spring.security.aes-secret}") String SECRET_KEY){
+        this.SECRET_KEY = SECRET_KEY;
+    }
 
     // cifrar
     public String encrypt(String rawPassword) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {

@@ -13,4 +13,5 @@ spring:
     show-sql: true
   security:
     secret-password: ${SPRING_SECURITY_SECRET_PASSWORD}
+    aes-secret: ${SPRING_SECURITY_AES_SECRET}
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS}

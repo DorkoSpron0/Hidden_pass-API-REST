@@ -1,4 +1,20 @@
 -------------------------------------------------------------------------------
 Test set: com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 s -- in com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest
+Tests run: 5, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.045 s <<< FAILURE! -- in com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest
+com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest.testEncryptAndDecryptSuccess -- Time elapsed: 0.021 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.getBytes()" because "<local3>.SECRET_KEY" is null
+	at com.sena.hidden_pass.infrastructure.utils.AESUtil.encrypt(AESUtil.java:24)
+	at com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest.testEncryptAndDecryptSuccess(UT_AESUtilTest.java:20)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest.testEncryptEmptyString -- Time elapsed: 0.008 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "String.getBytes()" because "<local3>.SECRET_KEY" is null
+	at com.sena.hidden_pass.infrastructure.utils.AESUtil.encrypt(AESUtil.java:24)
+	at com.sena.hidden_pass.infrastructure.utils.UT_AESUtilTest.testEncryptEmptyString(UT_AESUtilTest.java:28)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

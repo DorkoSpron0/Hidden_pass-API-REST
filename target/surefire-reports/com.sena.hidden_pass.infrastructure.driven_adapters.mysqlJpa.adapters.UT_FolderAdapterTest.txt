@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_FolderAdapterTest
 -------------------------------------------------------------------------------
-Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.502 s -- in com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_FolderAdapterTest
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.151 s -- in com.sena.hidden_pass.infrastructure.driven_adapters.mysqlJpa.adapters.UT_FolderAdapterTest

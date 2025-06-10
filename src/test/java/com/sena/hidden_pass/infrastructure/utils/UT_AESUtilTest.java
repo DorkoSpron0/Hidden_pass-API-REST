@@ -2,6 +2,8 @@ package com.sena.hidden_pass.infrastructure.utils;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +13,7 @@ public class UT_AESUtilTest {
 
     @BeforeEach
     void init(){
-        aesUtil = new AESUtil();
+        aesUtil = new AESUtil("q3D9sL2eA7FgX9K1hBtYwzRmLpVeTuYb");
     }
 
     @Test
