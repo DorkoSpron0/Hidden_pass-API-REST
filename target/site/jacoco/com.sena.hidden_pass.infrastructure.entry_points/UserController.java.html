@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hidden_pass</a> &gt; <a href="index.source.html" class="el_package">com.sena.hidden_pass.infrastructure.entry_points</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.sena.hidden_pass.infrastructure.entry_points;
+
+import com.sena.hidden_pass.domain.models.UserLoginModel;
+import com.sena.hidden_pass.domain.models.UserModel;
+import com.sena.hidden_pass.domain.usecases.UserUseCases;
+import com.sena.hidden_pass.domain.valueObjects.EmailValueObject;
+import com.sena.hidden_pass.domain.valueObjects.UsernameValueObject;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.request.*;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.RegisterUserResponseDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserInfoResponseDTO;
+import com.sena.hidden_pass.infrastructure.entry_points.DTO.response.UserLoginResponseDTO;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+
+@RestController
+@RequestMapping(&quot;/api/v1/hidden_pass/users&quot;)
+@AllArgsConstructor
+public class UserController {
+
+    private UserUseCases userUseCases;
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;UserInfoResponseDTO&gt; getUserById(@PathVariable UUID id){
+<span class="fc" id="L31">        UserModel model = userUseCases.getUserById(id);</span>
+<span class="fc" id="L32">        return ResponseEntity.status(HttpStatus.OK).body(new UserInfoResponseDTO(</span>
+<span class="fc" id="L33">                model.getId_usuario(),</span>
+<span class="fc" id="L34">                model.getUsername().getUsername(),</span>
+<span class="fc" id="L35">                model.getEmail().getEmail(),</span>
+<span class="fc" id="L36">                model.getMaster_password(),</span>
+<span class="fc" id="L37">                model.getUrl_image()</span>
+        ));
+    }
+
+    @PostMapping(&quot;/register&quot;)
+    public ResponseEntity&lt;RegisterUserResponseDTO&gt; registerUser(@Valid @RequestBody RegisterUserRequestDTO user){
+<span class="fc" id="L43">        UserModel model = userUseCases.registerUser(new UserModel(</span>
+                null,
+<span class="fc" id="L45">                new EmailValueObject(user.email()),</span>
+<span class="fc" id="L46">                new UsernameValueObject(user.username()),</span>
+<span class="fc" id="L47">                user.master_password(),</span>
+<span class="fc" id="L48">                user.url_image(),</span>
+                null,
+                null,
+                null,
+                null
+        ));
+
+<span class="fc" id="L55">        return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterUserResponseDTO(</span>
+<span class="fc" id="L56">                model.getId_usuario(),</span>
+<span class="fc" id="L57">                model.getUsername().getUsername(),</span>
+<span class="fc" id="L58">                model.getEmail().getEmail(),</span>
+<span class="fc" id="L59">                model.getMaster_password(),</span>
+<span class="fc" id="L60">                model.getUrl_image()</span>
+        ));
+    }
+
+    @PostMapping(&quot;/login&quot;)
+    public ResponseEntity&lt;UserLoginResponseDTO&gt; loginUser(@Valid @RequestBody LoginUserRequestDTO user){
+<span class="fc" id="L66">        UserLoginModel model = userUseCases.loginUser(new UserModel(</span>
+                null,
+<span class="fc" id="L68">                new EmailValueObject(user.email()),</span>
+<span class="fc" id="L69">                null, user.master_password(),</span>
+                null,
+                null,
+                null,
+                null,
+                null)
+        );
+
+<span class="fc" id="L77">        return ResponseEntity.status(HttpStatus.OK).body(</span>
+                new UserLoginResponseDTO(
+<span class="fc" id="L79">                        model.getUserId(),</span>
+<span class="fc" id="L80">                        model.getUsername().getUsername(),</span>
+<span class="fc" id="L81">                        model.getEmailValueObject().getEmail(),</span>
+<span class="fc" id="L82">                        model.getToken(),</span>
+<span class="fc" id="L83">                        model.getUrlImage()</span>
+                )
+        );
+    }
+
+    @PutMapping(&quot;/update/{id}&quot;)
+    public ResponseEntity&lt;UserInfoResponseDTO&gt; updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequestDTO user){
+
+<span class="fc" id="L91">        UserModel model = userUseCases.updateUser(id, new UserModel(</span>
+                null,
+<span class="fc" id="L93">                new EmailValueObject(user.email()),</span>
+<span class="fc" id="L94">                new UsernameValueObject(user.username()),</span>
+                null,
+<span class="fc" id="L96">                user.url_image(),</span>
+                null,
+                null,
+                null,
+                null
+        ));
+
+<span class="fc" id="L103">        return new ResponseEntity&lt;&gt;(new UserInfoResponseDTO(</span>
+<span class="fc" id="L104">                model.getId_usuario(),</span>
+<span class="fc" id="L105">                model.getUsername().getUsername(),</span>
+<span class="fc" id="L106">                model.getEmail().getEmail(),</span>
+<span class="fc" id="L107">                model.getMaster_password(),</span>
+<span class="fc" id="L108">                model.getUrl_image()</span>
+        ), HttpStatus.OK);
+    }
+
+    @PutMapping(&quot;/update/password&quot;)
+    public ResponseEntity&lt;UserInfoResponseDTO&gt; recoverMasterPassword(@RequestBody ResetMasterPasswordRequestDTO resetMasterPassword){
+
+<span class="fc" id="L115">        UserModel model = userUseCases.recoverMasterPassword(resetMasterPassword.new_password(), new EmailValueObject(resetMasterPassword.email()));</span>
+
+<span class="fc" id="L117">        return ResponseEntity.status(HttpStatus.OK).body(new UserInfoResponseDTO(</span>
+<span class="fc" id="L118">                model.getId_usuario(),</span>
+<span class="fc" id="L119">                model.getUsername().getUsername(),</span>
+<span class="fc" id="L120">                model.getEmail().getEmail(),</span>
+<span class="fc" id="L121">                model.getMaster_password(),</span>
+<span class="fc" id="L122">                model.getUrl_image()</span>
+        ));
+    }
+
+    @PutMapping(&quot;/update/password/{id}&quot;)
+    public ResponseEntity&lt;UserInfoResponseDTO&gt; updateMasterPassword(@PathVariable UUID id, @Valid @RequestBody UpdateMasterPasswordRequestDTO updateMasterPassword){
+
+<span class="fc" id="L129">        UserModel model = userUseCases.updateMasterPassword(id, updateMasterPassword.current_password(), updateMasterPassword.new_password());</span>
+
+<span class="fc" id="L131">        return ResponseEntity.status(HttpStatus.OK).body(new UserInfoResponseDTO(</span>
+<span class="fc" id="L132">                model.getId_usuario(),</span>
+<span class="fc" id="L133">                model.getUsername().getUsername(),</span>
+<span class="fc" id="L134">                model.getEmail().getEmail(),</span>
+<span class="fc" id="L135">                model.getMaster_password(),</span>
+<span class="fc" id="L136">                model.getUrl_image()</span>
+        ));
+    }
+
+    @DeleteMapping(&quot;/delete/{id}&quot;)
+    public ResponseEntity&lt;String&gt; deleteUser(@PathVariable UUID id, @RequestBody DeleteUserRequestDTO deleteUserDTO){
+
+<span class="fc" id="L143">        String result = userUseCases.deleteUser(id, deleteUserDTO.current_password());</span>
+
+<span class="fc" id="L145">        return ResponseEntity.status(HttpStatus.OK).body(result);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
