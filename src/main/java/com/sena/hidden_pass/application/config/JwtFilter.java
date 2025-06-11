@@ -27,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private final SecretKey SECRET_KEY;
 
     public JwtFilter(@Value("${spring.security.secret-password}") String secretPassword, IUserRepository userRepository) {
-        System.out.println("SECRET: " + secretPassword);
         if (secretPassword == null || secretPassword.length() < 32) {
             throw new IllegalArgumentException("La clave secreta debe tener al menos 32 caracteres.");
         }
